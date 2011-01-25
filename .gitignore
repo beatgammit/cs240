@@ -1,0 +1,10 @@
+# Ignore binaries and object files
+bin
+obj
+
+# Ignore other garbage that CODE::BLOCKS creates
+*.depend
+*.cbp
+*.layout
+
+testinput.txt
