@@ -94,11 +94,15 @@ class BST {
 
 
 		//!  Removes all values from the BST
-		void Clear(BSTNode* pStart = NULL);
+		void Clear(){
+			this->Clear(NULL);
+		}
 
 
 		//!  @return the number of values in the BST
-		int GetSize(BSTNode* pStart = NULL) const;
+		int GetSize() const{
+			return this->GetSize(NULL);
+		}
 
 
 		//!  Inserts value v into the BST
@@ -107,7 +111,9 @@ class BST {
 		//!
 		//!  @return a pointer to the newly inserted node, or NULL if v was already
 		//!          in the tree (i.e., NULL is used to indicate a duplicate insertion)
-		BSTNode* Insert(const std::string & v, BSTNode* pStart = NULL);
+		BSTNode* Insert(const std::string & v){
+			return this->Insert(v, NULL);
+		}
 
 
 		//!  Searches the tree for value v
@@ -115,7 +121,9 @@ class BST {
 		//!  @param v The new value being searched for
 		//!
 		//!  @return a pointer to the node containing v, or NULL if v is not in the tree
-		BSTNode* Find(const std::string & v, BSTNode* pStart = NULL) const;
+		BSTNode* Find(const std::string & v) const{
+			return this->Find(v, NULL);
+		}
 
 
 		//! @NOTE: YOU ARE NOT REQUIRED TO IMPLEMENT THE Remove METHOD BELOW
@@ -128,7 +136,20 @@ class BST {
 		//!  @return true if v was removed from the tree, or false if v was not in the tree
 		//bool Remove(const std::string & v);
 
+		void Output(std::ostream& cout, BSTNode* tNode){
+			if(tNode){
+				cout << tNode->value;
+
+				this->Output(cout, tNode->left);
+				this->Output(cout, tNode->right);
+			}
+		}
+
 	private:
+		void Clear(BSTNode* pStart);
+		BSTNode* Find(const std::string & v, BSTNode* pStart) const;
+		int GetSize(BSTNode* pStart) const;
+		BSTNode* Insert(const std::string & v, BSTNode* pStart);
 		void CopyChildren(BSTNode* pNode, BSTNode* pOrig);
 		BSTNode* pRoot;
 };

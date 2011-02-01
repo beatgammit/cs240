@@ -19,7 +19,24 @@ int main()
     tNode = tList->Insert("2\n", tNode);
     tNode = tList->Insert("3\n", tNode);
 
+	cout << "LinkedList contents:" << endl;
     tList->Output(cout);
 
+    BST* tBST = new BST();
+    BSTNode* tBSTNode;
+
+    tBSTNode = tBST->Insert("Cool\n");
+    tBSTNode = tBST->Insert("Awesome\n");
+    tBSTNode = tBST->Insert("Test\n");
+    tBSTNode = tBST->Insert("1\n");
+    //tBST->Remove(tBSTNode);
+    tBSTNode = tBST->Insert("4\n");
+    tBSTNode = tBST->Insert("2\n");
+    tBSTNode = tBST->Insert("3\n");
+
+    cout << endl << endl << "BST contents:" << endl;
+    tBST->Output(cout, tBST->GetRoot());
+
     delete tList;
+    delete tBST;
 }

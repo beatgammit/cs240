@@ -8,3 +8,9 @@ obj
 *.layout
 
 testinput.txt
+
+# Ignore personal stuff
+FileSync
+
+# Ignore this file
+.gitignore
