@@ -63,17 +63,19 @@ bool BST::IsEmpty() const{
 void BST::Clear(BSTNode* pStart){
 	BSTNode* pNode = (pStart != NULL) ? pStart : this->pRoot;
 
-	if(pNode->left){
-		this->Clear(pNode->left);
-	}
-	if(pNode->right){
-		this->Clear(pNode->right);
-	}
+	if(pNode){
+		if(pNode->left){
+			this->Clear(pNode->left);
+		}
+		if(pNode->right){
+			this->Clear(pNode->right);
+		}
 
-	if(pNode == pRoot){
-		this->pRoot = NULL;
+		if(pNode == pRoot){
+			this->pRoot = NULL;
+		}
+		delete pNode;
 	}
-	delete pNode;
 }
 
 
@@ -135,23 +137,26 @@ BSTNode* BST::Insert(const std::string & v, BSTNode* pStart){
 //!  @return a pointer to the node containing v, or NULL if v is not in the tree
 BSTNode* BST::Find(const std::string & v, BSTNode* pStart) const{
 	BSTNode* pNode = (pStart != NULL) ? pStart : pRoot;
-	int iCmp = v.compare(pNode->value);
+	if(pNode){
+		int iCmp = v.compare(pNode->value);
 
-	if(iCmp < 0){
-		if(pNode->left){
-			return this->Find(v, pNode->left);
+		if(iCmp < 0){
+			if(pNode->left){
+				return this->Find(v, pNode->left);
+			}else{
+				return NULL;
+			}
+		}else if(iCmp > 0){
+			if(pNode->right){
+				return this->Find(v, pNode->right);
+			}else{
+				return NULL;
+			}
 		}else{
-			return NULL;
+			return pNode;
 		}
-	}else if(iCmp > 0){
-		if(pNode->right){
-			return this->Find(v, pNode->right);
-		}else{
-			return NULL;
-		}
-	}else{
-		return pNode;
 	}
+	return NULL;
 }
 
 //// public methods
