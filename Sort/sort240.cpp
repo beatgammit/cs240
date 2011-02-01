@@ -6,8 +6,8 @@
 using namespace std;
 
 int compare(const void* a, const void* b){
-	FILE_LINE* fLineA = (FILE_LINE*)a;
-	FILE_LINE* fLineB = (FILE_LINE*)b;
+	FILE_LINE* fLineA = *((FILE_LINE**)a);
+	FILE_LINE* fLineB = *((FILE_LINE**)b);
 
 	int result = 0;
 
@@ -27,7 +27,7 @@ int compare(const void* a, const void* b){
 
 Sort240::Sort240()
 {
-	fileLineArray = new FILE_LINE[LINE_ARRAY_LENGTH];
+	fileLineArray = new FILE_LINE*[LINE_ARRAY_LENGTH];
 	numLines = 0;
 	flags.bReverse = false;
 	flags.bCaseInsensitive = false;
@@ -35,12 +35,13 @@ Sort240::Sort240()
 }
 
 void Sort240::addLine(char* tLineData, int iColumn){
-	fileLineArray[numLines].origLine = new char[MAX_LINE_LENGTH];
-	fileLineArray[numLines].columnPtr = new char[MAX_LINE_LENGTH];
-	fileLineArray[numLines].columnPtr[0] = '\0';
-	strcpy(fileLineArray[numLines].origLine, tLineData);
+	fileLineArray[numLines] = new FILE_LINE;
+	fileLineArray[numLines]->origLine = new char[MAX_LINE_LENGTH];
+	fileLineArray[numLines]->columnPtr = new char[MAX_LINE_LENGTH];
+	fileLineArray[numLines]->columnPtr[0] = '\0';
+	strcpy(fileLineArray[numLines]->origLine, tLineData);
 
-	fileLineArray[numLines].flags = &flags;
+	fileLineArray[numLines]->flags = &flags;
 
 	// check to see if we actually have something other than whitespace
 	char* tCol = strtok(tLineData, " \r\t");
@@ -51,7 +52,7 @@ void Sort240::addLine(char* tLineData, int iColumn){
 			tCol = strtok(NULL, " \r\t");
 			iCol++;
 		}
-		strcpy(fileLineArray[numLines].columnPtr, tCol);
+		strcpy(fileLineArray[numLines]->columnPtr, tCol);
 		numLines++;
 	}
 }
@@ -63,20 +64,26 @@ void Sort240::setFlags(bool tbReverse, bool tbCaseInsensitive, bool tbNumeric){
 }
 
 void Sort240::sort(){
-	qsort(&fileLineArray[0], numLines, sizeof(FILE_LINE), compare);
+	qsort(&fileLineArray[0], numLines, sizeof(FILE_LINE*), compare);
 }
 
 void Sort240::output(){
 	for(int i = 0; i < numLines; i++){
-		cout << fileLineArray[i].origLine << endl;
+		cout << fileLineArray[i]->origLine << endl;
 	}
 }
 
 Sort240::~Sort240()
 {
 	for(int i = 0; i < numLines; i++){
-		delete fileLineArray[i].origLine;
-		fileLineArray[i].origLine = NULL;
-		fileLineArray[i].columnPtr = NULL;
+		delete fileLineArray[i]->origLine;
+		fileLineArray[i]->origLine = NULL;
+
+		delete fileLineArray[i]->columnPtr;
+		fileLineArray[i]->columnPtr = NULL;
+
+		delete fileLineArray[i];
 	}
+	numLines = 0;
+	delete [] fileLineArray;
 }

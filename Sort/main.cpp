@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <fstream>
-#include "line.h"
 #include "sort240.h"
 
 using namespace std;

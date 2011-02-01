@@ -29,7 +29,7 @@ class Sort240
 		void sort();
 	protected:
 	private:
-		FILE_LINE* fileLineArray;
+		FILE_LINE** fileLineArray;
 		int numLines;
 		FLAGS flags;
 };
