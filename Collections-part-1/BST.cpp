@@ -167,14 +167,14 @@ BSTNode* BST::Find(const std::string & v, BSTNode* pStart) const{
 void BST::CopyChildren(BSTNode* pNode, BSTNode* pOrig){
 	if(pOrig->left){
 		pNode->left = new BSTNode(*pOrig->left);
-		pNode->left->left = NULL;
-		pNode->right->right = NULL;
+		pNode->left = NULL;
+		pNode->left->right = NULL;
 
 		this->CopyChildren(pNode->left, pOrig->left);
 	}
 	if(pOrig->right){
 		pNode->right = new BSTNode(*pOrig->right);
-		pNode->left->left = NULL;
+		pNode->right->left = NULL;
 		pNode->right->right = NULL;
 
 		this->CopyChildren(pNode->right, pOrig->right);
