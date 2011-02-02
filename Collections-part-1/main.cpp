@@ -7,27 +7,24 @@ using namespace std;
 int main(){
     LinkedList* tList = new LinkedList();
 
-    LLNode* tNode;
+	char* c = new char[3];
+	c[1] = '\n';
+	c[2] = '\0';
 
-    tNode = tList->Insert("Test\n", NULL);
-    tNode = tList->Insert("Cool\n", NULL);
-    tList->Clear();
-    tNode = tList->Insert("Awesome\n", NULL);
-    tNode = tList->Insert("1\n", tNode);
-    tList->Remove(tNode);
-    tNode = tList->Insert("4\n", tList->GetLast());
-    tNode = tList->Insert("2\n", tNode);
-    tNode = tList->Insert("3\n", tNode);
-
-    //tList->Remove(tList->GetFirst());
+    for(int i = 0; i < 200000; i++){
+    	c[0] = (char)i;
+    	tList->Insert(c, NULL);
+    }
 
 	cout << "LinkedList contents:" << tList->GetSize() << endl;
-    tList->Output(cout);
+    //tList->Output(cout);
 
-    LinkedList* tNew = new LinkedList(*tList);
+    //tList->Clear();
+    LinkedList tNew = *tList;
+    //tList->Clear();
 
-    cout << endl << endl << "List Copy contents:" << tNew->GetSize() << endl;
-	tNew->Output(cout);
+    cout << endl << endl << "List Copy contents:" << tNew.GetSize() << endl;
+	//tNew.Output(cout);
 
     BST* tBST = new BST();
     BSTNode* tBSTNode;
@@ -47,5 +44,4 @@ int main(){
 
     delete tList;
     delete tBST;
-    delete tNew;
 }
