@@ -11,8 +11,8 @@ int main(){
 
     tNode = tList->Insert("Test\n", NULL);
     tNode = tList->Insert("Cool\n", NULL);
-    //tList->Clear();
-    tNode = tList->Insert("Awesome\n", tNode);
+    tList->Clear();
+    tNode = tList->Insert("Awesome\n", NULL);
     tNode = tList->Insert("1\n", tNode);
     //tList->Remove(tNode);
     tNode = tList->Insert("4\n", tList->GetLast());
@@ -21,7 +21,7 @@ int main(){
 
     //tList->Remove(tList->GetFirst());
 
-	cout << "LinkedList contents:" << endl;
+	cout << "LinkedList contents:" << tList->GetSize() << endl;
     tList->Output(cout);
 
     tList->Clear();
@@ -38,7 +38,7 @@ int main(){
     tBSTNode = tBST->Insert("2\n");
     tBSTNode = tBST->Insert("3\n");
 
-    cout << endl << endl << "BST contents:" << endl;
+    cout << endl << endl << "BST contents:" << tBST->GetSize() << endl;
     tBST->Output(cout, tBST->GetRoot());
 
     delete tList;

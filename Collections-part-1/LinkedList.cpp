@@ -152,14 +152,20 @@ LLNode* LinkedList::Insert(const std::string & v, LLNode * n){
 			pNext->prev = pNode;
 		}
 		n->next = pNode;
+		if(n == tail){
+			tail = pNode;
+		}
 	}else{
 		pNext = head;
 		pNode = new LLNode(v, pPrev, pNext);
 		if(head){
 			pNode->next = head;
 			head->prev = pNode;
+			head = pNode;
+		}else{
+			head = pNode;
+			tail = pNode;
 		}
-		head = pNode;
 	}
 	return pNode;
 }

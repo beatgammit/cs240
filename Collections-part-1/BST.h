@@ -3,6 +3,10 @@
 
 #include <string>
 
+#include <iostream>
+
+using namespace std;
+
 
 //!  BSTNode implements a binary search tree node
 class BSTNode {
@@ -101,7 +105,7 @@ class BST {
 
 		//!  @return the number of values in the BST
 		int GetSize() const{
-			return this->GetSize(NULL);
+			return this->GetSize(NULL, 0);
 		}
 
 
@@ -140,15 +144,21 @@ class BST {
 			if(tNode){
 				cout << tNode->value;
 
-				this->Output(cout, tNode->left);
-				this->Output(cout, tNode->right);
+				if(tNode->left){
+					cout << "Left" << endl;
+					this->Output(cout, tNode->left);
+				}
+				if(tNode->right){
+					cout << "Right" << endl;
+					this->Output(cout, tNode->right);
+				}
 			}
 		}
 
 	private:
 		void Clear(BSTNode* pStart);
 		BSTNode* Find(const std::string & v, BSTNode* pStart) const;
-		int GetSize(BSTNode* pStart) const;
+		int GetSize(BSTNode* pStart, int size) const;
 		BSTNode* Insert(const std::string & v, BSTNode* pStart);
 		void CopyChildren(BSTNode* pNode, BSTNode* pOrig);
 		BSTNode* pRoot;

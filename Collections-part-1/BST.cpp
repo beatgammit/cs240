@@ -80,16 +80,17 @@ void BST::Clear(BSTNode* pStart){
 
 
 //!  @return the number of values in the BST
-int BST::GetSize(BSTNode* pStart) const{
-	int iReturn = 0;
+int BST::GetSize(BSTNode* pStart, int size) const{
+	int iReturn = size;
 
 	BSTNode* pNode = (pStart != NULL) ? pStart : pRoot;
 	if(pNode){
+		iReturn++;
 		if(pNode->left){
-			iReturn += this->GetSize(pNode->left);
+			iReturn += this->GetSize(pNode->left, 0);
 		}
 		if(pNode->right){
-			iReturn += this->GetSize(pNode->right);
+			iReturn += this->GetSize(pNode->right, 0);
 		}
 	}
 
