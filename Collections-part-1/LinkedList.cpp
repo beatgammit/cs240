@@ -186,7 +186,7 @@ LLNode* LinkedList::Find(const std::string & v, LLNode * n) const{
 		}else{
 			return Find(v, n->next);
 		}
-	}else if(head){
+	}else if(!n && head){
 		if(v.compare(head->value) == 0){
 			return head;
 		}else{
