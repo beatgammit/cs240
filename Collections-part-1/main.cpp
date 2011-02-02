@@ -41,6 +41,12 @@ int main(){
     cout << endl << endl << "BST contents:" << tBST->GetSize() << endl;
     tBST->Output(cout, tBST->GetRoot());
 
+    BST* tNew = new BST(*tBST);
+
+    cout << endl << endl << "BST Copy contents:" << tNew->GetSize() << endl;
+	tNew->Output(cout, tNew->GetRoot());
+
     delete tList;
     delete tBST;
+    delete tNew;
 }
