@@ -14,7 +14,7 @@ int main(){
     tList->Clear();
     tNode = tList->Insert("Awesome\n", NULL);
     tNode = tList->Insert("1\n", tNode);
-    //tList->Remove(tNode);
+    tList->Remove(tNode);
     tNode = tList->Insert("4\n", tList->GetLast());
     tNode = tList->Insert("2\n", tNode);
     tNode = tList->Insert("3\n", tNode);
@@ -24,7 +24,10 @@ int main(){
 	cout << "LinkedList contents:" << tList->GetSize() << endl;
     tList->Output(cout);
 
-    tList->Clear();
+    LinkedList* tNew = new LinkedList(*tList);
+
+    cout << endl << endl << "List Copy contents:" << tNew->GetSize() << endl;
+	tNew->Output(cout);
 
     BST* tBST = new BST();
     BSTNode* tBSTNode;
@@ -41,10 +44,6 @@ int main(){
     cout << endl << endl << "BST contents:" << tBST->GetSize() << endl;
     tBST->Output(cout, tBST->GetRoot());
 
-    BST* tNew = new BST(*tBST);
-
-    cout << endl << endl << "BST Copy contents:" << tNew->GetSize() << endl;
-	tNew->Output(cout, tNew->GetRoot());
 
     delete tList;
     delete tBST;

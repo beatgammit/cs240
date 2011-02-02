@@ -180,13 +180,17 @@ LLNode* LinkedList::Insert(const std::string & v, LLNode * n){
 //!
 //!  @return a pointer to the node containing v, or NULL if v is not found
 LLNode* LinkedList::Find(const std::string & v, LLNode * n) const{
-	// determine whether to use the parameter or head
-	LLNode* pNode = (n != NULL) ? n : head;
-	if(pNode){
-		if(v.compare(pNode->value) == 0){
-			return pNode;
-		}else if(pNode->next){
-			return Find(v, pNode->next);
+	if(n && n->next){
+		if(v.compare(n->next->value) == 0){
+			return n->next;
+		}else{
+			return Find(v, n->next);
+		}
+	}else if(head){
+		if(v.compare(head->value) == 0){
+			return head;
+		}else{
+			return Find(v, head);
 		}
 	}
 	return NULL;
