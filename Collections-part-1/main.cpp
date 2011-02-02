@@ -19,7 +19,7 @@ int main(){
 	cout << "LinkedList contents:" << tList->GetSize() << endl;
     //tList->Output(cout);
 
-    //tList->Clear();
+    tList->Clear();
     LinkedList tNew = *tList;
     //tList->Clear();
 

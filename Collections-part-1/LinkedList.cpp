@@ -12,6 +12,7 @@ LinkedList::LinkedList(){
 //!  Copy constructor.  Makes a complete copy of its argument
 LinkedList::LinkedList(const LinkedList & other){
 	LLNode* pNode = other.head;
+	head = NULL;
 
 	LLNode* pCurNode = NULL;
 	LLNode* pPrevNode = NULL;
