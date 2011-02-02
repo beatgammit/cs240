@@ -104,25 +104,27 @@ int BST::GetSize(BSTNode* pStart) const{
 //!  @return a pointer to the newly inserted node, or NULL if v was already
 //!          in the tree (i.e., NULL is used to indicate a duplicate insertion)
 BSTNode* BST::Insert(const std::string & v, BSTNode* pStart){
-	if(!pRoot){
-		pRoot = new BSTNode(v);
-		return pRoot;
-	}else{
-		BSTNode* pNode = (pStart != NULL) ? pStart : pRoot;
-		int iCmp = v.compare(pNode->value);
-		if(iCmp < 0){
-			if(pNode->left){
-				return this->Insert(v, pNode->left);
-			}else{
-				pNode->left = new BSTNode(v);
-				return pNode->left;
-			}
-		}else if(iCmp > 0){
-			if(pNode->right){
-				return this->Insert(v, pNode->right);
-			}else{
-				pNode->right = new BSTNode(v);
-				return pNode->right;
+	if(true){
+		if(!pRoot){
+			pRoot = new BSTNode(v);
+			return pRoot;
+		}else{
+			BSTNode* pNode = (pStart != NULL) ? pStart : pRoot;
+			int iCmp = v.compare(pNode->value);
+			if(iCmp < 0){
+				if(pNode->left){
+					return this->Insert(v, pNode->left);
+				}else{
+					pNode->left = new BSTNode(v);
+					return pNode->left;
+				}
+			}else if(iCmp > 0){
+				if(pNode->right){
+					return this->Insert(v, pNode->right);
+				}else{
+					pNode->right = new BSTNode(v);
+					return pNode->right;
+				}
 			}
 		}
 	}

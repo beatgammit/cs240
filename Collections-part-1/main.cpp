@@ -4,23 +4,27 @@
 
 using namespace std;
 
-int main()
-{
+int main(){
     LinkedList* tList = new LinkedList();
 
     LLNode* tNode;
 
-    tNode = tList->Insert("Test\n", tList->GetFirst());
-    tNode = tList->Insert("Cool\n", tNode);
+    tNode = tList->Insert("Test\n", NULL);
+    tNode = tList->Insert("Cool\n", NULL);
+    //tList->Clear();
     tNode = tList->Insert("Awesome\n", tNode);
     tNode = tList->Insert("1\n", tNode);
-    tList->Remove(tNode);
+    //tList->Remove(tNode);
     tNode = tList->Insert("4\n", tList->GetLast());
     tNode = tList->Insert("2\n", tNode);
     tNode = tList->Insert("3\n", tNode);
 
+    //tList->Remove(tList->GetFirst());
+
 	cout << "LinkedList contents:" << endl;
     tList->Output(cout);
+
+    tList->Clear();
 
     BST* tBST = new BST();
     BSTNode* tBSTNode;

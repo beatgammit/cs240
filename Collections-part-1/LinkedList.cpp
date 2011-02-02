@@ -94,9 +94,9 @@ void LinkedList::Clear(){
 	LLNode* pCurNode = head;
 	while(pCurNode){
 		pToDelete = pCurNode;
-		pCurNode = pCurNode->GetNext();
+		pCurNode = pCurNode->next;
 
-		delete pToDelete;
+		//delete pToDelete;
 	}
 	head = NULL;
 	tail = NULL;
@@ -137,24 +137,27 @@ LLNode* LinkedList::GetLast()const{
 //!
 //!  @return a pointer to the newly inserted node
 LLNode* LinkedList::Insert(const std::string & v, LLNode * n){
-	// set the next and prev nodes of this node;
-	LLNode* pPrev = (n != NULL) ? n : NULL;
-	LLNode* pNext = (n != NULL) ? n->GetNext() : head;
-
-	LLNode* pNode = new LLNode(v, pPrev, pNext);
+	LLNode* pNode;
+	LLNode* pPrev = NULL;
+	LLNode* pNext = NULL;
 
 	if(n){
-		n->next = pNode;
+		pPrev = n;
+		if(n->next){
+			pNext = n->next;
+		}
+		pNode = new LLNode(v, pPrev, pNext);
+
 		if(pNext){
 			pNext->prev = pNode;
-		}else if(n == tail){
-			tail = pNode;
 		}
-	}else if(n == head){
+		n->next = pNode;
+	}else{
+		pNext = head;
+		pNode = new LLNode(v, pPrev, pNext);
 		if(head){
+			pNode->next = head;
 			head->prev = pNode;
-		}else{
-			tail = pNode;
 		}
 		head = pNode;
 	}
@@ -173,13 +176,12 @@ LLNode* LinkedList::Insert(const std::string & v, LLNode * n){
 LLNode* LinkedList::Find(const std::string & v, LLNode * n) const{
 	// determine whether to use the parameter or head
 	LLNode* pNode = (n != NULL) ? n : head;
-
-	// get the next node if it exists
-	pNode = (pNode->next != NULL) ? pNode->next : NULL;
-
-	// check to see if we found what we're looking for or recurse
-	if(pNode->next){
-		return (pNode->value.compare(v) == 0) ? pNode : Find(v, pNode);
+	if(pNode){
+		if(v.compare(pNode->value) == 0){
+			return pNode;
+		}else if(pNode->next){
+			return Find(v, pNode->next);
+		}
 	}
 	return NULL;
 }
@@ -202,6 +204,6 @@ void LinkedList::Remove(LLNode * n){
 		if(n == tail){
 			tail = n->prev;
 		}
-		delete n;
+		//delete n;
 	}
 }
