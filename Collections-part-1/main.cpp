@@ -5,7 +5,7 @@
 using namespace std;
 
 int main(){
-    LinkedList* tList = new LinkedList();
+    LinkedList tList = LinkedList();
 
 	char* c = new char[3];
 	c[1] = '\n';
@@ -13,14 +13,15 @@ int main(){
 
     for(int i = 0; i < 200000; i++){
     	c[0] = (char)i;
-    	tList->Insert(c, NULL);
+    	tList.Insert(c, NULL);
     }
 
-	cout << "LinkedList contents:" << tList->GetSize() << endl;
+	tList = tList;
+	cout << "LinkedList contents:" << tList.GetSize() << endl;
     //tList->Output(cout);
 
-    tList->Clear();
-    LinkedList tNew = *tList;
+    //tList->Clear();
+    LinkedList tNew = tList;
     //tList->Clear();
 
     cout << endl << endl << "List Copy contents:" << tNew.GetSize() << endl;
@@ -42,6 +43,5 @@ int main(){
     tBST->Output(cout, tBST->GetRoot());
 
 
-    delete tList;
     delete tBST;
 }

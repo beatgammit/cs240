@@ -49,6 +49,9 @@ LinkedList::~LinkedList(){
 //! Assignment operator.  Makes a complete copy of its argument
 //! @return A reference to oneself
 LinkedList& LinkedList::operator =(const LinkedList & other){
+	if(head == other.head){
+		return *this;
+	}
 	if(this->head){
 		this->Clear();
 	}
