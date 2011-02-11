@@ -100,7 +100,7 @@ void LinkedList::Clear(){
 		pToDelete = pCurNode;
 		pCurNode = pCurNode->next;
 
-		//delete pToDelete;
+		delete pToDelete;
 	}
 	head = NULL;
 	tail = NULL;
