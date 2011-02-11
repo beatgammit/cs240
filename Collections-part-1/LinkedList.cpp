@@ -155,10 +155,7 @@ LLNode* LinkedList::Insert(const std::string & v, LLNode * n){
 		if(pNext){
 			pNext->prev = pNode;
 		}
-		if(pPrev){
-			pPrev->next = pNode;
-		}
-		n->next = pNode;
+		pPrev->next = pNode;
 		if(n == tail){
 			tail = pNode;
 		}
@@ -168,11 +165,10 @@ LLNode* LinkedList::Insert(const std::string & v, LLNode * n){
 		if(head){
 			pNode->next = head;
 			head->prev = pNode;
-			head = pNode;
 		}else{
-			head = pNode;
 			tail = pNode;
 		}
+		head = pNode;
 	}
 	return pNode;
 }
@@ -211,11 +207,9 @@ void LinkedList::Remove(LLNode * n){
 	if(n != NULL){
 		if(n->prev != NULL){
 			n->prev->next = n->next;
-			n->prev = NULL;
 		}
 		if(n->next != NULL){
 			n->next->prev = n->prev;
-			n->next = NULL;
 		}
 		if(n == head){
 			head = n->next;
