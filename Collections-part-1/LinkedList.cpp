@@ -208,9 +208,11 @@ void LinkedList::Remove(LLNode * n){
 	if(n != NULL){
 		if(n->prev != NULL){
 			n->prev->next = n->next;
+			n->prev = NULL;
 		}
 		if(n->next != NULL){
 			n->next->prev = n->prev;
+			n->next = NULL;
 		}
 		if(n == head){
 			head = n->next;
@@ -218,6 +220,6 @@ void LinkedList::Remove(LLNode * n){
 		if(n == tail){
 			tail = n->prev;
 		}
-		//delete n;
+		delete n;
 	}
 }

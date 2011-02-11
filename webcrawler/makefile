@@ -51,7 +51,9 @@ bin/webcrawler : obj/webcrawler.o lib/cs240utils.a
 obj/webcrawler.o : src/webcrawler.cpp
 	@ g++ -c -o obj/webcrawler.o -I inc src/webcrawler.cpp
 
-test : bin
+test : bin/test
+bin/test : obj/webcrawler.o lib/cs240utils.a
+	@ g++ -o bin/test obj/webcrawler.o lib/cs240utils.a
 	@ bin/webcrawler
 
 
