@@ -155,6 +155,9 @@ LLNode* LinkedList::Insert(const std::string & v, LLNode * n){
 		if(pNext){
 			pNext->prev = pNode;
 		}
+		if(pPrev){
+			pPrev->next = pNode;
+		}
 		n->next = pNode;
 		if(n == tail){
 			tail = pNode;
