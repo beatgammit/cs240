@@ -10,7 +10,7 @@ HTMLTOKENIZER = utils/obj/HTMLTokenizer.o
 LIBOBJFILES = $(STRINGUTIL) $(URLINPUTSTREAM) $(FILEINPUTSTREAM) $(HTTPINPUTSTREAM) $(COMANDRUNNER) $(FILESYSTEM) $(HTMLTOKEN) $(HTMLTOKENIZER)
 
 clean : 
-	@ rm $(LIBOBJFILES) bin/webcrawler obj/webcrawler.o lib/cs240utils.a
+	@ rm utils/obj/* bin/* obj/* lib/*
 
 
 lib : lib/cs240utils.a
@@ -42,7 +42,6 @@ $(HTMLTOKENIZER) : utils/inc/HTMLTokenizer.h utils/src/HTMLTokenizer.cpp
 	@ g++ -c -o $(HTMLTOKENIZER) -I utils/inc utils/src/HTMLTokenizer.cpp
 
 
-
 bin : bin/webcrawler
 bin/webcrawler : obj/webcrawler.o lib/cs240utils.a
 	@ g++ -o bin/webcrawler obj/webcrawler.o lib/cs240utils.a
@@ -51,10 +50,9 @@ bin/webcrawler : obj/webcrawler.o lib/cs240utils.a
 obj/webcrawler.o : src/webcrawler.cpp
 	@ g++ -c -o obj/webcrawler.o -I inc src/webcrawler.cpp
 
+
 test : bin/test
+	@ bin/test
 bin/test : obj/webcrawler.o lib/cs240utils.a
 	@ g++ -o bin/test obj/webcrawler.o lib/cs240utils.a
-	@ bin/webcrawler
-
-
-bin/webcrawler : obj/
+	@ chmod +x bin/test
