@@ -78,6 +78,11 @@ URL
 * Takes a base URL and relative URL
 * Compare method to determine equivelence (same domain, port and path)
 
+URLResolver
+-----------
+
+The URL resolver from the URLResolver lab rewritten to use the string class.
+
 KeywordIndex
 ------------
 
@@ -99,3 +104,13 @@ XMLPrinter
     * Prints page description
 * Prints the KeywordIndex as formatted XML
     * Prints each word with associated value and occurrences
+
+LinkedList
+----------
+
+The LinkedList from the Collections lab with minor modifications.
+
+BST
+---
+
+The binary search tree from the Collections lab with minor modifications.

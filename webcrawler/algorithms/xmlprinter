@@ -1,0 +1,27 @@
+#include "string"
+#include "page.h"
+#include "keyword.h"
+#include "keyworditerator.h"
+#include "occurrencemap.h"
+
+string XMLPrinter::generateXML(){
+	string xmlReturn = "<website>";
+
+	xmlReturn += "<start-url>";
+	xmlReturn += this->startURL;
+	xmlReturn += "</start-url>";
+
+	xmlReturn += "<pages>";
+	Page* pPage = pPages->GetFirst();
+	while(pPage->HasNext()){
+		xmlReturn += this->generatePageXML(pPage);
+		pPage = pPage.GetNext();
+	}
+	xmlReturn += "</pages>";
+
+	xmlReturn += "<index>";
+	pIndex->recurse(generateKeywordXML, &this);
+	xmlReturn += "</index>";
+
+	xmlReturn += "</website>";
+}

@@ -1,0 +1,73 @@
+#include "htmlparser.h"
+#include "HTMLTokenizer.h"
+
+#include "url.h"
+#include "urlresolver.h"
+
+Page* HTMLParser::parse(PageQueue* pQueue, KeywordIndex* pIndex, BST* pStopWords){
+	Page* pPage = new Page;
+	pPage->pURL = this->pURL;
+	pPage->description = "";
+
+	HTMLTokenizer tTokenizer = HTMLTokenizer(this->URLData);
+	
+	bool bIgnore = false;
+	bool bReadTitle = false;
+	URLResolver tURLResolver = URLResolver(this->pURL);
+	URL* pURL = NULL;
+	string tRelativeURL;
+
+	while(tTokenizer.HasNextToken()){
+		HTMLToken tToken = tTokenizer.GetNextToken();
+		switch(tToken.GetType()){
+			case TAG_START:{
+				string tokenValue = tolower(tToken.getValue());
+				if(tokenValue.find("<title") >= 0){
+					bReadTitle = true;
+				}else if(tokenValue.find("<script") >= 0){
+					bIgnore = true;
+				}else if(!bIgnore && tokenValue.find("<a") >= 0 && tToken.AttributeExists("href")){
+					tRelativeURL = tToken.GetAttribute("href");
+					if(this->isInScope(tRelativeURL)){
+						pURL = new URL(tURLResolver.resolve(tRelativeURL));
+						pPageQueue.push(pURL);
+					}
+				}
+				break;
+			}
+
+			case TAG_END:{
+				string tokenValue = tolower(tToken.getValue());
+				if(tokenValue == "</title>"){
+					bReadTitle = false;
+				}else if(tokenValue == "</script>"){
+					bIgnore = false;
+				}
+				break;
+			}
+
+			case COMMENT:{
+				// ignore everything
+				break;
+			}
+
+			case TEXT:{
+				if(!bIgnore){
+					if(bReadTitle){
+						pPage->description = tToken.GetValue();
+					}else{
+						this->parseText(tToken.GetValue(), pIndex, pStopWords);
+					}
+				}
+				break;
+			}
+
+			case END: // useless, so I'll let my while condition handle this
+			default:{
+				break;
+			}
+		}
+	}
+
+	return pPage;
+}

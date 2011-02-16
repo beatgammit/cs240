@@ -1,0 +1,22 @@
+#include "page.h"
+#include "url.h"
+#include "htmlparser.h"
+
+void WebCrawler::crawl(URL* pStartURL){
+	this->pageQueue.push(pStartURL);
+	HTMLParser tParser;
+	URL* pURL = NULL;
+	Page* pPage = NULL;
+	while(!pageQueue.empty()){
+		pURL = pageQueue.pop();
+
+		// the file is downloaded in HTMLParser
+		tHTMLParser = HTMLParser(pURL);
+		pPage = tParser.parse(&this->pageQueue, &this->keyIndex, &this->stopWords);
+		this->pagesParsed.add(pPage);
+
+		// these will be deleted later
+		pPage = NULL;
+		pURL = NULL;
+	}
+}
