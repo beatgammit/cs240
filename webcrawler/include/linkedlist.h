@@ -3,6 +3,8 @@
 
 #include <string>
 
+class LinkedList;
+
 //! LLNode implements a doubly-linked list node
 class LLNode {
 	friend class LinkedList;  //!< LinkedList can access private members of LLNode
@@ -50,9 +52,9 @@ class LLNode {
 		}
 
 	private:
-		std::string value;        //!< value stored in the node
-		LLNode * prev;            //!< pointer to previous node in the list
-		LLNode * next;            //!< pointer to next node in the list
+		std::string value;		//!< value stored in the node
+		LLNode * prev;			//!< pointer to previous node in the list
+		LLNode * next;			//!< pointer to next node in the list
 };
 
 

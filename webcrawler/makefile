@@ -9,6 +9,22 @@ HTMLTOKENIZER = utils/obj/HTMLTokenizer.o
 
 LIBOBJFILES = $(STRINGUTIL) $(URLINPUTSTREAM) $(FILEINPUTSTREAM) $(HTTPINPUTSTREAM) $(COMANDRUNNER) $(FILESYSTEM) $(HTMLTOKEN) $(HTMLTOKENIZER)
 
+
+COMPILER = g++
+RFLAGS = -c -o
+DFLAGS = -g $(RFLAGS)
+RELEASE = $(COMPILER) $(RFLAGS)
+DEBUG = $(COMPILER) $(DFLAGS)
+
+DEBUG_OBJECTS = obj/debugwebcrawler.o obj/debugurl.o obj/debughtmlparser.o obj/debuglinkedlist.o obj/debugpagequeue.o obj/debugurlresolver.o lib/cs240utils.a;
+RELEASE_OBJECTS = obj/webcrawler.o obj/url.o obj/htmlparser.o  obj/linkedlist.o obj/pagequeue.o obj/urlresolver.o lib/cs240utils.a;
+
+DEBUG_CASES = debug/webcrawler.o debug/url.o debug/htmlparser.o debug/linkedlist.o debug/pagequeue.o debug/urlresolver.o lib/cs240utils.a;
+RELEASE_CASES = obj/webcrawler.o obj/url.o obj/htmlparser.o obj/linkedlist.o obj/pagequeue.o obj/urlresolver.o lib/cs240utils.a;
+
+INCLUDES = -I ./include -I ./utils/inc
+
+
 clean : 
 	@ rm utils/obj/* bin/* obj/* lib/*
 
@@ -43,16 +59,50 @@ $(HTMLTOKENIZER) : utils/inc/HTMLTokenizer.h utils/src/HTMLTokenizer.cpp
 
 
 bin : bin/webcrawler
-bin/webcrawler : obj/webcrawler.o lib/cs240utils.a
-	@ g++ -o bin/webcrawler obj/webcrawler.o lib/cs240utils.a
+bin/webcrawler : $(RELEASE_CASES)
+	g++ -o bin/webcrawler $(RELEASE_OBJECTS)
 	@ chmod +x bin/webcrawler
 
 obj/webcrawler.o : src/webcrawler.cpp
-	@ g++ -c -o obj/webcrawler.o -I inc src/webcrawler.cpp
+	$(RELEASE) obj/webcrawler.o $(INCLUDES) src/webcrawler.cpp
+
+obj/url.o : src/url.cpp
+	$(RELEASE) obj/url.o $(INCLUDES) src/url.cpp
+
+obj/htmlparser.o : src/htmlparser.cpp
+	$(RELEASE) obj/htmlparser.o $(INCLUDES) src/htmlparser.cpp
+
+obj/urlresolver.o : src/urlresolver.cpp
+	$(RELEASE) obj/urlresolver.o $(INCLUDES) src/urlresolver.cpp
+
+obj/linkedlist.o : src/linkedlist.cpp
+	$(RELEASE) obj/linkedlist.o $(INCLUDES) src/linkedlist.cpp
+
+obj/pagequeue.o : src/pagequeue.cpp
+	$(RELEASE) obj/pagequeue.o $(INCLUDES) src/pagequeue.cpp
+
+
+
+debug/webcrawler.o : src/webcrawler.cpp
+	$(DEBUG) obj/debugwebcrawler.o $(INCLUDES) src/webcrawler.cpp
+
+debug/url.o : src/url.cpp
+	$(DEBUG) obj/debugurl.o $(INCLUDES) src/url.cpp
+
+debug/htmlparser.o : src/htmlparser.cpp
+	$(DEBUG) obj/debughtmlparser.o $(INCLUDES) src/htmlparser.cpp
+
+debug/urlresolver.o : src/urlresolver.cpp
+	$(DEBUG) obj/debugurlresolver.o $(INCLUDES) src/urlresolver.cpp
+
+debug/linkedlist.o : src/linkedlist.cpp
+	$(DEBUG) obj/debuglinkedlist.o $(INCLUDES) src/linkedlist.cpp
+
+debug/pagequeue.o : src/pagequeue.cpp
+	$(DEBUG) obj/debugpagequeue.o $(INCLUDES) src/pagequeue.cpp
 
 
 test : bin/test
-	@ bin/test
-bin/test : obj/webcrawler.o lib/cs240utils.a
-	@ g++ -o bin/test obj/webcrawler.o lib/cs240utils.a
+bin/test : $(DEBUG_CASES)
+	g++ -g -Wall -o bin/test $(DEBUG_OBJECTS)
 	@ chmod +x bin/test

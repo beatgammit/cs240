@@ -12,7 +12,7 @@ using namespace std;
 
 /*
  * WebCrawler drives the application.
- * 
+ *
  * Pages are parsed in the crawl method according to the spec.
  * Words found in the stop words data structure are ignored,
  * and all others are stored with a page count.
@@ -26,29 +26,32 @@ class WebCrawler{
 
 		/*
 		 * Loads the stop words from the given file
-		 * 
+		 *
 		 * @param pFilePath- The path to a file containing the stop words
 		 */
 		void loadStopWords(char* pFilePath);
 
 		/*
 		 * Main function of this class.  This starts the indexing process.
-		 * 
+		 *
 		 * @param pStartURL- the URL to start on
 		 */
-		void crawl(URL* pStartURL);
+		void crawl(string sURL);
 
 		/*
 		 * Turns the keyword index generated in the crawl method into XML.
 		 * Should be called after crawl has been finished.
-		 * 
+		 *
 		 * @return XML representing a page index
 		 */
 		string toXML();
 
 	private:
 		/* Contains keywords that should be ignored (e.g. of, it, an...) */
-		BST stopWords;
+		string* pStopWords;
+
+		/* The number of stopwords */
+		int iStopWords;
 
 		/* Queue of pages yet te be processed */
 		PageQueue pageQueue;
@@ -57,6 +60,6 @@ class WebCrawler{
 		PagesParsed pagesParsed;
 
 		/* Set of all of the keywords that have been indexed */
-		KeywordIndex keyIndex;
-}
+		//KeywordIndex keyIndex;
+};
 #endif

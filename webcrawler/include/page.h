@@ -4,7 +4,7 @@
 #include "string"
 
 struct Page{
-	char* pURL;
+	string pURL;
 	string description;
 };
 #endif
