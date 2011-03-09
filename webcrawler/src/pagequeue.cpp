@@ -2,7 +2,7 @@
 
 string PageQueue::pop(){
 	if(!this->IsEmpty()){
-		string tURL = this->GetFirst()->GetValue();
+		string tURL = *((string*)this->GetFirst()->GetValue());
 		this->Remove(this->GetFirst());
 		return tURL;
 	}
@@ -10,5 +10,5 @@ string PageQueue::pop(){
 }
 
 void PageQueue::push(string tURL){
-	this->Insert(tURL, this->GetLast());
+	this->Insert(new string(tURL), this->GetLast());
 }

@@ -4,6 +4,7 @@
 #include "page.h"
 #include "url.h"
 #include "linkedlist.h"
+#include "string"
 
 /*
  * Stores the pages that have already been parsed.
@@ -17,7 +18,7 @@ class PagesParsed : public LinkedList {
 		 * @param pURL The URL to check for
 		 * @return true if the URL is in the tree, false if not
 		 */
-		bool pageProcessed(URL* pURL);
+		bool pageProcessed(std::string tURL);
 
 		/*
 		 * Adds a page to the list.

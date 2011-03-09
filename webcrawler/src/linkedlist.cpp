@@ -140,7 +140,7 @@ LLNode* LinkedList::GetLast()const{
 //!      If n is NULL, the new node should be inserted at the beginning of the list.
 //!
 //!  @return a pointer to the newly inserted node
-LLNode* LinkedList::Insert(const std::string & v, LLNode * n){
+LLNode* LinkedList::Insert(void* v, LLNode * n){
 	LLNode* pNode;
 	LLNode* pPrev = NULL;
 	LLNode* pNext = NULL;
@@ -182,18 +182,18 @@ LLNode* LinkedList::Insert(const std::string & v, LLNode * n){
 //!      If n is NULL, the list should be searched from the beginning.
 //!
 //!  @return a pointer to the node containing v, or NULL if v is not found
-LLNode* LinkedList::Find(const std::string & v, LLNode * n) const{
+LLNode* LinkedList::Find(void* v, LLNode * n, int (*comparator)(void*, void*)) const{
 	if(n && n->next){
-		if(v.compare(n->next->value) == 0){
+		if(comparator(v, n->next->value) == 0){
 			return n->next;
 		}else{
-			return Find(v, n->next);
+			return Find(v, n->next, comparator);
 		}
 	}else if(!n && head){
-		if(v.compare(head->value) == 0){
+		if(comparator(v, head->value) == 0){
 			return head;
 		}else{
-			return Find(v, head);
+			return Find(v, head, comparator);
 		}
 	}
 	return NULL;

@@ -16,11 +16,11 @@ DFLAGS = -g $(RFLAGS)
 RELEASE = $(COMPILER) $(RFLAGS)
 DEBUG = $(COMPILER) $(DFLAGS)
 
-DEBUG_OBJECTS = obj/debugwebcrawler.o obj/debugurl.o obj/debughtmlparser.o obj/debuglinkedlist.o obj/debugpagequeue.o obj/debugurlresolver.o lib/cs240utils.a;
-RELEASE_OBJECTS = obj/webcrawler.o obj/url.o obj/htmlparser.o  obj/linkedlist.o obj/pagequeue.o obj/urlresolver.o lib/cs240utils.a;
+DEBUG_OBJECTS = obj/debugwebcrawler.o obj/debugurl.o obj/debughtmlparser.o obj/debuglinkedlist.o obj/debugpagequeue.o obj/debugurlresolver.o obj/debugpagesparsed.o lib/cs240utils.a;
+RELEASE_OBJECTS = obj/webcrawler.o obj/url.o obj/htmlparser.o  obj/linkedlist.o obj/pagequeue.o obj/urlresolver.o obj/pagesparsed.o lib/cs240utils.a;
 
-DEBUG_CASES = debug/webcrawler.o debug/url.o debug/htmlparser.o debug/linkedlist.o debug/pagequeue.o debug/urlresolver.o lib/cs240utils.a;
-RELEASE_CASES = obj/webcrawler.o obj/url.o obj/htmlparser.o obj/linkedlist.o obj/pagequeue.o obj/urlresolver.o lib/cs240utils.a;
+DEBUG_CASES = debug/webcrawler.o debug/url.o debug/htmlparser.o debug/linkedlist.o debug/pagequeue.o debug/urlresolver.o debug/pagesparsed.o lib/cs240utils.a;
+RELEASE_CASES = obj/webcrawler.o obj/url.o obj/htmlparser.o obj/linkedlist.o obj/pagequeue.o obj/urlresolver.o obj/pagesparsed.o lib/cs240utils.a;
 
 INCLUDES = -I ./include -I ./utils/inc
 
@@ -81,6 +81,9 @@ obj/linkedlist.o : src/linkedlist.cpp
 obj/pagequeue.o : src/pagequeue.cpp
 	$(RELEASE) obj/pagequeue.o $(INCLUDES) src/pagequeue.cpp
 
+obj/pagesparsed.o : src/pagesparsed.cpp
+	$(DEBUG) obj/pagesparsed.o $(INCLUDES) src/pagesparsed.cpp
+
 
 
 debug/webcrawler.o : src/webcrawler.cpp
@@ -100,6 +103,10 @@ debug/linkedlist.o : src/linkedlist.cpp
 
 debug/pagequeue.o : src/pagequeue.cpp
 	$(DEBUG) obj/debugpagequeue.o $(INCLUDES) src/pagequeue.cpp
+
+debug/pagesparsed.o : src/pagesparsed.cpp
+	$(DEBUG) obj/debugpagesparsed.o $(INCLUDES) src/pagesparsed.cpp
+
 
 
 test : bin/test

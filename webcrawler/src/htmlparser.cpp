@@ -25,7 +25,7 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 	Page* pPage = new Page;
 	pPage->pURL = this->tUrl;
 
-	pParsed->Insert(this->tUrl);
+	pParsed->Insert((void*)new string(this->tUrl), NULL);
 
 	URLInputStream tStream = URLInputStream(this->tUrl);
 	HTMLTokenizer tTokenizer = HTMLTokenizer(&tStream);
@@ -119,7 +119,7 @@ bool HTMLParser::addLink(std::string tURL, PageQueue* pQueue, PagesParsed* pPars
 				urlToAdd = urlToAdd.substr(0, tPos);
 			}
 
-			if(!pParsed->Find(urlToAdd, NULL)){
+			if(!pParsed->pageProcessed(urlToAdd)){
 				pQueue->push(urlToAdd);
 				return true;
 			}

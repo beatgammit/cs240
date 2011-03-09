@@ -12,18 +12,15 @@ class LLNode {
 	public:
 
 		//!  Constructor
-		LLNode(const std::string & v, LLNode * p, LLNode * n) : value(v), prev(p), next(n)
-		{
+		LLNode(void* v, LLNode * p, LLNode * n) : value(v), prev(p), next(n){
 		}
 
 		//! Copy Constructor
-		LLNode(const LLNode & other) : value(other.value), prev(other.prev), next(other.next)
-		{
+		LLNode(const LLNode & other) : value(other.value), prev(other.prev), next(other.next){
 		}
 
 		//!  Read-only public methods for use by clients of the LinkedList class
-		const std::string & GetValue() const
-		{
+		void* GetValue() const{
 		  return value;
 		}
 
@@ -52,7 +49,7 @@ class LLNode {
 		}
 
 	private:
-		std::string value;		//!< value stored in the node
+		void* value;			//!< value stored in the node
 		LLNode * prev;			//!< pointer to previous node in the list
 		LLNode * next;			//!< pointer to next node in the list
 };
@@ -110,7 +107,7 @@ class LinkedList
 		//!      If n is NULL, the new node should be inserted at the beginning of the list.
 		//!
 		//!  @return a pointer to the newly inserted node
-		LLNode * Insert(const std::string & v, LLNode * n);
+		LLNode * Insert(void* v, LLNode * n);
 
 
 		//! Searches for the first occurrence of value v that appears in the list
@@ -121,21 +118,13 @@ class LinkedList
 		//!      If n is NULL, the list should be searched from the beginning.
 		//!
 		//!  @return a pointer to the node containing v, or NULL if v is not found
-		LLNode * Find(const std::string & v, LLNode * n) const;
+		LLNode * Find(void* v, LLNode * n, int (*comparatorint)(void*, void*)) const;
 
 
 		//!  Removes node n from the list
 		//!
 		//!  @param n The node being removed from the list
 		void Remove(LLNode * n);
-
-		void Output(std::ostream& cout){
-			LLNode* tNode = head;
-			while(tNode){
-				cout << tNode->value;
-				tNode = tNode->next;
-			}
-		}
 
 	private:
 		LLNode* head;

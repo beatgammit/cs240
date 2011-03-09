@@ -4,7 +4,7 @@
 #include "string"
 
 struct Page{
-	string pURL;
-	string description;
+	std::string pURL;
+	std::string description;
 };
 #endif
