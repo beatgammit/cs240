@@ -29,15 +29,15 @@ public:
     bool pathMatches(URL* tURL);
     std::string getExtension();
 
+    std::string output();
     static bool isRelative(std::string tURL);
 private:
     URLTYPE type;
-    char* head;
-    char* path;
+    std::string head;
+    std::string path;
     bool bFixup;
 
     void applyChange(char* tToken);
-    std::string output();
     void fixup();
     void clearPath();
 };

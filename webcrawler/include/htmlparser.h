@@ -51,22 +51,13 @@ class HTMLParser{
 
 	private:
 		/*
-		 * Downloads the page using the member variable.
-		 *
-		 * This method uses the URLInputStream given in the CS240Utils package.
-		 *
-		 * @return The contents of the file at the URL
-		 */
-		string downloadURL();
-
-		/*
 		 * Parses text into keywords and adds them to the keyword index.
 		 *
 		 * @param text- The text to be indexed
 		 * @param pIndex- The keyword index to add keywords to
 		 * @param pStopWords- the words to ignore when processing text
 		 */
-		void parseText(string text, KeywordIndex* pIndex, BST* pStopWords);
+		void parseText(string text, KeywordIndex* pIndex, string* pStopWords);
 
 		/*
 		 * Checks to see if the link is in scopo, and if so, adds it to the Queue if it isn't in the pages parsed

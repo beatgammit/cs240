@@ -15,31 +15,30 @@ using namespace std;
 #define DOMAIN_START 8
 
 URL::URL(string sPath) {
-	char* pPath = (char*)sPath.c_str();
-    bFixup = false;
+	bFixup = false;
 
-    head = new char[MAX_STR];
-    path = new char[MAX_STR];
+    head = "";
+    path = "";
 
-    if(pPath[0] == 'h'){
+    if(sPath.find("http://") == 0){
         type = HTTP;
 
-        char* pPos = strstr(&pPath[DOMAIN_START], "/");
-        if(pPos){
-            strncpy(head, pPath, pPos - pPath);
-            strcpy(path, pPos);
+		size_t tPos = sPath.find("/", DOMAIN_START);
+        if(tPos != string::npos){
+        	head = sPath.substr(0, tPos);
+        	path = sPath.substr(tPos);
         }else{
-            strcpy(head, pPath);
+        	head = sPath;
             path[0] = '\0';
         }
 
-        //printf("\nHead: %s\n", head);
+        //printf("\nHead: %s\n", head);řř
         //printf("Path: %s\n\n\n", path);
     }else{
         type = FILETYPE;
 
-        strncpy(head, pPath, 7);
-        strcpy(path, &pPath[7]);
+		head = sPath.substr(0, 7);
+		path = sPath.substr(7);
     }
 }
 
@@ -49,55 +48,53 @@ void URL::applyChange(char* tToken){
         // don't do anything
     }else if(strcmp(tToken, "..") == 0){
         // go up a directory
-        int strLen = strlen(path);
+        int strLen = path.length();
         if(strLen){
             // directory
             if(path[strLen - 1] == '/'){
                 path[strLen - 1] = '\0';
-                char* pLoc = strrchr(path, '/');
-
-                path[pLoc - path + 1] = '\0';
+                size_t tPos = path.rfind("/");
+               	path = path.erase(tPos + 1);
             }else{
-                char* pLoc = strrchr(path, '/');
-                //printf("Loc:%s\n", pLoc);
-                if(pLoc){
-                    path[pLoc - path] = '\0';
-                    pLoc = strrchr(path, '/');
-                    if(pLoc){
-                        path[pLoc - path] = '\0';
+            	size_t tPos = path.rfind("/");
+                if(tPos){
+                	path = path.erase(tPos);
+                    tPos = path.rfind('/');
+                    if(tPos){
+						path = path.erase(tPos);
                     }
                 }
-                strcat(path, "/");
+                path += "/";
 
                 bFixup = true;
             }
         }else{
-            strcat(path, "/");
-            strcat(path, tToken);
-            strcat(path, "/");
+        	path += "/";
+        	path += tToken;
+        	path += "/";
             bFixup = true;
         }
     }else if(tToken[0] == '#'){
-        strcat(path, tToken);
+    	path += tToken;
     }else{
-        int strLen = strlen(path);
+        int strLen = path.length();
         if(strLen){
             // we have a directory
             if(path[strLen - 1] == '/'){
-                strcat(path, tToken);
-                strcat(path, "/");
+            	path += tToken;
+            	path += "/";
                 bFixup = true;
             }else{
-                char* pLoc = strrchr(path, '/');
-                path[pLoc - path + 1] = '\0';
-                strcat(path, tToken);
-                strcat(path, "/");
+            	size_t tPos = path.rfind("/");
+            	path.erase(tPos + 1);
+            	path += tToken;
+            	path += "/";
                 bFixup = true;
             }
         }else{
-            strcat(path, "/");
-            strcat(path, tToken);
-            strcat(path, "/");
+        	path += "/";
+        	path += tToken;
+        	path += "/";
             bFixup = true;
         }
     }
@@ -116,8 +113,8 @@ void URL::clearPath(){
 
 void URL::fixup(){
     if(bFixup){
-        char* pLoc = strrchr(path, '/');
-        path[pLoc - path] = '\0';
+    	size_t tPos = path.rfind("/");
+    	path.erase(tPos);
     }
 }
 
@@ -147,9 +144,9 @@ URL::~URL() {
 }
 
 bool URL::domainMatches(URL* tURL){
-	int iLen = strlen(this->head);
+	int iLen = this->head.length();
 	// case doesn't matter
-	if(strncasecmp(this->head, tURL->head, iLen) == 0){
+	if(strncasecmp(this->head.c_str(), tURL->head.c_str(), iLen) == 0){
 		return true;
 	}
 	return false;
@@ -157,10 +154,10 @@ bool URL::domainMatches(URL* tURL){
 
 bool URL::pathMatches(URL* tURL){
 	// get the length of the string to the last slash (directory)
-	int iLen = (int)(strrchr(this->path, '/') - this->path);
+	size_t tPos = path.rfind("/");
 
 	// case does matter
-	if(strncmp(this->head, tURL->head, iLen) == 0){
+	if(head.compare(tURL->head) == 0){
 		return true;
 	}
 	return false;

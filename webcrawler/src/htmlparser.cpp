@@ -22,6 +22,15 @@ HTMLParser::HTMLParser(string& tURL){
 	this->tUrl = tURL;
 }
 
+void HTMLParser::parseText(string text, KeywordIndex* pIndex, string* pStopWords){
+	boost::regex regexp("([A-Za-z][-A-Za-z0-9_]*)", boost::regex::normal | boost::regbase::icase);
+	boost::sregex_token_iterator i(text.begin(), text.end(), regexp, 1);
+	boost::sregex_token_iterator j;
+	while(i != j){
+		cout << *i++ << endl;
+	}
+}
+
 Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* pIndex,
 						string* pStopWords, int iStopWords){
 	Page* pPage = new Page;
@@ -66,7 +75,7 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 				}
 
 				if(bTitle || bIndex){
-					cout << "Text:" << endl << tToken.GetValue() << endl;
+					parseText(tToken.GetValue(), pIndex, pStopWords);
 				}
 				break;
 			}
