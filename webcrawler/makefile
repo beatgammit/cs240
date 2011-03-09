@@ -10,26 +10,28 @@ HTMLTOKENIZER = utils/obj/HTMLTokenizer.o
 LIBOBJFILES = $(STRINGUTIL) $(URLINPUTSTREAM) $(FILEINPUTSTREAM) $(HTTPINPUTSTREAM) $(COMANDRUNNER) $(FILESYSTEM) $(HTMLTOKEN) $(HTMLTOKENIZER)
 
 
+
 COMPILER = g++
 RFLAGS = -c -o
 DFLAGS = -g $(RFLAGS)
 RELEASE = $(COMPILER) $(RFLAGS)
 DEBUG = $(COMPILER) $(DFLAGS)
+LIB_OBJFILES = lib/cs240utils.a lib/boost.a
 
-DEBUG_OBJECTS = obj/debugwebcrawler.o obj/debugurl.o obj/debughtmlparser.o obj/debuglinkedlist.o obj/debugpagequeue.o obj/debugurlresolver.o obj/debugpagesparsed.o lib/cs240utils.a;
-RELEASE_OBJECTS = obj/webcrawler.o obj/url.o obj/htmlparser.o  obj/linkedlist.o obj/pagequeue.o obj/urlresolver.o obj/pagesparsed.o lib/cs240utils.a;
+DEBUG_OBJECTS = obj/debugwebcrawler.o obj/debugurl.o obj/debughtmlparser.o obj/debuglinkedlist.o obj/debugpagequeue.o obj/debugurlresolver.o obj/debugpagesparsed.o $(LIB_OBJFILES);
+RELEASE_OBJECTS = obj/webcrawler.o obj/url.o obj/htmlparser.o  obj/linkedlist.o obj/pagequeue.o obj/urlresolver.o obj/pagesparsed.o $(LIB_OBJFILES);
 
-DEBUG_CASES = debug/webcrawler.o debug/url.o debug/htmlparser.o debug/linkedlist.o debug/pagequeue.o debug/urlresolver.o debug/pagesparsed.o lib/cs240utils.a;
-RELEASE_CASES = obj/webcrawler.o obj/url.o obj/htmlparser.o obj/linkedlist.o obj/pagequeue.o obj/urlresolver.o obj/pagesparsed.o lib/cs240utils.a;
+DEBUG_CASES = debug/webcrawler.o debug/url.o debug/htmlparser.o debug/linkedlist.o debug/pagequeue.o debug/urlresolver.o debug/pagesparsed.o $(LIB_OBJFILES);
+RELEASE_CASES = obj/webcrawler.o obj/url.o obj/htmlparser.o obj/linkedlist.o obj/pagequeue.o obj/urlresolver.o obj/pagesparsed.o $(LIB_OBJFILES);
 
-INCLUDES = -I ./include -I ./utils/inc
+INCLUDES = -I ./include -I ./utils/inc -I boost/
 
 
 clean : 
 	@ rm utils/obj/* bin/* obj/* lib/*
 
 
-lib : lib/cs240utils.a
+lib : $(LIB_OBJFILES)
 lib/cs240utils.a : $(LIBOBJFILES)
 	@ ld -r -o lib/cs240utils.a $(LIBOBJFILES)
 
@@ -56,6 +58,11 @@ $(HTMLTOKEN) : utils/inc/HTMLToken.h utils/src/HTMLToken.cpp
 
 $(HTMLTOKENIZER) : utils/inc/HTMLTokenizer.h utils/src/HTMLTokenizer.cpp
 	@ g++ -c -o $(HTMLTOKENIZER) -I utils/inc utils/src/HTMLTokenizer.cpp
+
+
+lib/boost.a : 
+	@ cd boost/libs/regex/build ; ls ; make -fgcc.mak
+	@ cp boost/libs/regex/build/gcc/libboost_regex-gcc-1_46.a lib/boost.a
 
 
 bin : bin/webcrawler

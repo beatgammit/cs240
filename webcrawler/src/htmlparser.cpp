@@ -6,6 +6,8 @@
 #include "URLInputStream.h"
 #include "HTMLTokenizer.h"
 
+#include "boost/regex.hpp"
+
 using namespace std;
 
 string myToLower(string orig){
