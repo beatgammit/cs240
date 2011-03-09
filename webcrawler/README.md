@@ -13,6 +13,8 @@ WebCrawler takes an initial webpage and indexes and crawls all pages in a breadt
 	* Only HTML files are parsed
 * Output the results in a formatted XML document
 
+This project uses BOOST, which is included.  Just run the makefile and all dependencies will be resolved.
+
 Classes
 =======
 
