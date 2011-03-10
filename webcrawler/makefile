@@ -18,11 +18,11 @@ RELEASE = $(COMPILER) $(RFLAGS)
 DEBUG = $(COMPILER) $(DFLAGS)
 LIB_OBJFILES = lib/cs240utils.a
 
-DEBUG_OBJECTS = obj/debugwebcrawler.o obj/debugurl.o obj/debughtmlparser.o obj/debuglinkedlist.o obj/debugbst.o obj/debugpagequeue.o obj/debugurlresolver.o obj/debugpagesparsed.o obj/debugutils.o obj/debugkeywordindex.o obj/debugoccurrence.o obj/debugxmlprinter.o $(LIB_OBJFILES);
-RELEASE_OBJECTS = obj/webcrawler.o obj/url.o obj/htmlparser.o  obj/linkedlist.o obj/bst.o obj/pagequeue.o obj/urlresolver.o obj/pagesparsed.o obj/utils.o obj/keywordindex.o obj/occurrence.o obj/xmlprinter.o $(LIB_OBJFILES);
+DEBUG_OBJECTS = obj/debugwebcrawler.o obj/debugurl.o obj/debughtmlparser.o obj/debuglinkedlist.o obj/debugbst.o obj/debugpagequeue.o obj/debugpagesparsed.o obj/debugutils.o obj/debugkeywordindex.o obj/debugoccurrence.o obj/debugxmlprinter.o $(LIB_OBJFILES);
+RELEASE_OBJECTS = obj/webcrawler.o obj/url.o obj/htmlparser.o  obj/linkedlist.o obj/bst.o obj/pagequeue.o obj/pagesparsed.o obj/utils.o obj/keywordindex.o obj/occurrence.o obj/xmlprinter.o $(LIB_OBJFILES);
 
-DEBUG_CASES = debug/webcrawler.o debug/url.o debug/htmlparser.o debug/linkedlist.o debug/bst.o debug/pagequeue.o debug/urlresolver.o debug/pagesparsed.o debug/utils.o debug/keywordindex.o debug/occurrence.o debug/xmlprinter.o $(LIB_OBJFILES);
-RELEASE_CASES = obj/webcrawler.o obj/url.o obj/htmlparser.o obj/linkedlist.o obj/bst.o obj/pagequeue.o obj/urlresolver.o obj/pagesparsed.o obj/utils.o obj/keywordindex.o obj/occurrence.o obj/xmlprinter.o $(LIB_OBJFILES);
+DEBUG_CASES = debug/webcrawler.o debug/url.o debug/htmlparser.o debug/linkedlist.o debug/bst.o debug/pagequeue.o debug/pagesparsed.o debug/utils.o debug/keywordindex.o debug/occurrence.o debug/xmlprinter.o $(LIB_OBJFILES);
+RELEASE_CASES = obj/webcrawler.o obj/url.o obj/htmlparser.o obj/linkedlist.o obj/bst.o obj/pagequeue.o obj/pagesparsed.o obj/utils.o obj/keywordindex.o obj/occurrence.o obj/xmlprinter.o $(LIB_OBJFILES);
 
 INCLUDES = -I ./include -I ./utils/inc
 
@@ -75,9 +75,6 @@ obj/url.o : src/url.cpp
 obj/htmlparser.o : src/htmlparser.cpp
 	$(RELEASE) obj/htmlparser.o $(INCLUDES) src/htmlparser.cpp
 
-obj/urlresolver.o : src/urlresolver.cpp
-	$(RELEASE) obj/urlresolver.o $(INCLUDES) src/urlresolver.cpp
-
 obj/linkedlist.o : src/linkedlist.cpp
 	$(RELEASE) obj/linkedlist.o $(INCLUDES) src/linkedlist.cpp
 
@@ -112,9 +109,6 @@ debug/url.o : src/url.cpp
 
 debug/htmlparser.o : src/htmlparser.cpp
 	$(DEBUG) obj/debughtmlparser.o $(INCLUDES) src/htmlparser.cpp
-
-debug/urlresolver.o : src/urlresolver.cpp
-	$(DEBUG) obj/debugurlresolver.o $(INCLUDES) src/urlresolver.cpp
 
 debug/linkedlist.o : src/linkedlist.cpp
 	$(DEBUG) obj/debuglinkedlist.o $(INCLUDES) src/linkedlist.cpp

@@ -22,12 +22,6 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
-	cout << "Arg1: " << argv[1] << endl;
-	cout << "Arg2: " << argv[2] << endl;
-	cout << "Arg3: " << argv[3] << endl;
-
-	cout << endl;
-
 	WebCrawler tCrawler = WebCrawler();
 	tCrawler.loadStopWords(argv[3]);
 
@@ -40,8 +34,6 @@ int main(int argc, char** argv)
 	outFile << sReturn;
 
 	outFile.close();
-
-	cout << "Final:" << endl << sReturn << endl;
 
     return 0;
 }
@@ -91,8 +83,6 @@ void WebCrawler::crawl(string sURL){
 	pageQueue.push(sURL);
 	while(!pageQueue.IsEmpty()){
 		string tURL = pageQueue.pop();
-		cout << tURL << endl;
-
 		HTMLParser tParser = HTMLParser(tURL);
 		Page* pPage = tParser.parse(&this->pageQueue, &this->pagesParsed, this->pKeyIndex, this->pStopWords, this->iStopWords);
 	}

@@ -19,7 +19,6 @@ string XMLPrinter::generateXML(string startURL, PagesParsed* pPages, KeywordInde
 	sReturn += "<pages>";
 	LLNode* pNode = pPages->GetFirst();
 	while(pNode){
-		cout << "So far:" << endl << sReturn << endl;
 		Page* pPage = (Page*)pNode->GetValue();
 		sReturn += generatePageXML(pPage);
 
@@ -48,6 +47,8 @@ std::string XMLPrinter::generatePageXML(Page* pPage){
 	sReturn += "</description>";
 
 	sReturn += "</page>";
+
+	cout << "XML Description: " << pPage->description << endl;
 
 	return sReturn;
 }

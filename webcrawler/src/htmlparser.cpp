@@ -3,11 +3,12 @@
 #include "pagesparsed.h"
 #include "utils.h"
 
+#include <stdlib.h>
+#include "string.h"
+
 // cs240utils headers
 #include "URLInputStream.h"
 #include "HTMLTokenizer.h"
-
-#include "boost/regex.hpp"
 
 using namespace std;
 
@@ -23,18 +24,18 @@ HTMLParser::HTMLParser(string& tURL){
 }
 
 void HTMLParser::parseText(string text, KeywordIndex* pIndex, string* pStopWords, int iStopWords){
-	boost::regex regexp("([A-Za-z][-A-Za-z0-9_]*)", boost::regex::normal | boost::regbase::icase);
-	boost::sregex_token_iterator i(text.begin(), text.end(), regexp, 1);
-	boost::sregex_token_iterator j;
-	while(i != j){
-		string tKey = myToLower(string(*i));
+	string tCopy = string(text.c_str());
+
+	string delimiter = " \n\t\r!\"$%'()*+,./:;<=>?@[\\]^`{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿŒœŠšŸƒ–—‘’‚“”„†‡•…‰⁈⁘";
+	char* sToken = strtok((char*)tCopy.c_str(), (char*)delimiter.c_str());
+
+	while(sToken){
+		string tKey = myToLower(sToken);
 		// if it isn't in the stopwords file, then add it to the index
 		if(!bsearch(&tKey, pStopWords, iStopWords, sizeof(string*), stopWordsComparator)){
-			cout << "Key: " << tKey << endl;
 			pIndex->put(tKey, this->tUrl);
-			cout << *i << endl;
 		}
-		*i++;
+		sToken = strtok(NULL, (char*)delimiter.c_str());
 	}
 }
 
@@ -76,7 +77,8 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 
 			case TEXT:{
 				if(bTitle){
-					pPage->description = tToken.GetValue();
+					pPage->description = string(tToken.GetValue());
+					cout << "Description: " << pPage->description << endl;
 				}
 
 				if(bTitle || bIndex){

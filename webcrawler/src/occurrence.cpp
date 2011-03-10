@@ -18,7 +18,6 @@ int compareOccurrence(void* key, void* elem){
 }
 
 void Occurrence::put(string url){
-	cout << "Occurrence: " << url << endl;
 	BSTNode* pNode = this->Find(&url, compareUrlToOccurrence);
 	if(pNode){
 		Instance* pInstance = (Instance*)pNode->GetValue();
@@ -27,8 +26,6 @@ void Occurrence::put(string url){
 		Instance* pInstance = new Instance;
 		pInstance->url = url;
 		pInstance->count = 1;
-
-		cout << "Occ URL: " << pInstance->url << endl;
 
 		this->Insert(pInstance, compareOccurrence);
 	}
