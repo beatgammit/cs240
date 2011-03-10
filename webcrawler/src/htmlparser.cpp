@@ -78,7 +78,6 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 			case TEXT:{
 				if(bTitle){
 					pPage->description = string(tToken.GetValue());
-					cout << "Description: " << pPage->description << endl;
 				}
 
 				if(bTitle || bIndex){

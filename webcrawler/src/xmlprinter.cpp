@@ -48,8 +48,6 @@ std::string XMLPrinter::generatePageXML(Page* pPage){
 
 	sReturn += "</page>";
 
-	cout << "XML Description: " << pPage->description << endl;
-
 	return sReturn;
 }
 
