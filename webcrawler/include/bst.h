@@ -13,38 +13,32 @@ class BSTNode {
 
 	public:
 		//!  Constructor
-		BSTNode(const std::string & v) :
-		  value(v), left(NULL), right(NULL)
-		{
+		BSTNode(void* v) :
+		  value(v), left(NULL), right(NULL){
 		}
 
 		//! Copy Constructor
 		BSTNode(const BSTNode & other) :
-		  value(other.value),left(other.left),right(other.right)
-		{
+		  value(other.value),left(other.left),right(other.right){
 		}
 
 		//!  Read-only public methods for use by clients of the BST class
-		const std::string & GetValue() const
-		{
-		  return value;
+		void* GetValue() const{
+			return value;
 		}
 
-		BSTNode* GetLeft()const
-		{
+		BSTNode* GetLeft()const{
 		  return left;
 		}
 
 
-		BSTNode* GetRight()const
-		{
+		BSTNode* GetRight()const{
 		  return right;
 		}
 
 
 		//! Assignment operator
-		BSTNode & operator=(const BSTNode & other)
-		{
+		BSTNode & operator=(const BSTNode & other){
 			if(this!=&other)
 			{
 				value=other.value;
@@ -55,16 +49,17 @@ class BSTNode {
 			return *this;
 		}
 
-	private:
-		std::string value;  //!< value stored in the node
 		BSTNode* left;     //!< pointer to the node's left child
 		BSTNode* right;    //!< pointer to the node's right child
+
+	private:
+		void* value;  //!< value stored in the node
 };
 
 
 //!  BST implements a binary search tree
 class BST {
-
+	friend class BSTNode;
 	public:
 		//!  No-arg constructor.  Initializes an empty BST
 		BST();
@@ -110,8 +105,8 @@ class BST {
 		//!
 		//!  @return a pointer to the newly inserted node, or NULL if v was already
 		//!          in the tree (i.e., NULL is used to indicate a duplicate insertion)
-		BSTNode* Insert(const std::string & v){
-			return this->Insert(v, NULL);
+		BSTNode* Insert(void* v, int (*comparator)(void* key, void* elem)){
+			return this->Insert(v, NULL, comparator);
 		}
 
 
@@ -120,8 +115,8 @@ class BST {
 		//!  @param v The new value being searched for
 		//!
 		//!  @return a pointer to the node containing v, or NULL if v is not in the tree
-		BSTNode* Find(const std::string & v) const{
-			return this->Find(v, NULL);
+		BSTNode* Find(void* v, int (*comparator)(void* key, void* elem)) const{
+			return this->Find(v, NULL, comparator);
 		}
 
 		//! @NOTE: YOU ARE NOT REQUIRED TO IMPLEMENT THE Remove METHOD BELOW
@@ -149,13 +144,15 @@ class BST {
 			}
 		}
 
+	protected:
+		BSTNode* pRoot;
+
 	private:
 		void Clear(BSTNode* pStart);
-		BSTNode* Find(const std::string & v, BSTNode* pStart) const;
+		BSTNode* Find(void* v, BSTNode* pStart, int (*comparator)(void* key, void* elem)) const;
 		int GetSize(BSTNode* pStart, int size) const;
-		BSTNode* Insert(const std::string & v, BSTNode* pStart);
+		BSTNode* Insert(void* v, BSTNode* pStart, int (*comparator)(void* key, void* elem));
 		void CopyChildren(BSTNode* pNode, BSTNode* pOrig);
-		BSTNode* pRoot;
 };
 
 

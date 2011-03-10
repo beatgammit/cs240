@@ -1,6 +1,7 @@
 #include "htmlparser.h"
 #include "url.h"
 #include "pagesparsed.h"
+#include "utils.h"
 
 // cs240utils headers
 #include "URLInputStream.h"
@@ -10,24 +11,30 @@
 
 using namespace std;
 
-string myToLower(string orig){
-	int iSize = orig.size();
-	for(int i = 0; i < iSize; i++){
-		orig[i] = tolower(orig[i]);
-	}
-	return orig;
+int stopWordsComparator(const void* first, const void* second){
+	string sKey = *(string*)first;
+	string sElem = *(string*)second;
+
+	return sKey.compare(sElem);
 }
 
 HTMLParser::HTMLParser(string& tURL){
 	this->tUrl = tURL;
 }
 
-void HTMLParser::parseText(string text, KeywordIndex* pIndex, string* pStopWords){
+void HTMLParser::parseText(string text, KeywordIndex* pIndex, string* pStopWords, int iStopWords){
 	boost::regex regexp("([A-Za-z][-A-Za-z0-9_]*)", boost::regex::normal | boost::regbase::icase);
 	boost::sregex_token_iterator i(text.begin(), text.end(), regexp, 1);
 	boost::sregex_token_iterator j;
 	while(i != j){
-		cout << *i++ << endl;
+		string tKey = myToLower(string(*i));
+		// if it isn't in the stopwords file, then add it to the index
+		if(!bsearch(&tKey, pStopWords, iStopWords, sizeof(string*), stopWordsComparator)){
+			cout << "Key: " << tKey << endl;
+			pIndex->put(tKey, this->tUrl);
+			cout << *i << endl;
+		}
+		*i++;
 	}
 }
 
@@ -35,8 +42,6 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 						string* pStopWords, int iStopWords){
 	Page* pPage = new Page;
 	pPage->pURL = this->tUrl;
-
-	pParsed->Insert((void*)new string(this->tUrl), NULL);
 
 	URLInputStream tStream = URLInputStream(this->tUrl);
 	HTMLTokenizer tTokenizer = HTMLTokenizer(&tStream);
@@ -75,7 +80,7 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 				}
 
 				if(bTitle || bIndex){
-					parseText(tToken.GetValue(), pIndex, pStopWords);
+					parseText(tToken.GetValue(), pIndex, pStopWords, iStopWords);
 				}
 				break;
 			}
@@ -87,6 +92,8 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 			}
 		}
 	}
+
+	pParsed->Insert(pPage, NULL);
 
 	return pPage;
 }

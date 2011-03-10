@@ -57,7 +57,7 @@ class HTMLParser{
 		 * @param pIndex- The keyword index to add keywords to
 		 * @param pStopWords- the words to ignore when processing text
 		 */
-		void parseText(string text, KeywordIndex* pIndex, string* pStopWords);
+		void parseText(string text, KeywordIndex* pIndex, string* pStopWords, int iStopWords);
 
 		/*
 		 * Checks to see if the link is in scopo, and if so, adds it to the Queue if it isn't in the pages parsed

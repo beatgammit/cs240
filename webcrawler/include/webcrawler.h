@@ -60,6 +60,8 @@ class WebCrawler{
 		PagesParsed pagesParsed;
 
 		/* Set of all of the keywords that have been indexed */
-		//KeywordIndex keyIndex;
+		KeywordIndex* pKeyIndex;
+
+		string startURL;
 };
 #endif

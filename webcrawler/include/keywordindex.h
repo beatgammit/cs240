@@ -3,8 +3,9 @@
 
 #include "string"
 #include "bst.h"
+#include "occurrence.h"
 
-class KeywordIndex {
+class KeywordIndex : public BST{
 	public:
 		/*
 		 * Default constructor. Initializes member variables.
@@ -26,7 +27,7 @@ class KeywordIndex {
 		 * @param word- The keyword to search for
 		 * @return BST that represents the occurrence map or NULL
 		 */
-		BST* get(string word);
+		Occurrence* get(string word);
 
 		/*
 		 * Walks the tree recursively calling the function with the
@@ -36,10 +37,9 @@ class KeywordIndex {
 		 * @param function- The function to call at each node
 		 * @param pData- the data to include in the function call
 		 */
-		void recurse(void* function(), void* pData = NULL);
+		void recurse(void (*function)(Occurrence* pOccurrence, void* data), void* pData = NULL);
 
 	private:
-		/* The keyword index */
-		BST* pIndex;
+		void recurse(BSTNode* pNode, void (*function)(Occurrence* pOccurrence, void* data), void* pData = NULL);
 };
 #endif

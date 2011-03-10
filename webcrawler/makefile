@@ -18,11 +18,11 @@ RELEASE = $(COMPILER) $(RFLAGS)
 DEBUG = $(COMPILER) $(DFLAGS)
 LIB_OBJFILES = lib/cs240utils.a lib/boost.a
 
-DEBUG_OBJECTS = obj/debugwebcrawler.o obj/debugurl.o obj/debughtmlparser.o obj/debuglinkedlist.o obj/debugpagequeue.o obj/debugurlresolver.o obj/debugpagesparsed.o $(LIB_OBJFILES);
-RELEASE_OBJECTS = obj/webcrawler.o obj/url.o obj/htmlparser.o  obj/linkedlist.o obj/pagequeue.o obj/urlresolver.o obj/pagesparsed.o $(LIB_OBJFILES);
+DEBUG_OBJECTS = obj/debugwebcrawler.o obj/debugurl.o obj/debughtmlparser.o obj/debuglinkedlist.o obj/debugbst.o obj/debugpagequeue.o obj/debugurlresolver.o obj/debugpagesparsed.o obj/debugutils.o obj/debugkeywordindex.o obj/debugoccurrence.o obj/debugxmlprinter.o $(LIB_OBJFILES);
+RELEASE_OBJECTS = obj/webcrawler.o obj/url.o obj/htmlparser.o  obj/linkedlist.o obj/bst.o obj/pagequeue.o obj/urlresolver.o obj/pagesparsed.o obj/utils.o obj/keywordindex.o obj/occurrence.o obj/xmlprinter.o $(LIB_OBJFILES);
 
-DEBUG_CASES = debug/webcrawler.o debug/url.o debug/htmlparser.o debug/linkedlist.o debug/pagequeue.o debug/urlresolver.o debug/pagesparsed.o $(LIB_OBJFILES);
-RELEASE_CASES = obj/webcrawler.o obj/url.o obj/htmlparser.o obj/linkedlist.o obj/pagequeue.o obj/urlresolver.o obj/pagesparsed.o $(LIB_OBJFILES);
+DEBUG_CASES = debug/webcrawler.o debug/url.o debug/htmlparser.o debug/linkedlist.o debug/bst.o debug/pagequeue.o debug/urlresolver.o debug/pagesparsed.o debug/utils.o debug/keywordindex.o debug/occurrence.o debug/xmlprinter.o $(LIB_OBJFILES);
+RELEASE_CASES = obj/webcrawler.o obj/url.o obj/htmlparser.o obj/linkedlist.o obj/bst.o obj/pagequeue.o obj/urlresolver.o obj/pagesparsed.o obj/utils.o obj/keywordindex.o obj/occurrence.o obj/xmlprinter.o $(LIB_OBJFILES);
 
 INCLUDES = -I ./include -I ./utils/inc -I boost/
 
@@ -89,7 +89,22 @@ obj/pagequeue.o : src/pagequeue.cpp
 	$(RELEASE) obj/pagequeue.o $(INCLUDES) src/pagequeue.cpp
 
 obj/pagesparsed.o : src/pagesparsed.cpp
-	$(DEBUG) obj/pagesparsed.o $(INCLUDES) src/pagesparsed.cpp
+	$(RELEASE) obj/pagesparsed.o $(INCLUDES) src/pagesparsed.cpp
+
+obj/utils.o : src/utils.cpp
+	$(RELEASE) obj/utils.o $(INCLUDES) src/utils.cpp
+
+obj/bst.o : src/bst.cpp
+	$(RELEASE) obj/bst.o $(INCLUDES) src/bst.cpp
+
+obj/keywordindex.o : src/keywordindex.cpp
+	$(RELEASE) obj/keywordindex.o $(INCLUDES) src/keywordindex.cpp
+
+obj/occurrence.o : src/occurrence.cpp
+	$(RELEASE) obj/occurrence.o $(INCLUDES) src/occurrence.cpp
+
+obj/xmlprinter.o : src/xmlprinter.cpp
+	$(RELEASE) obj/xmlprinter.o $(INCLUDES) src/xmlprinter.cpp
 
 
 
@@ -113,6 +128,21 @@ debug/pagequeue.o : src/pagequeue.cpp
 
 debug/pagesparsed.o : src/pagesparsed.cpp
 	$(DEBUG) obj/debugpagesparsed.o $(INCLUDES) src/pagesparsed.cpp
+
+debug/utils.o : src/utils.cpp
+	$(DEBUG) obj/debugutils.o $(INCLUDES) src/utils.cpp
+
+debug/bst.o : src/bst.cpp
+	$(DEBUG) obj/debugbst.o $(INCLUDES) src/bst.cpp
+
+debug/keywordindex.o : src/keywordindex.cpp
+	$(DEBUG) obj/debugkeywordindex.o $(INCLUDES) src/keywordindex.cpp
+
+debug/occurrence.o : src/occurrence.cpp
+	$(DEBUG) obj/debugoccurrence.o $(INCLUDES) src/occurrence.cpp
+
+debug/xmlprinter.o : src/xmlprinter.cpp
+	$(DEBUG) obj/debugxmlprinter.o $(INCLUDES) src/xmlprinter.cpp
 
 
 

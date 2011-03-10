@@ -4,7 +4,10 @@
 
 // my headers
 #include "webcrawler.h"
+#include "utils.h"
 #include "htmlparser.h"
+#include "xmlprinter.h"
+
 
 #define MAXLINELENGTH 64
 
@@ -30,11 +33,22 @@ int main(int argc, char** argv)
 
 	tCrawler.crawl(string(argv[1]));
 
+	string sReturn = tCrawler.toXML();
+
+	ofstream outFile(argv[2], ios::trunc);
+
+	outFile << sReturn;
+
+	outFile.close();
+
+	cout << "Final:" << endl << sReturn << endl;
+
     return 0;
 }
 
 WebCrawler::WebCrawler(){
 	this->pStopWords = NULL;
+	this->pKeyIndex = new KeywordIndex();
 }
 
 void WebCrawler::loadStopWords(char* pFilePath){
@@ -72,12 +86,18 @@ void WebCrawler::loadStopWords(char* pFilePath){
 }
 
 void WebCrawler::crawl(string sURL){
-	HTMLParser tParser = HTMLParser(sURL);
-	Page* pPage = tParser.parse(&this->pageQueue, &this->pagesParsed, NULL, this->pStopWords, this->iStopWords);
+	this->startURL = sURL;
 
-	cout << endl << "URL: " << pPage->pURL << endl << "Description: " << pPage->description << endl;
-
+	pageQueue.push(sURL);
 	while(!pageQueue.IsEmpty()){
-		cout << pageQueue.pop() << endl;
+		string tURL = pageQueue.pop();
+		cout << tURL << endl;
+
+		HTMLParser tParser = HTMLParser(tURL);
+		Page* pPage = tParser.parse(&this->pageQueue, &this->pagesParsed, this->pKeyIndex, this->pStopWords, this->iStopWords);
 	}
+}
+
+string WebCrawler::toXML(){
+	return XMLPrinter::generateXML(this->startURL, &this->pagesParsed, this->pKeyIndex);
 }
