@@ -74,7 +74,7 @@ Page* fixupPage(string description, string url, string lastResort){
 
 Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* pIndex,
 						string* pStopWords, int iStopWords){
-	string description;
+	string description = "";
 	string lastResort = "";
 
 	URLInputStream tStream = URLInputStream(this->tUrl);
@@ -111,12 +111,14 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 			}
 
 			case TEXT:{
-				if(bTitle || (bReadDesc && description == "")){
-					description = string(tToken.GetValue());
+				if(bTitle || bReadDesc){
+					description = description == "" ? string(tToken.GetValue()) : description;
 					bReadDesc = false;
+
 					parseText(tToken.GetValue(), pIndex, pStopWords, iStopWords);
 				}else if(description == ""){
 					lastResort += numNonWhitespace(lastResort) < 100 ? tToken.GetValue() : "";
+
 					parseText(tToken.GetValue(), pIndex, pStopWords, iStopWords);
 				}
 				break;
