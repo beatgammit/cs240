@@ -57,35 +57,35 @@ lib/cs240utils.a : $(LIBOBJFILES)
 	@ ld -r -o lib/cs240utils.a $(LIBOBJFILES)
 
 $(STRINGUTIL) : utils/inc/StringUtil.h utils/src/StringUtil.cpp
-	mkdir -p utils/lib
+	mkdir -p utils/obj
 	@ g++ -c -o $(STRINGUTIL) -I utils/inc utils/src/StringUtil.cpp
 
 $(URLINPUTSTREAM) : utils/inc/StringUtil.h utils/inc/CS240Exception.h utils/inc/HTTPInputStream.h utils/inc/FileInputStream.h utils/inc/InputStream.h utils/inc/URLInputStream.h utils/src/URLInputStream.cpp
-	mkdir -p utils/lib
+	mkdir -p utils/obj
 	@ g++ -c -o $(URLINPUTSTREAM) -I utils/inc utils/src/URLInputStream.cpp
 
 $(FILEINPUTSTREAM) : utils/inc/FileSystem.h utils/inc/CS240Exception.h utils/inc/UnitTest.h utils/src/FileInputStream.cpp
-	mkdir -p utils/lib
+	mkdir -p utils/obj
 	@ g++ -c -o $(FILEINPUTSTREAM) -I utils/inc utils/src/FileInputStream.cpp
 
 $(HTTPINPUTSTREAM) : utils/inc/StringUtil.h utils/inc/CS240Exception.h utils/inc/HTTPInputStream.h utils/src/HTTPInputStream.cpp
-	mkdir -p utils/lib
+	mkdir -p utils/obj
 	@ g++ -c -o $(HTTPINPUTSTREAM) -I utils/inc utils/src/HTTPInputStream.cpp
 
 $(COMANDRUNNER) : utils/inc/StringUtil.h utils/inc/CS240Exception.h utils/inc/CommandRunner.h utils/src/CommandRunner.cpp
-	mkdir -p utils/lib
+	mkdir -p utils/obj
 	@ g++ -c -o $(COMANDRUNNER) -I utils/inc utils/src/CommandRunner.cpp
 
 $(FILESYSTEM) : utils/inc/CS240Exception.h utils/inc/UnitTest.h utils/inc/FileSystem.h utils/src/FileSystem.cpp
-	mkdir -p utils/lib
+	mkdir -p utils/obj
 	@ g++ -c -o $(FILESYSTEM) -I utils/inc utils/src/FileSystem.cpp
 
 $(HTMLTOKEN) : utils/inc/HTMLToken.h utils/src/HTMLToken.cpp
-	mkdir -p utils/lib
+	mkdir -p utils/obj
 	@ g++ -c -o $(HTMLTOKEN) -I utils/inc utils/src/HTMLToken.cpp
 
 $(HTMLTOKENIZER) : utils/inc/HTMLTokenizer.h utils/src/HTMLTokenizer.cpp
-	mkdir -p utils/lib
+	mkdir -p utils/obj
 	@ g++ -c -o $(HTMLTOKENIZER) -I utils/inc utils/src/HTMLTokenizer.cpp
 
 
