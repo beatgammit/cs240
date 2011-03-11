@@ -83,7 +83,8 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 						string* pStopWords, int iStopWords){
 	string description = "", lastResort = "";
 
-	HTMLTokenizer tTokenizer = HTMLTokenizer(&URLInputStream(this->tUrl));
+	URLInputStream tStream = URLInputStream(this->tUrl);
+	HTMLTokenizer tTokenizer = HTMLTokenizer(&tStream);
 
 	bool bTitle = false, bIgnore = false, bBody = false, bReadDesc = false;
 	while(tTokenizer.HasNextToken()){
@@ -93,10 +94,13 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 				string tokenValue = StringUtil::ToLowerCopy(tToken.GetValue());
 
 				// awesome checkstyle hacks
-				bTitle = tokenValue.compare("title") == 0 ? true : bTitle;
-				bIgnore = tokenValue.compare("script") == 0 ? true : bIgnore;
-				bBody = tokenValue.compare("body") == 0 ? true : bBody;
-				if(tokenValue.compare("a") == 0){
+				if(tokenValue.compare("title") == 0){
+					bTitle = true;
+				}else if(tokenValue.compare("script") == 0){
+					bIgnore = true;
+				}else if(tokenValue.compare("body") == 0){
+					bBody = true;
+				}else if(tokenValue.compare("a") == 0){
 					this->addLink(tToken.GetAttribute("href"), pQueue, pParsed);
 				}else if(addHeader(description, tokenValue)){
 					bReadDesc = true;
