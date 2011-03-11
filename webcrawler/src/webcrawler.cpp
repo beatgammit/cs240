@@ -31,7 +31,7 @@ int main(int argc, char** argv){
 
 		return 0;
 	}catch(...){
-		cout << "Epic fail occurred." << endl;
+		cout << "Fail failed, hence an epic fail occurred." << endl;
 		return -1;
 	}
 }
@@ -89,13 +89,13 @@ void WebCrawler::crawl(string sURL){
 	pageQueue.push(sURL);
 	while(!pageQueue.IsEmpty()){
 		string tURL = pageQueue.pop();
-		cout << tURL << endl;
+
 		HTMLParser tParser = HTMLParser(tURL, this->startURL);
 		try{
 			Page* pPage = NULL;
 			pPage = tParser.parse(&this->pageQueue, &this->pagesParsed, this->pKeyIndex,
 									this->pStopWords, this->iStopWords);
-			pagesParsed.add(pPage);
+
 		}catch(NetworkException ex){
 			cout << "NetworkException on this URL: " << tURL << endl;
 		}catch(FileException ex){

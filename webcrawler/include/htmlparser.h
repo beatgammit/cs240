@@ -16,6 +16,7 @@
 // cs240utils headers
 #include "URLInputStream.h"
 #include "HTMLTokenizer.h"
+#include "StringUtil.h"
 
 
 /*

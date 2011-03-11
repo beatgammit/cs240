@@ -12,11 +12,11 @@
 #include "pagesparsed.h"
 #include "bst.h"
 #include "url.h"
-#include "utils.h"
 #include "htmlparser.h"
 #include "xmlprinter.h"
 
 #include "CS240Exception.h"
+#include "StringUtil.h"
 
 
 using namespace std;

@@ -18,15 +18,15 @@ RELEASE = $(COMPILER) $(RFLAGS)
 DEBUG = $(COMPILER) $(DFLAGS)
 LIB_OBJFILES = lib/cs240utils.a
 
-DEBUG_OBJECTS = obj/debugwebcrawler.o obj/debugurl.o obj/debughtmlparser.o obj/debuglinkedlist.o obj/debugbst.o obj/debugpagequeue.o obj/debugpagesparsed.o obj/debugutils.o obj/debugkeywordindex.o obj/debugoccurrence.o obj/debugxmlprinter.o $(LIB_OBJFILES);
-RELEASE_OBJECTS = obj/webcrawler.o obj/url.o obj/htmlparser.o  obj/linkedlist.o obj/bst.o obj/pagequeue.o obj/pagesparsed.o obj/utils.o obj/keywordindex.o obj/occurrence.o obj/xmlprinter.o $(LIB_OBJFILES);
+DEBUG_OBJECTS = obj/debugwebcrawler.o obj/debugurl.o obj/debughtmlparser.o obj/debuglinkedlist.o obj/debugbst.o obj/debugpagequeue.o obj/debugpagesparsed.o obj/debugkeywordindex.o obj/debugoccurrence.o obj/debugxmlprinter.o $(LIB_OBJFILES);
+RELEASE_OBJECTS = obj/webcrawler.o obj/url.o obj/htmlparser.o  obj/linkedlist.o obj/bst.o obj/pagequeue.o obj/pagesparsed.o obj/keywordindex.o obj/occurrence.o obj/xmlprinter.o $(LIB_OBJFILES);
 
 INCLUDES = -I ./include -I ./utils/inc
 
 
 BST_HEADERS = include/bst.h
 
-HTMLPARSER_HEADERS = include/htmlparser.h include/url.h include/bst.h include/keywordindex.h include/pagequeue.h include/pagesparsed.h include/page.h include/utils.h
+HTMLPARSER_HEADERS = include/htmlparser.h include/url.h include/bst.h include/keywordindex.h include/pagequeue.h include/pagesparsed.h include/page.h
 
 KEYWORDINDEX_HEADERS = include/keywordindex.h include/bst.h include/occurrence.h
 
@@ -44,7 +44,7 @@ URL_HEADERS = include/url.h
 
 UTILS_HEADERS = include/utils.h
 
-WEBCRAWLER_HEADERS = include/webcrawler.h include/keywordindex.h include/pagequeue.h include/pagesparsed.h include/bst.h include/url.h include/utils.h include/htmlparser.h include/xmlprinter.h
+WEBCRAWLER_HEADERS = include/webcrawler.h include/keywordindex.h include/pagequeue.h include/pagesparsed.h include/bst.h include/url.h include/htmlparser.h include/xmlprinter.h
 
 XMLPRINTER_HEADERS = include/xmlprinter.h include/url.h include/page.h include/pagesparsed.h include/bst.h include/keywordindex.h include/occurrence.h
 
@@ -112,9 +112,6 @@ obj/pagesparsed.o : src/pagesparsed.cpp $(PAGESPARSED_HEADERS)
 obj/url.o : src/url.cpp $(URL_HEADERS)
 	$(RELEASE) obj/url.o $(INCLUDES) src/url.cpp
 
-obj/utils.o : src/utils.cpp $(UTILS_HEADERS)
-	$(RELEASE) obj/utils.o $(INCLUDES) src/utils.cpp
-
 obj/webcrawler.o : src/webcrawler.cpp $(WEBCRAWLER_HEADERS)
 	$(RELEASE) obj/webcrawler.o $(INCLUDES) src/webcrawler.cpp
 
@@ -146,9 +143,6 @@ obj/debugpagesparsed.o : src/pagesparsed.cpp $(PAGESPARSED_HEADERS)
 
 obj/debugurl.o : src/url.cpp $(URL_HEADERS)
 	$(DEBUG) obj/debugurl.o $(INCLUDES) src/url.cpp
-
-obj/debugutils.o : src/utils.cpp $(UTILS_HEADERS)
-	$(DEBUG) obj/debugutils.o $(INCLUDES) src/utils.cpp
 
 obj/debugwebcrawler.o : src/webcrawler.cpp $(WEBCRAWLER_HEADERS)
 	$(DEBUG) obj/debugwebcrawler.o $(INCLUDES) src/webcrawler.cpp

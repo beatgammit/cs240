@@ -9,6 +9,27 @@ int stopWordsComparator(const void* first, const void* second){
 	return sKey.compare(sElem);
 }
 
+int numNonWhitespace(string s){
+	int iCount = 0;
+	for(int i = 0; i < s.length(); i++){
+		if(s[i] != ' '){
+			iCount++;
+		}
+	}
+	return iCount;
+}
+
+int indexOfIthNonWhitespace(string s, int iTH){
+	int iCount = 0;
+	int i = 0;
+	for(i = 0; i < s.length() && iCount < iTH; i++){
+		if(s[i] != ' ' && s[i] != '\n' && s[i] != '\t' && s[i] != '\r'){
+			iCount++;
+		}
+	}
+	return i;
+}
+
 HTMLParser::HTMLParser(string& tURL, string baseURL){
 	this->tUrl = tURL;
 	this->baseURL = baseURL;
@@ -26,9 +47,9 @@ void HTMLParser::parseText(string text, KeywordIndex* pIndex, string* pStopWords
 	char* sToken = strtok((char*)tCopy.c_str(), (char*)delimiter.c_str());
 
 	while(sToken){
-		string tKey = myToLower(sToken);
+		string tKey = StringUtil::ToLowerCopy(sToken);
 		// must start with an alphabat letter
-		if(tKey[0] >= 97 || tKey[0] <= 122){
+		if(tKey[0] >= 97 && tKey[0] <= 122){
 			// if it isn't in the stopwords file, then add it to the index
 			if(!bsearch(&tKey, pStopWords, iStopWords, sizeof(string*), stopWordsComparator)){
 				pIndex->put(tKey, this->tUrl);
@@ -43,43 +64,53 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 	Page* pPage = new Page;
 	pPage->url = this->tUrl;
 
+	string lastResort = "";
+
 	URLInputStream tStream = URLInputStream(this->tUrl);
 	HTMLTokenizer tTokenizer = HTMLTokenizer(&tStream);
 	bool bTitle = false;
 	bool bIgnore = false;
-	bool bIndex = false;
+	bool bBody = false;
+	bool bReadDesc = false;
 	while(tTokenizer.HasNextToken()){
 		HTMLToken tToken = tTokenizer.GetNextToken();
 		switch(tToken.GetType()){
 			case TAG_START:{
-				string tokenValue = myToLower(tToken.GetValue());
+				string tokenValue = StringUtil::ToLowerCopy(tToken.GetValue());
 
 				// awesome checkstyle hacks
 				bTitle = tokenValue.compare("title") == 0 ? true : bTitle;
 				bIgnore = tokenValue.compare("script") == 0 ? true : bIgnore;
-				bIndex = tokenValue.compare("body") == 0 ? true : bIndex;
-				if(tokenValue.compare("a") == 0){
+				bBody = tokenValue.compare("body") == 0 ? true : bBody;
+				if(tokenValue.compare("a") == 0 && tToken.AttributeExists("href")){
 					string href = tToken.GetAttribute("href");
 					this->addLink(href, pQueue, pParsed);
+				}else if(tokenValue[0] == 'h' && tokenValue.length() < 4){
+					bReadDesc = true;
 				}
 				break;
 			}
 
 			case TAG_END:{
-				string tokenValue = myToLower(tToken.GetValue());
+				string tokenValue = StringUtil::ToLowerCopy(tToken.GetValue());
 				// awesome checkstyle hacks
 				bTitle = tokenValue.compare("title") == 0 ? false : bTitle;
 				bIgnore = tokenValue.compare("script") == 0 ? false : bIgnore;
-				bIndex = tokenValue.compare("body") == 0 ? false : bIndex;
+				bBody = tokenValue.compare("body") == 0 ? false : bBody;
 				break;
 			}
 
 			case TEXT:{
-				if(bTitle){
+				if(bTitle || (bReadDesc && pPage->description == "")){
 					pPage->description = string(tToken.GetValue());
+					bReadDesc = false;
 				}
 
-				if(bTitle || bIndex){
+				if(bBody && pPage->description == "" && numNonWhitespace(lastResort) < 100){
+					lastResort += tToken.GetValue();
+				}
+
+				if(bTitle || bBody){
 					parseText(tToken.GetValue(), pIndex, pStopWords, iStopWords);
 				}
 				break;
@@ -93,7 +124,11 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 		}
 	}
 
-	pParsed->Insert(pPage, NULL);
+	if(pPage->description == "" && lastResort.length()){
+		pPage->description = lastResort.substr(0, indexOfIthNonWhitespace(lastResort, 100));
+	}
+
+	pParsed->add(pPage);
 
 	return pPage;
 }
@@ -109,7 +144,7 @@ bool HTMLParser::addLink(std::string tURL, PageQueue* pQueue, PagesParsed* pPars
 		URL base = URL(this->tUrl);
 		URL next = URL(tURL);
 		if(base.domainMatches(&next) && base.pathMatches(&next)){
-			if(!pParsed->pageProcessed(tURL)){
+			if(tURL != this->tUrl && !pParsed->pageProcessed(tURL) && !pQueue->contains(tURL)){
 				pQueue->push(tURL);
 				return true;
 			}
@@ -138,7 +173,7 @@ bool HTMLParser::addLink(std::string tURL, PageQueue* pQueue, PagesParsed* pPars
 				urlToAdd.erase(tPos);
 			}
 
-			if(!pParsed->pageProcessed(urlToAdd)){
+			if(!pParsed->pageProcessed(urlToAdd) && !pQueue->contains(urlToAdd)){
 				pQueue->push(urlToAdd);
 				return true;
 			}

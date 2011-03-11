@@ -97,7 +97,7 @@ string URL::output(){
 }
 
 void URL::clearPath(){
-    path[0] = '\0';
+    path.erase(0);
 }
 
 void URL::fixup(){
@@ -146,7 +146,7 @@ bool URL::pathMatches(URL* tURL){
 	size_t tPos = path.rfind("/");
 
 	// case does matter
-	if(path.compare(0, tPos, tURL->path) == 0){
+	if(path.compare(0, tPos, tURL->path, 0, tPos) == 0){
 		return true;
 	}
 	return false;

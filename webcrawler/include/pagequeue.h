@@ -21,5 +21,7 @@ class PageQueue : public LinkedList {
 		 * @param pURL- The URL to push onto the queue
 		 */
 		void push(string tURL);
+
+		bool contains(string tURL);
 };
 #endif
