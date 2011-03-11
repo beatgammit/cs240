@@ -90,10 +90,10 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 				bIgnore = tokenValue.compare("script") == 0 ? true : bIgnore;
 				bBody = tokenValue.compare("body") == 0 ? true : bBody;
 				if(tokenValue.compare("a") == 0){
-					string href = tToken.GetAttribute("href");
-					this->addLink(href, pQueue, pParsed);
-				}else if(description == "" && tokenValue[0] == 'h'){
-					bReadDesc = (tokenValue[1] <= 57 && tokenValue[1] >= 48) ? true : bReadDesc;
+					this->addLink(tToken.GetAttribute("href"), pQueue, pParsed);
+				}else if(description == ""){
+					bReadDesc = (tokenValue[0] == 'h' &&
+									tokenValue[1] <= 57 && tokenValue[1] >= 48) ? true : bReadDesc;
 				}
 				break;
 			}
