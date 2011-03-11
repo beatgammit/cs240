@@ -116,15 +116,16 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 			}
 
 			case TEXT:{
+				string tValue = tToken.GetValue();
 				if(bTitle || bReadDesc){
-					description = description == "" ? string(tToken.GetValue()) : description;
+					description = description == "" ? tValue : description;
 					bReadDesc = false;
-
-					parseText(tToken.GetValue(), pIndex, pStopWords, iStopWords);
 				}else if(description == ""){
-					lastResort += numNonWhitespace(lastResort) < 100 ? tToken.GetValue() : "";
+					lastResort += numNonWhitespace(lastResort) < 100 ? tValue : "";
 
-					parseText(tToken.GetValue(), pIndex, pStopWords, iStopWords);
+				}
+				if(bBody || bTitle){
+					parseText(tValue, pIndex, pStopWords, iStopWords);
 				}
 				break;
 			}
