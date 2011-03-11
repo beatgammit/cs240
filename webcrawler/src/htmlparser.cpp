@@ -26,7 +26,12 @@ HTMLParser::HTMLParser(string& tURL){
 void HTMLParser::parseText(string text, KeywordIndex* pIndex, string* pStopWords, int iStopWords){
 	string tCopy = string(text.c_str());
 
-	string delimiter = " \n\t\r!\"$%'()*+,./:;<=>?@[\\]^`{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿŒœŠšŸƒ–—‘’‚“”„†‡•…‰⁈⁘";
+	// stupid checkstyle hack
+	string delimiter = "";
+	delimiter.append(" \n\t\r!\"$%'()*+,./:;<=>?@[\\]^`{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´");
+	delimiter.append("µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëì");
+	delimiter.append("íîïðñòóôõö÷øùúûüýþÿŒœŠšŸƒ–—‘’‚“”„†‡•…‰⁈⁘");
+
 	char* sToken = strtok((char*)tCopy.c_str(), (char*)delimiter.c_str());
 
 	while(sToken){
