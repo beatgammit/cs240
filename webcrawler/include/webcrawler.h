@@ -2,11 +2,22 @@
 #define __WEBCRAWLER_H__
 
 #include "string"
+#include <string.h>
+#include <iostream>
+#include <fstream>
+
+// my headers
 #include "keywordindex.h"
 #include "pagequeue.h"
 #include "pagesparsed.h"
 #include "bst.h"
 #include "url.h"
+#include "utils.h"
+#include "htmlparser.h"
+#include "xmlprinter.h"
+
+#include "CS240Exception.h"
+
 
 using namespace std;
 

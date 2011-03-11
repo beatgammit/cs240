@@ -1,10 +1,12 @@
 #ifndef __PAGESPARSED_H__
 #define __PAGESPARSED_H__
 
+#include "string"
+
 #include "page.h"
 #include "url.h"
 #include "linkedlist.h"
-#include "string"
+
 
 /*
  * Stores the pages that have already been parsed.

@@ -1,5 +1,4 @@
 #include "occurrence.h"
-#include "string"
 
 using namespace std;
 

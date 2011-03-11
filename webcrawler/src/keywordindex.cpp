@@ -1,7 +1,4 @@
 #include "keywordindex.h"
-#include "occurrence.h"
-
-#include "string"
 
 using namespace std;
 

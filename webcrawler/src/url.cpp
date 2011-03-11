@@ -6,9 +6,6 @@
  */
 
 #include "url.h"
-#include "string.h"
-#include "string"
-#include <stdio.h>
 
 using namespace std;
 
@@ -31,14 +28,13 @@ URL::URL(string sPath) {
         	head = sPath;
             path[0] = '\0';
         }
-
-        //printf("\nHead: %s\n", head);řř
-        //printf("Path: %s\n\n\n", path);
-    }else{
+    }else if(sPath.find("file:///") == 0){
         type = FILETYPE;
 
 		head = sPath.substr(0, 7);
 		path = sPath.substr(7);
+    }else{
+    	cout << "Squack!" << endl << sPath << endl;
     }
 }
 
@@ -150,14 +146,14 @@ bool URL::pathMatches(URL* tURL){
 	size_t tPos = path.rfind("/");
 
 	// case does matter
-	if(head.compare(tURL->head) == 0){
+	if(path.compare(0, tPos, tURL->path) == 0){
 		return true;
 	}
 	return false;
 }
 
 bool URL::isRelative(std::string tURL){
-	return tURL.find("http://") == 0 ? false : true;
+	return (tURL.find("http://") == 0 || tURL.find("file:///") == 0) ? false : true;
 }
 
 string URL::getExtension(){

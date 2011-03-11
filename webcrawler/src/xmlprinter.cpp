@@ -40,7 +40,7 @@ std::string XMLPrinter::generatePageXML(Page* pPage){
 	string sReturn = "<page>";
 
 	sReturn += "<url>";
-	sReturn += pPage->pURL;
+	sReturn += pPage->url;
 	sReturn += "</url>";
 
 	sReturn += "<description>";

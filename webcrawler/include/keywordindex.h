@@ -2,6 +2,7 @@
 #define __KEYWORDINDEX_H__
 
 #include "string"
+
 #include "bst.h"
 #include "occurrence.h"
 

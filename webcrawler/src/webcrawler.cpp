@@ -1,15 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <string.h>
-
-// my headers
 #include "webcrawler.h"
-#include "utils.h"
-#include "htmlparser.h"
-#include "xmlprinter.h"
-
-#include "CS240Exception.h"
-
 
 #define MAXLINELENGTH 64
 
@@ -36,6 +25,9 @@ int main(int argc, char** argv){
 		outFile << sReturn;
 
 		outFile.close();
+
+		cout << "Everything's shiny captain.  Here's your XML:" << endl;
+		cout << argv[2] << endl;
 
 		return 0;
 	}catch(...){
@@ -97,10 +89,13 @@ void WebCrawler::crawl(string sURL){
 	pageQueue.push(sURL);
 	while(!pageQueue.IsEmpty()){
 		string tURL = pageQueue.pop();
-		HTMLParser tParser = HTMLParser(tURL);
+		cout << tURL << endl;
+		HTMLParser tParser = HTMLParser(tURL, this->startURL);
 		try{
-		Page* pPage = tParser.parse(&this->pageQueue, &this->pagesParsed, this->pKeyIndex,
+			Page* pPage = NULL;
+			pPage = tParser.parse(&this->pageQueue, &this->pagesParsed, this->pKeyIndex,
 									this->pStopWords, this->iStopWords);
+			pagesParsed.add(pPage);
 		}catch(NetworkException ex){
 			cout << "NetworkException on this URL: " << tURL << endl;
 		}catch(FileException ex){

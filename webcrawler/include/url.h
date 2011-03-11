@@ -8,7 +8,10 @@
 #ifndef URL_H
 #define	URL_H
 
+#include "string.h"
 #include "string"
+#include <stdio.h>
+#include <iostream>
 
 #define MAX_STR 1024
 

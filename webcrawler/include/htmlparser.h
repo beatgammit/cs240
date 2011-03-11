@@ -1,13 +1,22 @@
 #ifndef __HTMLPARSER_H__
 #define __HTMLPARSER_H__
 
+#include <stdlib.h>
+#include "string.h"
 #include "string"
+
 #include "url.h"
 #include "bst.h"
 #include "keywordindex.h"
 #include "pagequeue.h"
 #include "pagesparsed.h"
 #include "page.h"
+#include "utils.h"
+
+// cs240utils headers
+#include "URLInputStream.h"
+#include "HTMLTokenizer.h"
+
 
 /*
  * Parses HTML by adding links to a passed-in page queue.
@@ -26,7 +35,7 @@ class HTMLParser{
 		 *
 		 * @param tURL- The URL to parse
 		 */
-		HTMLParser(string& tURL);
+		HTMLParser(string& tURL, string baseURL);
 
 		/*
 		 * Will parse the page and returns the Page object tha was created
@@ -85,5 +94,8 @@ class HTMLParser{
 
 		/* URL of the page to parse */
 		string tUrl;
+
+		/* The starting URL passed into WebCrawler */
+		string baseURL;
 };
 #endif

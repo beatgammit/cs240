@@ -1,14 +1,4 @@
 #include "htmlparser.h"
-#include "url.h"
-#include "pagesparsed.h"
-#include "utils.h"
-
-#include <stdlib.h>
-#include "string.h"
-
-// cs240utils headers
-#include "URLInputStream.h"
-#include "HTMLTokenizer.h"
 
 using namespace std;
 
@@ -19,8 +9,9 @@ int stopWordsComparator(const void* first, const void* second){
 	return sKey.compare(sElem);
 }
 
-HTMLParser::HTMLParser(string& tURL){
+HTMLParser::HTMLParser(string& tURL, string baseURL){
 	this->tUrl = tURL;
+	this->baseURL = baseURL;
 }
 
 void HTMLParser::parseText(string text, KeywordIndex* pIndex, string* pStopWords, int iStopWords){
@@ -50,7 +41,7 @@ void HTMLParser::parseText(string text, KeywordIndex* pIndex, string* pStopWords
 Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* pIndex,
 						string* pStopWords, int iStopWords){
 	Page* pPage = new Page;
-	pPage->pURL = this->tUrl;
+	pPage->url = this->tUrl;
 
 	URLInputStream tStream = URLInputStream(this->tUrl);
 	HTMLTokenizer tTokenizer = HTMLTokenizer(&tStream);
@@ -118,7 +109,11 @@ bool HTMLParser::addLink(std::string tURL, PageQueue* pQueue, PagesParsed* pPars
 		URL base = URL(this->tUrl);
 		URL next = URL(tURL);
 		if(base.domainMatches(&next) && base.pathMatches(&next)){
-			return true;
+			if(!pParsed->pageProcessed(tURL)){
+				pQueue->push(tURL);
+				return true;
+			}
+			return false;
 		}
 		return false;
 	}
@@ -127,8 +122,9 @@ bool HTMLParser::addLink(std::string tURL, PageQueue* pQueue, PagesParsed* pPars
 	URL base = URL(this->tUrl);
 	string sNewURL = base.resolve(tURL);
 
-	size_t tPos = sNewURL.rfind("/");
-	if(this->tUrl.compare(0, tPos, sNewURL)){
+	size_t tPos = this->baseURL.rfind("/");
+
+	if(this->baseURL.compare(0, tPos, sNewURL, 0, tPos) == 0){
 		string tExt = base.getExtension();
 		if(tExt == "html" || tExt == "htm" || tExt == "shtml" ||
 			tExt == "cgi" || tExt == "jsp" || tExt == "asp" ||
@@ -138,8 +134,8 @@ bool HTMLParser::addLink(std::string tURL, PageQueue* pQueue, PagesParsed* pPars
 			// get rid of query or fragment
 			string urlToAdd = sNewURL;
 			tPos = urlToAdd.find('#');
-			if(tPos > 0){
-				urlToAdd = urlToAdd.substr(0, tPos);
+			if(tPos != string::npos){
+				urlToAdd.erase(tPos);
 			}
 
 			if(!pParsed->pageProcessed(urlToAdd)){

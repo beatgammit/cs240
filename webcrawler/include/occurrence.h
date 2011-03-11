@@ -1,8 +1,9 @@
 #ifndef __OCCURRENCE_H__
 #define __OCCURRENCE_H__
 
-#include "bst.h"
 #include "string"
+
+#include "bst.h"
 
 struct Instance{
 	string url;
