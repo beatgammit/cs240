@@ -72,8 +72,8 @@ Page* fixupPage(string description, string url, string lastResort){
 	return pPage;
 }
 
-bool isNumber(char c){
-	return (int)c <= 57 && (int)c >= 48;
+bool isHeader(string t){
+	return (t.length() == 2 && t[0] == 'h' && (int)t[1] <= 57 && (int)t[1] >= 48);
 }
 
 Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* pIndex,
@@ -95,8 +95,8 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 				bBody = tokenValue.compare("body") == 0 ? true : bBody;
 				if(tokenValue.compare("a") == 0){
 					this->addLink(tToken.GetAttribute("href"), pQueue, pParsed);
-				}else if(description == "" && tokenValue[0] == 'h'){
-					bReadDesc = isNumber(tokenValue[1]) ? true : bReadDesc;
+				}else if(description == "" && isHeader(tokenValue)){
+					bReadDesc = true;
 				}
 				break;
 			}
