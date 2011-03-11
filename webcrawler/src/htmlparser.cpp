@@ -94,7 +94,7 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 				if(tokenValue.compare("a") == 0){
 					string href = tToken.GetAttribute("href");
 					this->addLink(href, pQueue, pParsed);
-				}else if(description == "" && tokenValue[0] == 'h' && tokenValue.length() < 4){
+				}else if(description == "" && tokenValue[0] == 'h'){
 					bReadDesc = (tokenValue[1] <= 57 && tokenValue[1] >= 48) ? true : bReadDesc;
 				}
 				break;
