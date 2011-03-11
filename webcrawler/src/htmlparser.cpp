@@ -31,9 +31,12 @@ void HTMLParser::parseText(string text, KeywordIndex* pIndex, string* pStopWords
 
 	while(sToken){
 		string tKey = myToLower(sToken);
-		// if it isn't in the stopwords file, then add it to the index
-		if(!bsearch(&tKey, pStopWords, iStopWords, sizeof(string*), stopWordsComparator)){
-			pIndex->put(tKey, this->tUrl);
+		// must start with an alphabat letter
+		if(tKey[0] >= 97 || tKey[0] <= 122){
+			// if it isn't in the stopwords file, then add it to the index
+			if(!bsearch(&tKey, pStopWords, iStopWords, sizeof(string*), stopWordsComparator)){
+				pIndex->put(tKey, this->tUrl);
+			}
 		}
 		sToken = strtok(NULL, (char*)delimiter.c_str());
 	}
