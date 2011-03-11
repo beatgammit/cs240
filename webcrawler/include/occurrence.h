@@ -41,6 +41,10 @@ class Occurrence : public BST {
 
 		string word;
 
+		void Clear(BSTNode* bStart);
+
+		~Occurrence();
+
 	private:
 		void recurse(BSTNode* pStart, void (*function)(Instance* data, void* pData), void* pData = NULL);
 

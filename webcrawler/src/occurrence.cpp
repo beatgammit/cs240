@@ -48,3 +48,32 @@ void Occurrence::recurse(BSTNode* pNode, void (*function)(Instance* data, void* 
 		}
 	}
 }
+
+//!  Removes all values from the BST
+void Occurrence::Clear(BSTNode* pStart){
+	BSTNode* pNode = (pStart != NULL) ? pStart : this->pRoot;
+
+	if(pNode){
+		if(pNode->left){
+			this->Clear(pNode->left);
+		}
+		if(pNode->right){
+			this->Clear(pNode->right);
+		}
+
+		if(pNode == pRoot){
+			this->pRoot = NULL;
+		}
+
+		if(pNode->value){
+			Instance* pInstance = (Instance*)pNode->value;
+			delete pInstance;
+		}
+		delete pNode;
+	}
+}
+
+
+Occurrence::~Occurrence(){
+	this->Clear(this->pRoot);
+}

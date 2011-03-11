@@ -40,6 +40,10 @@ class KeywordIndex : public BST{
 		 */
 		void recurse(void (*function)(Occurrence* pOccurrence, void* data), void* pData = NULL);
 
+		void Clear(BSTNode* pStart);
+
+		~KeywordIndex();
+
 	private:
 		void recurse(BSTNode* pNode, void (*function)(Occurrence* pOccurrence, void* data),
 					void* pData = NULL);

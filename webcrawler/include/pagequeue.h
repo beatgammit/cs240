@@ -23,5 +23,9 @@ class PageQueue : public LinkedList {
 		void push(string tURL);
 
 		bool contains(string tURL);
+
+		void Remove(LLNode* n);
+
+		~PageQueue();
 };
 #endif

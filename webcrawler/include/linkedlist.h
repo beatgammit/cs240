@@ -44,10 +44,10 @@ class LLNode {
 			return *this;
 		}
 
-	private:
-		void* value;			//!< value stored in the node
 		LLNode * prev;			//!< pointer to previous node in the list
 		LLNode * next;			//!< pointer to next node in the list
+
+		void* value;			//!< value stored in the node
 };
 
 
@@ -77,7 +77,7 @@ class LinkedList{
 
 
 		//!  Removes all values from the list
-		void Clear();
+		virtual void Clear();
 
 
 		//!  @return the number of values in the list
@@ -119,9 +119,8 @@ class LinkedList{
 		//!  Removes node n from the list
 		//!
 		//!  @param n The node being removed from the list
-		void Remove(LLNode * n);
+		virtual void Remove(LLNode * n);
 
-	private:
 		LLNode* head;
 		LLNode* tail;
 };

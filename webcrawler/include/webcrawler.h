@@ -57,6 +57,8 @@ class WebCrawler{
 		 */
 		string toXML();
 
+		~WebCrawler();
+
 	private:
 		/* Contains keywords that should be ignored (e.g. of, it, an...) */
 		string* pStopWords;

@@ -51,7 +51,6 @@ class BSTNode {
 		BSTNode* left;     //!< pointer to the node's left child
 		BSTNode* right;    //!< pointer to the node's right child
 
-	private:
 		void* value;  //!< value stored in the node
 };
 

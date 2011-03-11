@@ -28,5 +28,11 @@ class PagesParsed : public LinkedList {
 		 * @param pPage- The page to add to the list
 		 */
 		void add(Page* pPage);
+
+		void Remove(LLNode* pNode);
+
+		void Clear();
+
+		~PagesParsed();
 };
 #endif

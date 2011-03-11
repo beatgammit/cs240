@@ -91,27 +91,21 @@ void WebCrawler::crawl(string sURL){
 		string tURL = pageQueue.pop();
 
 		HTMLParser tParser = HTMLParser(tURL, this->startURL);
-		try{
-			Page* pPage = NULL;
-			pPage = tParser.parse(&this->pageQueue, &this->pagesParsed, this->pKeyIndex,
+		Page* pPage = NULL;
+		pPage = tParser.parse(&this->pageQueue, &this->pagesParsed, this->pKeyIndex,
 									this->pStopWords, this->iStopWords);
-
-		}catch(NetworkException ex){
-			cout << "NetworkException on this URL: " << tURL << endl;
-		}catch(FileException ex){
-			cout << "FileException on this URL: " << tURL << endl;
-		}catch(IllegalStateException ex){
-			cout << "IllegalStateException on this URL: " << tURL << endl;
-		}catch(InvalidArgumentException ex){
-			cout << "InvalidArgumentException on this URL: " << tURL << endl;
-		}catch(InvalidURLException ex){
-			cout << "InvalidURLException on this URL: " << tURL << endl;
-		}catch(IOException ex){
-			cout << "IOException on this URL: " << tURL << endl;
-		}
 	}
 }
 
 string WebCrawler::toXML(){
 	return XMLPrinter::generateXML(this->startURL, &this->pagesParsed, this->pKeyIndex);
+}
+
+WebCrawler::~WebCrawler(){
+	if(this->pStopWords){
+		delete[] this->pStopWords;
+	}
+	if(this->pKeyIndex){
+		delete pKeyIndex;
+	}
 }

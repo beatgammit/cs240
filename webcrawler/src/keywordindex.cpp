@@ -52,3 +52,30 @@ void KeywordIndex::recurse(BSTNode* pStart, void (*function)(Occurrence* pOccurr
 		}
 	}
 }
+
+void KeywordIndex::Clear(BSTNode* pStart){
+	BSTNode* pNode = (pStart != NULL) ? pStart : this->pRoot;
+
+	if(pNode){
+		if(pNode->left){
+			this->Clear(pNode->left);
+		}
+		if(pNode->right){
+			this->Clear(pNode->right);
+		}
+
+		if(pNode == pRoot){
+			this->pRoot = NULL;
+		}
+
+		if(pNode->value){
+			Occurrence* pOccurrence = (Occurrence*)pNode->value;
+			delete pOccurrence;
+		}
+		delete pNode;
+	}
+}
+
+KeywordIndex::~KeywordIndex(){
+	this->Clear(this->pRoot);
+}

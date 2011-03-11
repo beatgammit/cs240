@@ -61,8 +61,8 @@ void HTMLParser::parseText(string text, KeywordIndex* pIndex, string* pStopWords
 
 Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* pIndex,
 						string* pStopWords, int iStopWords){
-	Page* pPage = new Page;
-	pPage->url = this->tUrl;
+	Page tPage;
+	tPage.url = this->tUrl;
 
 	string lastResort = "";
 
@@ -85,8 +85,8 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 				if(tokenValue.compare("a") == 0 && tToken.AttributeExists("href")){
 					string href = tToken.GetAttribute("href");
 					this->addLink(href, pQueue, pParsed);
-				}else if(tokenValue[0] == 'h' && tokenValue.length() < 4){
-					bReadDesc = true;
+				}else if(tPage.description == "" && tokenValue[0] == 'h' && tokenValue.length() < 4){
+					bReadDesc = (tokenValue[1] <= 57 && tokenValue[1] >= 48) ? true : bReadDesc;
 				}
 				break;
 			}
@@ -97,16 +97,17 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 				bTitle = tokenValue.compare("title") == 0 ? false : bTitle;
 				bIgnore = tokenValue.compare("script") == 0 ? false : bIgnore;
 				bBody = tokenValue.compare("body") == 0 ? false : bBody;
+				bReadDesc = tokenValue[0] == 'h' ? false : bReadDesc;
 				break;
 			}
 
 			case TEXT:{
-				if(bTitle || (bReadDesc && pPage->description == "")){
-					pPage->description = string(tToken.GetValue());
+				if(bTitle || (bReadDesc && tPage.description == "")){
+					tPage.description = string(tToken.GetValue());
 					bReadDesc = false;
 				}
 
-				if(bBody && pPage->description == "" && numNonWhitespace(lastResort) < 100){
+				if(bBody && tPage.description == "" && numNonWhitespace(lastResort) < 100){
 					lastResort += tToken.GetValue();
 				}
 
@@ -124,10 +125,14 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 		}
 	}
 
-	if(pPage->description == "" && lastResort.length()){
-		pPage->description = lastResort.substr(0, indexOfIthNonWhitespace(lastResort, 100));
+	if(tPage.description == "" && lastResort.length()){
+		tPage.description = lastResort.substr(0, indexOfIthNonWhitespace(lastResort, 100));
 	}
 
+	// fixes memory leak when exception is thrown
+	Page* pPage = new Page;
+	pPage->description = tPage.description;
+	pPage->url = tPage.url;
 	pParsed->add(pPage);
 
 	return pPage;
@@ -173,7 +178,7 @@ bool HTMLParser::addLink(std::string tURL, PageQueue* pQueue, PagesParsed* pPars
 				urlToAdd.erase(tPos);
 			}
 
-			if(!pParsed->pageProcessed(urlToAdd) && !pQueue->contains(urlToAdd)){
+			if(this->tUrl != urlToAdd && !pParsed->pageProcessed(urlToAdd) && !pQueue->contains(urlToAdd)){
 				pQueue->push(urlToAdd);
 				return true;
 			}
