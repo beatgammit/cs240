@@ -59,33 +59,28 @@ void HTMLParser::parseText(string text, KeywordIndex* pIndex, string* pStopWords
 	}
 }
 
-Page* fixupPage(Page tPage, string lastResort){
-	if(tPage.description == "" && lastResort.length()){
-		tPage.description = lastResort.substr(0, indexOfIthNonWhitespace(lastResort, 100));
+Page* fixupPage(string description, string url, string lastResort){
+	if(description == "" && lastResort.length()){
+		description = lastResort.substr(0, indexOfIthNonWhitespace(lastResort, 100));
 	}
 
 	// fixes memory leak when exception is thrown
 	Page* pPage = new Page;
-	pPage->description = tPage.description;
-	pPage->url = tPage.url;
+	pPage->description = description;
+	pPage->url = url;
 
 	return pPage;
 }
 
 Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* pIndex,
 						string* pStopWords, int iStopWords){
-	Page tPage;
-	tPage.url = this->tUrl;
-
+	string description;
 	string lastResort = "";
 
 	URLInputStream tStream = URLInputStream(this->tUrl);
 	HTMLTokenizer tTokenizer = HTMLTokenizer(&tStream);
 
-	bool bTitle = false;
-	bool bIgnore = false;
-	bool bBody = false;
-	bool bReadDesc = false;
+	bool bTitle = false, bIgnore = false, bBody = false, bReadDesc = false;
 	while(tTokenizer.HasNextToken()){
 		HTMLToken tToken = tTokenizer.GetNextToken();
 		switch(tToken.GetType()){
@@ -99,7 +94,7 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 				if(tokenValue.compare("a") == 0 && tToken.AttributeExists("href")){
 					string href = tToken.GetAttribute("href");
 					this->addLink(href, pQueue, pParsed);
-				}else if(tPage.description == "" && tokenValue[0] == 'h' && tokenValue.length() < 4){
+				}else if(description == "" && tokenValue[0] == 'h' && tokenValue.length() < 4){
 					bReadDesc = (tokenValue[1] <= 57 && tokenValue[1] >= 48) ? true : bReadDesc;
 				}
 				break;
@@ -116,12 +111,12 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 			}
 
 			case TEXT:{
-				if(bTitle || (bReadDesc && tPage.description == "")){
-					tPage.description = string(tToken.GetValue());
+				if(bTitle || (bReadDesc && description == "")){
+					description = string(tToken.GetValue());
 					bReadDesc = false;
 				}
 
-				if(bBody && tPage.description == "" && numNonWhitespace(lastResort) < 100){
+				if(bBody && description == "" && numNonWhitespace(lastResort) < 100){
 					lastResort += tToken.GetValue();
 				}
 
@@ -139,7 +134,7 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 		}
 	}
 
-	Page* pPage = fixupPage(tPage, lastResort);
+	Page* pPage = fixupPage(description, this->tUrl, lastResort);
 
 	pParsed->add(pPage);
 
