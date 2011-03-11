@@ -119,7 +119,7 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 				if(bTitle || bReadDesc){
 					description = description == "" ? tValue : description;
 					bReadDesc = false;
-				}else if(description == ""){
+				}else if(bBody && description == ""){
 					lastResort += numNonWhitespace(lastResort) < 100 ? tValue : "";
 				}
 
