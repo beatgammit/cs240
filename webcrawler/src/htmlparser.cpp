@@ -59,6 +59,19 @@ void HTMLParser::parseText(string text, KeywordIndex* pIndex, string* pStopWords
 	}
 }
 
+Page* fixupPage(Page tPage, string lastResort){
+	if(tPage.description == "" && lastResort.length()){
+		tPage.description = lastResort.substr(0, indexOfIthNonWhitespace(lastResort, 100));
+	}
+
+	// fixes memory leak when exception is thrown
+	Page* pPage = new Page;
+	pPage->description = tPage.description;
+	pPage->url = tPage.url;
+
+	return pPage;
+}
+
 Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* pIndex,
 						string* pStopWords, int iStopWords){
 	Page tPage;
@@ -68,6 +81,7 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 
 	URLInputStream tStream = URLInputStream(this->tUrl);
 	HTMLTokenizer tTokenizer = HTMLTokenizer(&tStream);
+
 	bool bTitle = false;
 	bool bIgnore = false;
 	bool bBody = false;
@@ -125,14 +139,8 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 		}
 	}
 
-	if(tPage.description == "" && lastResort.length()){
-		tPage.description = lastResort.substr(0, indexOfIthNonWhitespace(lastResort, 100));
-	}
+	Page* pPage = fixupPage(tPage, lastResort);
 
-	// fixes memory leak when exception is thrown
-	Page* pPage = new Page;
-	pPage->description = tPage.description;
-	pPage->url = tPage.url;
 	pParsed->add(pPage);
 
 	return pPage;
