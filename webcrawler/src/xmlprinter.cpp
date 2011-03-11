@@ -5,6 +5,7 @@
 #include "url.h"
 #include "pagesparsed.h"
 #include "keywordindex.h"
+#include "StringUtil.h"
 
 using namespace std;
 
@@ -43,7 +44,7 @@ std::string XMLPrinter::generatePageXML(Page* pPage){
 	sReturn += "</url>";
 
 	sReturn += "<description>";
-	sReturn += pPage->description;
+	sReturn += StringUtil::EncodeToXmlCopy(pPage->description);
 	sReturn += "</description>";
 
 	sReturn += "</page>";

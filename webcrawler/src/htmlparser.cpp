@@ -28,9 +28,9 @@ void HTMLParser::parseText(string text, KeywordIndex* pIndex, string* pStopWords
 
 	// stupid checkstyle hack
 	string delimiter = "";
-	delimiter.append(" \n\t\r!\"$%'()*+,./:;<=>?@[\\]^`{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´");
-	delimiter.append("µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëì");
-	delimiter.append("íîïðñòóôõö÷øùúûüýþÿŒœŠšŸƒ–—‘’‚“”„†‡•…‰⁈⁘");
+	delimiter.append(" \n\t\r!#$%'()*+,./:;<=>?@[\\]^`{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´");
+	delimiter.append("¶\"·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéê");
+	delimiter.append("ëìíîïðñòóôõö÷øùúûüýþÿŒœŠšŸƒ–—‘’‚“”„†‡•…‰⁈⁘&µ");
 
 	char* sToken = strtok((char*)tCopy.c_str(), (char*)delimiter.c_str());
 
