@@ -25,22 +25,18 @@ class LLNode {
 		}
 
 
-		LLNode * GetPrevious()const
-		{
+		LLNode * GetPrevious()const{
 		  return prev;
 		}
 
 
-		LLNode * GetNext()const
-		{
+		LLNode * GetNext()const{
 		  return next;
 		}
 
 		//! Assignment operator
-		LLNode & operator=(const LLNode & other)
-		{
-			if(this!=&other)
-			{
+		LLNode & operator=(const LLNode & other){
+			if(this!=&other){
 				value=other.value;
 				prev=other.prev;
 				next=other.next;
@@ -56,8 +52,7 @@ class LLNode {
 
 
 //! LinkedList implements a doubly-linked list
-class LinkedList
-{
+class LinkedList{
 	public:
 
 		//!  No-arg constructor.  Initializes an empty linked list
@@ -133,4 +128,3 @@ class LinkedList
 
 
 #endif
-

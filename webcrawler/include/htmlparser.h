@@ -47,7 +47,8 @@ class HTMLParser{
 		 *
 		 * @return A Page object with information pulled from this URL or NULL
 		 */
-		Page* parse(PageQueue* pQueue, PagesParsed* pPages, KeywordIndex* pIndex, string* pStopWords, int iStopWords);
+		Page* parse(PageQueue* pQueue, PagesParsed* pPages, KeywordIndex* pIndex,
+					string* pStopWords, int iStopWords);
 
 	private:
 		/*
@@ -60,7 +61,8 @@ class HTMLParser{
 		void parseText(string text, KeywordIndex* pIndex, string* pStopWords, int iStopWords);
 
 		/*
-		 * Checks to see if the link is in scopo, and if so, adds it to the Queue if it isn't in the pages parsed
+		 * Checks to see if the link is in scopo, and if so, adds it to the Queue
+		 * if it isn't in the pages parsed
 		 *
 		 * A page is in scope if:
 		 *   - the domains & starting path are the same

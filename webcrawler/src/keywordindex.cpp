@@ -42,7 +42,8 @@ void KeywordIndex::recurse(void (*function)(Occurrence* pOccurrence, void* data)
 	recurse(pRoot, function, pData);
 }
 
-void KeywordIndex::recurse(BSTNode* pStart, void (*function)(Occurrence* pOccurrence, void* data), void* pData){
+void KeywordIndex::recurse(BSTNode* pStart, void (*function)(Occurrence* pOccurrence, void* data),
+							void* pData){
 	if(pStart){
 		function((Occurrence*)pStart->GetValue(), pData);
 

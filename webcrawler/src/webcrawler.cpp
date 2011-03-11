@@ -13,8 +13,7 @@
 
 using namespace std;
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv){
 	// program name, start-url, output-file, stopwords file
 	if(argc != 4){
 		std::cout << "Give me these parameters:" << std::endl;
@@ -84,7 +83,8 @@ void WebCrawler::crawl(string sURL){
 	while(!pageQueue.IsEmpty()){
 		string tURL = pageQueue.pop();
 		HTMLParser tParser = HTMLParser(tURL);
-		Page* pPage = tParser.parse(&this->pageQueue, &this->pagesParsed, this->pKeyIndex, this->pStopWords, this->iStopWords);
+		Page* pPage = tParser.parse(&this->pageQueue, &this->pagesParsed, this->pKeyIndex,
+									this->pStopWords, this->iStopWords);
 	}
 }
 

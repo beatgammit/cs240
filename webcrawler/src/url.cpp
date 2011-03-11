@@ -43,7 +43,6 @@ URL::URL(string sPath) {
 }
 
 void URL::applyChange(char* tToken){
-    //printf("Token:%s\n", tToken);
     if(strcmp(tToken, ".") == 0){
         // don't do anything
     }else if(strcmp(tToken, "..") == 0){
@@ -60,9 +59,7 @@ void URL::applyChange(char* tToken){
                 if(tPos){
                 	path = path.erase(tPos);
                     tPos = path.rfind('/');
-                    if(tPos){
-						path = path.erase(tPos);
-                    }
+                    path = tPos != string::npos ? path.erase(tPos) : path;
                 }
                 path += "/";
 
@@ -87,18 +84,14 @@ void URL::applyChange(char* tToken){
             }else{
             	size_t tPos = path.rfind("/");
             	path.erase(tPos + 1);
-            	path += tToken;
-            	path += "/";
+            	path.append(tToken).append("/");
                 bFixup = true;
             }
         }else{
-        	path += "/";
-        	path += tToken;
-        	path += "/";
+        	path.append("/").append(tToken).append("/");
             bFixup = true;
         }
     }
-    //printf("Path: %s\nToken:%s\n", path, tToken);
 }
 
 string URL::output(){

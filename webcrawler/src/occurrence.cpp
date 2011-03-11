@@ -37,7 +37,8 @@ void Occurrence::recurse(void (*function)(Instance* data, void* pData), void* pD
 	}
 }
 
-void Occurrence::recurse(BSTNode* pNode, void (*function)(Instance* data, void* pData), void* pData){
+void Occurrence::recurse(BSTNode* pNode, void (*function)(Instance* data, void* pData),
+						void* pData){
 	if(pNode){
 		function((Instance*)pNode->GetValue(), pData);
 		if(pNode->left){

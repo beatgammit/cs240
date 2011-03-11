@@ -39,8 +39,7 @@ class BSTNode {
 
 		//! Assignment operator
 		BSTNode & operator=(const BSTNode & other){
-			if(this!=&other)
-			{
+			if(this!=&other){
 				value=other.value;
 				left=other.left;
 				right=other.right;
