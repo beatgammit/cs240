@@ -91,7 +91,7 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 				bTitle = tokenValue.compare("title") == 0 ? true : bTitle;
 				bIgnore = tokenValue.compare("script") == 0 ? true : bIgnore;
 				bBody = tokenValue.compare("body") == 0 ? true : bBody;
-				if(tokenValue.compare("a") == 0 && tToken.AttributeExists("href")){
+				if(tokenValue.compare("a") == 0){
 					string href = tToken.GetAttribute("href");
 					this->addLink(href, pQueue, pParsed);
 				}else if(description == "" && tokenValue[0] == 'h' && tokenValue.length() < 4){
@@ -141,7 +141,7 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 
 bool HTMLParser::addLink(std::string tURL, PageQueue* pQueue, PagesParsed* pParsed){
 	// we don't care about fragments
-	if(tURL[0] == '#'){
+	if(tURL == "" || tURL[0] == '#'){
 		return false;
 	}
 
