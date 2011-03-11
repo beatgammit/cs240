@@ -21,9 +21,6 @@ LIB_OBJFILES = lib/cs240utils.a
 DEBUG_OBJECTS = obj/debugwebcrawler.o obj/debugurl.o obj/debughtmlparser.o obj/debuglinkedlist.o obj/debugbst.o obj/debugpagequeue.o obj/debugpagesparsed.o obj/debugutils.o obj/debugkeywordindex.o obj/debugoccurrence.o obj/debugxmlprinter.o $(LIB_OBJFILES);
 RELEASE_OBJECTS = obj/webcrawler.o obj/url.o obj/htmlparser.o  obj/linkedlist.o obj/bst.o obj/pagequeue.o obj/pagesparsed.o obj/utils.o obj/keywordindex.o obj/occurrence.o obj/xmlprinter.o $(LIB_OBJFILES);
 
-DEBUG_CASES = debug/webcrawler.o debug/url.o debug/htmlparser.o debug/linkedlist.o debug/bst.o debug/pagequeue.o debug/pagesparsed.o debug/utils.o debug/keywordindex.o debug/occurrence.o debug/xmlprinter.o $(LIB_OBJFILES);
-RELEASE_CASES = obj/webcrawler.o obj/url.o obj/htmlparser.o obj/linkedlist.o obj/bst.o obj/pagequeue.o obj/pagesparsed.o obj/utils.o obj/keywordindex.o obj/occurrence.o obj/xmlprinter.o $(LIB_OBJFILES);
-
 INCLUDES = -I ./include -I ./utils/inc
 
 
@@ -62,7 +59,7 @@ $(HTMLTOKENIZER) : utils/inc/HTMLTokenizer.h utils/src/HTMLTokenizer.cpp
 
 
 bin : bin/webcrawler
-bin/webcrawler : $(RELEASE_CASES)
+bin/webcrawler : $(RELEASE_OBJECTS)
 	g++ -o bin/webcrawler $(RELEASE_OBJECTS)
 	@ chmod +x bin/webcrawler
 
@@ -101,42 +98,43 @@ obj/xmlprinter.o : src/xmlprinter.cpp
 
 
 
-debug/webcrawler.o : src/webcrawler.cpp
+obj/debugwebcrawler.o : src/webcrawler.cpp
 	$(DEBUG) obj/debugwebcrawler.o $(INCLUDES) src/webcrawler.cpp
 
-debug/url.o : src/url.cpp
+obj/debugurl.o : src/url.cpp
 	$(DEBUG) obj/debugurl.o $(INCLUDES) src/url.cpp
 
-debug/htmlparser.o : src/htmlparser.cpp
+obj/debughtmlparser.o : src/htmlparser.cpp
 	$(DEBUG) obj/debughtmlparser.o $(INCLUDES) src/htmlparser.cpp
 
-debug/linkedlist.o : src/linkedlist.cpp
+obj/debuglinkedlist.o : src/linkedlist.cpp
 	$(DEBUG) obj/debuglinkedlist.o $(INCLUDES) src/linkedlist.cpp
 
-debug/pagequeue.o : src/pagequeue.cpp
+obj/debugpagequeue.o : src/pagequeue.cpp
 	$(DEBUG) obj/debugpagequeue.o $(INCLUDES) src/pagequeue.cpp
 
-debug/pagesparsed.o : src/pagesparsed.cpp
+obj/debugpagesparsed.o : src/pagesparsed.cpp
 	$(DEBUG) obj/debugpagesparsed.o $(INCLUDES) src/pagesparsed.cpp
 
-debug/utils.o : src/utils.cpp
+obj/debugutils.o : src/utils.cpp
 	$(DEBUG) obj/debugutils.o $(INCLUDES) src/utils.cpp
 
-debug/bst.o : src/bst.cpp
+obj/debugbst.o : src/bst.cpp
 	$(DEBUG) obj/debugbst.o $(INCLUDES) src/bst.cpp
 
-debug/keywordindex.o : src/keywordindex.cpp
+obj/debugkeywordindex.o : src/keywordindex.cpp
 	$(DEBUG) obj/debugkeywordindex.o $(INCLUDES) src/keywordindex.cpp
 
-debug/occurrence.o : src/occurrence.cpp
+obj/debugoccurrence.o : src/occurrence.cpp
 	$(DEBUG) obj/debugoccurrence.o $(INCLUDES) src/occurrence.cpp
 
-debug/xmlprinter.o : src/xmlprinter.cpp
+obj/debugxmlprinter.o : src/xmlprinter.cpp
 	$(DEBUG) obj/debugxmlprinter.o $(INCLUDES) src/xmlprinter.cpp
 
 
 
 test : bin/test
-bin/test : $(DEBUG_CASES)
+bin/test : $(DEBUG_OBJECTS)
 	g++ -g -Wall -o bin/test $(DEBUG_OBJECTS)
 	@ chmod +x bin/test
+	./bin/test http://www.beatgammit.com/index.html input/out.xml input/stopword.txt

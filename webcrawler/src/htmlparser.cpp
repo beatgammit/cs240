@@ -137,10 +137,6 @@ bool HTMLParser::addLink(std::string tURL, PageQueue* pQueue, PagesParsed* pPars
 
 			// get rid of query or fragment
 			string urlToAdd = sNewURL;
-			tPos = urlToAdd.find('?');
-			if(tPos > 0){
-				urlToAdd = urlToAdd.substr(0, tPos);
-			}
 			tPos = urlToAdd.find('#');
 			if(tPos > 0){
 				urlToAdd = urlToAdd.substr(0, tPos);
