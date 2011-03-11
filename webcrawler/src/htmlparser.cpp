@@ -94,16 +94,13 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 				string tokenValue = StringUtil::ToLowerCopy(tToken.GetValue());
 
 				// awesome checkstyle hacks
-				if(tokenValue.compare("title") == 0){
-					bTitle = true;
-				}else if(tokenValue.compare("script") == 0){
-					bIgnore = true;
-				}else if(tokenValue.compare("body") == 0){
-					bBody = true;
-				}else if(tokenValue.compare("a") == 0){
+				bTitle = tokenValue.compare("title") == 0 ? true : bTitle;
+				bIgnore = tokenValue.compare("script") == 0 ? true : bIgnore;
+				bBody = tokenValue.compare("body") == 0 ? true : bBody;
+
+				bReadDesc = addHeader(description, tokenValue) ? true : bReadDesc;
+				if(tokenValue.compare("a") == 0){
 					this->addLink(tToken.GetAttribute("href"), pQueue, pParsed);
-				}else if(addHeader(description, tokenValue)){
-					bReadDesc = true;
 				}
 				break;
 			}
