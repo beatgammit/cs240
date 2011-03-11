@@ -134,7 +134,7 @@ obj/debugxmlprinter.o : src/xmlprinter.cpp
 
 
 test : bin/test
+	bin/test http://www.beatgammit.com/index.html input/out.xml input/stopword.txt
 bin/test : $(DEBUG_OBJECTS)
 	g++ -g -Wall -o bin/test $(DEBUG_OBJECTS)
 	@ chmod +x bin/test
-	./bin/test http://www.beatgammit.com/index.html input/out.xml input/stopword.txt
