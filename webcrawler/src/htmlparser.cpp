@@ -99,9 +99,8 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 				bBody = tokenValue.compare("body") == 0 ? true : bBody;
 
 				bReadDesc = addHeader(description, tokenValue) ? true : bReadDesc;
-				if(tokenValue.compare("a") == 0){
-					this->addLink(tToken.GetAttribute("href"), pQueue, pParsed);
-				}
+				bool bs = tokenValue.compare("a") == 0 ?
+									addLink(tToken.GetAttribute("href"), pQueue, pParsed) : false;
 				break;
 			}
 
@@ -122,8 +121,8 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 					bReadDesc = false;
 				}else if(description == ""){
 					lastResort += numNonWhitespace(lastResort) < 100 ? tValue : "";
-
 				}
+
 				if(bBody || bTitle){
 					parseText(tValue, pIndex, pStopWords, iStopWords);
 				}
