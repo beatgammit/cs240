@@ -74,11 +74,9 @@ Page* fixupPage(string description, string url, string lastResort){
 
 Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* pIndex,
 						string* pStopWords, int iStopWords){
-	string description = "";
-	string lastResort = "";
+	string description = "", lastResort = "";
 
-	URLInputStream tStream = URLInputStream(this->tUrl);
-	HTMLTokenizer tTokenizer = HTMLTokenizer(&tStream);
+	HTMLTokenizer tTokenizer = HTMLTokenizer(&URLInputStream(this->tUrl));
 
 	bool bTitle = false, bIgnore = false, bBody = false, bReadDesc = false;
 	while(tTokenizer.HasNextToken()){
