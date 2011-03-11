@@ -111,17 +111,12 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 			}
 
 			case TEXT:{
-				if(bTitle){
+				if(bTitle || (bReadDesc && description == "")){
 					description = string(tToken.GetValue());
-				}else if(bReadDesc){
-					description = string(tToken.GetValue());
-				}
-
-				if(bBody && description == "" && numNonWhitespace(lastResort) < 100){
-					lastResort += tToken.GetValue();
-				}
-
-				if(bTitle || bBody){
+					bReadDesc = false;
+					parseText(tToken.GetValue(), pIndex, pStopWords, iStopWords);
+				}else if(description == ""){
+					lastResort += numNonWhitespace(lastResort) < 100 ? tToken.GetValue() : "";
 					parseText(tToken.GetValue(), pIndex, pStopWords, iStopWords);
 				}
 				break;
