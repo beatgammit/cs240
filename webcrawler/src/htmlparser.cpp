@@ -111,9 +111,10 @@ Page* HTMLParser::parse(PageQueue* pQueue, PagesParsed* pParsed, KeywordIndex* p
 			}
 
 			case TEXT:{
-				if(bTitle || (bReadDesc && description == "")){
+				if(bTitle){
 					description = string(tToken.GetValue());
-					bReadDesc = false;
+				}else if(bReadDesc){
+					description = string(tToken.GetValue());
 				}
 
 				if(bBody && description == "" && numNonWhitespace(lastResort) < 100){
