@@ -6,20 +6,29 @@ This repository has all of my code for the labs in my CS 240 class.  I have supp
 Projects
 ========
 
-URLResolver
+Chess
+-----
+
+A graphical game of chess.  The UI was provided by the instructor, but I implemented all of the backend code.  The UI is not included in this repository, but any UI can be used with minor changes to the source.  Features include:
+
+* Undo/redo
+* Move validator
+* Save to/load from file
+
+Collections
 -----------
 
-Resolves a URL given a base URL and a relative URL.
+Implementation of a LinkedList and a Binary Search Tree.  Both are free from memory leaks.
 
 Sort
 ----
 
 Proof of concept showing that I can use the qsort method.  This is implemented using double pointers to reduce overhead.
 
-Collections
+URLResolver
 -----------
 
-Implementation of a LinkedList and a Binary Search Tree.  Both are free from memory leaks.
+Resolves a URL given a base URL and a relative URL.
 
 Webcrawler
 ----------
