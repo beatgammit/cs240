@@ -1,0 +1,93 @@
+/*
+ * Undoes a single move.
+ */
+void Game::undoMove(){
+	Move oldMove = moveHistory.pop();
+
+	int startX = oldMove.getStartX();
+	int startY = oltMove.getStartY();
+	int endX = oldMove.getEndX();
+	int endY = oldMove.getEndY();
+
+	this->movePiece(endX, endY, startX, startY);
+
+	Piece tPiece;
+
+	PieceEnum capturedPiece = oldMove.getCapturedPiece();
+	switch(capturedPiece){
+		case W_PAWN:{
+			tPiece = Pawn(endX, endY, true);
+			break;
+		}
+
+		case W_ROOK:{
+			tPiece = Rook(endX, endY, true);
+			break;
+		}
+
+		case W_KNIGHT:{
+			tPiece = Knight(endX, endY, true);
+			break;
+		}
+
+		case W_BISHOP:{
+			tPiece = Bishop(endX, endY, true);
+			break;
+		}
+
+		case W_QUEEN:{
+			tPiece = Queen(endX, endY, true);
+			break;
+		}
+
+		case W_KING:{
+			tPiece = King(endX, endY, true);
+			break;
+		}
+
+		case B_PAWN:{
+			tPiece = Pawn(endX, endY, false);
+			break;
+		}
+
+		case B_ROOK:{
+			tPiece = Rook(endX, endY, false);
+			break;
+		}
+
+		case B_KNIGHT:{
+			tPiece = Knight(endX, endY, false);
+			break;
+		}
+
+		case B_BISHOP:{
+			tPiece = Bishop(endX, endY, false);
+			break;
+		}
+
+		case B_QUEEN:{
+			tPiece = Queen(endX, endY, false);
+			break;
+		}
+
+		case B_KING:{
+			tPiece = King(endX, endY, false);
+			break;
+		}
+
+		case NAN:
+		default:{
+			break;
+		}
+
+	}
+
+	if(capturedPiece){
+		board.addPiece(&tPiece, endX, endY);
+		for(int x = 0; x < 8; x++){
+			for(int y = 0; y < 8; y++){
+				chessController.
+			}
+		}
+	}
+}

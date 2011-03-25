@@ -1,0 +1,20 @@
+/*
+ * Loads a game from file.
+ * 
+ * @param pGame- The game to load data into
+ */
+void Load::loadGame(Game* pGame){
+	XMLTokenizer tokenizer = XMLTokenizer(filename);
+
+	while(tokenizer.hasNext()){
+		XMLToken tToken = tokenizer.next();
+
+		string name = tToken.getName();
+		if(tolower(name) == "chessgame"){
+		}else if(tolower(name) == "board"){
+			populateBoard(tToken, &pGame->board);
+		}else if(tolower(name) == "history"){
+			populateHistory(tToken, &pGame->moveHistory);
+		}
+	}
+}

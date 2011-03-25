@@ -1,0 +1,19 @@
+/*
+ * Saves the game to file in XML format.
+ * 
+ * @param game- The game to save to file
+ */
+void Save::saveGame(Game & game){
+	string result = "";
+
+	result += "<chessgame>";
+
+	result += this->saveBoard(game.getBoard());
+	result += this->saveHistory(game.getHistory());
+
+	result += "</chessgame>";
+
+	ofstream outputFile(this->filename);
+	outputFile << result;
+	outputFile.close();
+}

@@ -1,0 +1,23 @@
+/*
+ * Moves a piece at a certain location to another location.
+ * Validity of this move has already been handled.
+ *
+ * @param x- the x coordinate of the piece to
+ * @param y- the y coordinate of the piece to
+ * @param newX- the x coordinate to move the piece to
+ * @param newY- the y coordinate to move the piece to
+ */
+void Game::movePiece(int x, int y, int newX, int newY){
+	board.movePiece(x, y, newX, newY);
+	if(board.hasCheck()){
+		// do stuff with this info
+		if(board.hasCheckMate()){
+			// do stuff with this info
+		}
+	}else if(board.isStaleMate()){
+		// do stuff with this info
+	}
+
+	this->view.ClearPiece(x, y);
+	PlacePiece(newX, newY, ImageName piece);
+}

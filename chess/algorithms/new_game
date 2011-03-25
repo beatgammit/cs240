@@ -1,0 +1,46 @@
+/*
+ * Creates a new game. Discards the current game.
+ * 
+ * @param playMode- 
+ */
+void Game::createGame(int playMode){
+	// if the wrong game type was chosen, force Player vs Player
+	if(playMode < 0 || playMode > 3){
+		playMode = 0;
+	}
+
+	switch(playMode){
+		// Human vs Human
+		case 0:{
+			this->white = Human();
+			this->black = Human();
+			break;
+		}
+
+		// Human vs Computer
+		case 1:{
+			this->white = Human();
+			this->black = SimpleAI();
+			break;
+		}
+
+		// Computer vs Human
+		case 2:{
+			this->white = SimpleAI();
+			this->black = Human();
+			break;
+		}
+
+		// Computer vs Computer
+		case 3:{
+			this->white = SimpleAI();
+			this->black = SimpleAI();
+			break;
+		}
+	}
+
+	moveHistory.clear();
+	board.reset();
+	whitePieces = Stack<Piece>();
+	blackPieces = Stack<Piece>();
+}

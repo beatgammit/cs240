@@ -27,6 +27,11 @@ class History {
 		 */
 		Move pop();
 
+		/*
+		 * Clears the move history.
+		 */
+		void clear();
+
 	private:
 		Stack moveHistory;
 };
