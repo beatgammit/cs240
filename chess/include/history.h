@@ -1,6 +1,12 @@
 #ifndef __HISTORY_H__
 #define __HISTORY_H__
 
+#include <stack>
+
+#include "move.h"
+
+using namespace std;
+
 class History {
 	public:
 		/*
@@ -33,7 +39,7 @@ class History {
 		void clear();
 
 	private:
-		Stack moveHistory;
+		stack<Move> moveHistory;
 };
 
 #endif

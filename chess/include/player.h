@@ -9,12 +9,14 @@ class Player {
 		/*
 		 * Default constructor. Doesn't do much.
 		 */
-		Player() {}
+		Player() {};
 
 		/*
 		 * Returns true if this player is an AI.
 		 */
-		virtual bool isAI();
+		virtual bool isAI() {};
+
+		~Player(){};
 };
 
 #endif

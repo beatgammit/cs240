@@ -13,11 +13,11 @@ class SimpleAI : public AI {
 
 		/*
 		 * Generate's a random move.  The parameter is not used.
-		 * 
+		 *
 		 * @param pPlayerMove- the opponent's last move
 		 * @return The generated move
 		 */
-		Move generateMove(Move* pPlayerMove);
+		virtual Move generateMove(Move* pPlayerMove);
 };
 
 #endif

@@ -12,10 +12,10 @@ class Human : public Player {
 
 		/*
 		 * Returns false, because this is a human.
-		 * 
+		 *
 		 * @return true, this is a human
 		 */
-		bool isAI() {return false;}
+		virtual bool isAI() {return false;}
 };
 
 #endif

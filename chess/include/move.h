@@ -1,27 +1,27 @@
 #ifndef __MOVE_H__
 #define __MOVE_H__
 
-enum PieceEnum = {
-	NAN,
-	W_PAWN,
-	W_ROOK,
-	W_KNIGHT,
-	W_BISHOP,
-	W_QUEEN,
-	W_KING,
-	B_PAWN,
-	B_ROOK,
-	B_KNIGHT,
-	B_BISHOP,
-	B_QUEEN,
-	B_KING
+enum PieceEnum {
+	P_NAN,
+	P_W_PAWN,
+	P_W_ROOK,
+	P_W_KNIGHT,
+	P_W_BISHOP,
+	P_W_QUEEN,
+	P_W_KING,
+	P_B_PAWN,
+	P_B_ROOK,
+	P_B_KNIGHT,
+	P_B_BISHOP,
+	P_B_QUEEN,
+	P_B_KING
 };
 
 class Move {
 	public:
 		/*
 		 * Constructor.
-		 * 
+		 *
 		 * @param startX- starting x position
 		 * @param startY- starting y position
 		 * @param endX- ending x position
@@ -29,46 +29,46 @@ class Move {
 		 * @param piece- the piece doing the moving
 		 * @param capturedPiece- captured piece if any, NAN if none
 		 */
-		Move(int startX, int startY, int endX, int endY, PieceEnum piece, PieceEnum capturedPiece = NAN);
+		Move(int startX, int startY, int endX, int endY, PieceEnum piece, PieceEnum capturedPiece = P_NAN);
 
 		/*
 		 * Gets the starting x position.
-		 * 
+		 *
 		 * @return the starting x position
 		 */
 		int getStartX();
 
 		/*
 		 * Gets the starting y position.
-		 * 
+		 *
 		 * @return the starting y position
 		 */
 		int getStartY();
 
 		/*
 		 * Gets the ending x position.
-		 * 
+		 *
 		 * @return the ending x position
 		 */
 		int getEndX();
 
 		/*
 		 * Gets the endning y position.
-		 * 
+		 *
 		 * @return the ending y position
 		 */
 		int getEndY();
 
 		/*
 		 * Gets the piece that did the moving.
-		 * 
+		 *
 		 * @return the piece that did the enum
 		 */
 		PieceEnum getPiece();
 
 		/*
 		 * Gets the captured piece, if any.
-		 * 
+		 *
 		 * @return the captured piece, if any, or NAN
 		 */
 		PieceEnum getCapturedPiece();
