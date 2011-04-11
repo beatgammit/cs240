@@ -72,7 +72,7 @@ EXE = bin/chess			# normal executable
 MEXE = bin/mchess			# executable for memory testing
 
 # Macros for compilation flags
-INCLUDES = -I$(MODEL_INC) -I$(VIEW_INC) -I$(CONT_INC) -I ./include
+INCLUDES = -I$(MODEL_INC) -I$(VIEW_INC) -I$(CONT_INC) -I ./include ./utils
 DEBUG = #-g # Uncomment this if you want to compile with debug info
 
 
