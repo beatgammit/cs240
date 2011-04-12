@@ -1,0 +1,9 @@
+save
+docs
+
+*.vcproj
+*.dsp
+*.xml
+*.dsw
+*.sln
+*.gif
