@@ -8,6 +8,10 @@
 
 using namespace std;
 
+class Piece;
+
+typedef Piece* TBoard[8][8];
+
 class Piece {
 	public:
 		/*
@@ -43,7 +47,8 @@ class Piece {
 		 *
 		 * @return The y coordinate of this piece
 		 */
-		int getY(){return x;}
+
+		int getY(){return y;}
 
 		/*
 		 * Gets whether this piece is white.
@@ -59,9 +64,10 @@ class Piece {
 		 * - if the piece is a king, the move cannot directly result in capture
 		 *
 		 * @param pBoard- if defined, the game board
+		 * @param pKing- king piece, defaults to NULL
 		 * @return a list of valid moves
 		 */
-		virtual list<Move> getValidMoves(Piece** pBoard = NULL) {}
+		virtual list<Move> getValidMoves(TBoard* pBoard = NULL) {}
 
 		/*
 		 * Runs a test driver to test isValidMove.
@@ -70,6 +76,8 @@ class Piece {
 		 * @return True if all tests passed, false if not
 		 */
 		virtual bool test(ostream & os) {}
+
+		virtual PieceEnum getType() {return P_NAN;}
 
 	private:
 		int x;

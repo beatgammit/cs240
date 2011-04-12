@@ -7,7 +7,7 @@
 
 using namespace std;
 
-class Rook : Piece {
+class Rook : public Piece {
 	public:
 		/*
 		 * Calls the super constructor.
@@ -32,7 +32,7 @@ class Rook : Piece {
 		 * @param pBoard- if defined, the game board
 		 * @return a list of valid moves
 		 */
-		virtual list<Move> getValidMoves(Piece** pBoard = NULL);
+		virtual list<Move> getValidMoves(TBoard* pBoard = NULL);
 
 		/*
 		 * Runs the test driver and outputs any errors to the output stream.
@@ -41,6 +41,11 @@ class Rook : Piece {
 		 * @return True if all tests passed successfully, false otherwise
 		 */
 		virtual bool test(ostream & os);
+
+		virtual PieceEnum getType() {return this->isWhite() ? P_W_ROOK : P_B_ROOK;}
+
+	private:
+		list<Move> getPossibleMoves(TBoard* pBoard);
 };
 
 #endif

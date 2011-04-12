@@ -33,9 +33,10 @@ class Knight : public Piece {
 		 * without checking to see if the resulting square is occupied
 		 *
 		 * @param pBoard- if defined, the game board
+		 * @param pKing- king piece, defaults to NULL
 		 * @return a list of valid moves
 		 */
-		virtual list<Move> getValidMoves(Piece** pBoard = NULL);
+		virtual list<Move> getValidMoves(TBoard* pBoard = NULL);
 
 		/*
 		 * Runs the test driver and outputs any errors to the output stream.
@@ -44,6 +45,11 @@ class Knight : public Piece {
 		 * @return True if all tests passed successfully, false otherwise
 		 */
 		virtual bool test(ostream & os);
+
+		virtual PieceEnum getType() {return this->isWhite() ? P_W_KNIGHT : P_B_KNIGHT;}
+
+	public:
+		list<Move> getPossibleMoves(TBoard* pBoard);
 };
 
 #endif

@@ -32,7 +32,7 @@ class Pawn : public Piece {
 		 * @param pBoard- if defined, the game board
 		 * @return a list of valid moves
 		 */
-		virtual list<Move> getValidMoves(Piece** pBoard = NULL);
+		virtual list<Move> getValidMoves(TBoard* pBoard = NULL);
 
 		/*
 		 * Runs the test driver and outputs any errors to the output stream.
@@ -41,6 +41,11 @@ class Pawn : public Piece {
 		 * @return True if all tests passed successfully, false otherwise
 		 */
 		virtual bool test(ostream & os);
+
+		virtual PieceEnum getType() {return this->isWhite() ? P_W_PAWN : P_B_PAWN;}
+
+	private:
+		list<Move> getPossibleMoves(TBoard* pBoard);
 };
 
 #endif

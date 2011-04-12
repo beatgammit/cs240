@@ -5,13 +5,15 @@
 #include <stack>
 #include <list>
 
-#include "board.h"
 #include "history.h"
 #include "player.h"
 #include "piece.h"
 #include "move.h"
 
 using namespace std;
+
+// typedefs are cool... let's use ane =D
+typedef Piece* Board[8][8];
 
 /*
  * Main runner for the Chess game.
@@ -40,6 +42,11 @@ class Game {
 		Game(string savedGame);
 
 		/*
+		 * Destructor.  Frees everything in the board.
+		 */
+		~Game();
+
+		/*
 		 * Creates a new game. Discards the current game.
 		 *
 		 * @param playMode-
@@ -47,7 +54,7 @@ class Game {
 		void createGame(int playMode = 0);
 
 		/*
-		 * Gets a list of legas moves for the piece at the specified position.
+		 * Gets a list of legal moves for the piece at the specified position.
 		 *
 		 * @param x- the x position of the piece in question
 		 * @param y- the y position of the piece in question
@@ -55,26 +62,43 @@ class Game {
 		 */
 		void getLegalMoves(int x, int y, list<Move>* pList);
 
+		void move(Move tMove);
+
+		bool kingIsInCheck(bool bWhite);
+
 		/*
 		 * Undoes a single move.
 		 */
-		void undoMove();
+		Move undoMove();
+
+		bool canUndo();
 
 		/*
 		 * Gets the board.
 		 *
 		 * @return The boare
 		 */
-		Board getBoard();
+		Board* getBoard();
 
 		/*
 		 * Gets the move history.
 		 *
 		 * @return The move history
 		 */
-		History getMoveHistory();
+		History* getMoveHistory();
+
+		bool isWhiteTurn();
+
+		void changeSides();
+
+		Piece* findPiece(PieceEnum tPiece);
 
 	private:
+		bool kingInCheckKnight(Piece* pKing);
+		bool kingInCheckVertical(Piece* pKing);
+		bool kingInCheckHorizontal(Piece* pKing);
+		bool kingInCheckDiagonal(Piece* pKing);
+
 		/* The game board */
 		Board board;
 
@@ -88,10 +112,12 @@ class Game {
 		Player black;
 
 		/* White pieces that have been captured */
-		stack<Piece> whitePieces;
+		stack<Piece*> whitePieces;
 
 		/* Black pieces that have been captured */
-		stack<Piece> blackPieces;
+		stack<Piece*> blackPieces;
+
+		bool bWhiteTurn;
 };
 
 #endif

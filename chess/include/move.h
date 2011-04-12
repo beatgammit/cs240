@@ -36,42 +36,66 @@ class Move {
 		 *
 		 * @return the starting x position
 		 */
-		int getStartX();
+		int getStartX() {
+			return this->startX;
+		}
 
 		/*
 		 * Gets the starting y position.
 		 *
 		 * @return the starting y position
 		 */
-		int getStartY();
+		int getStartY() {
+			return this->startY;
+		}
 
 		/*
 		 * Gets the ending x position.
 		 *
 		 * @return the ending x position
 		 */
-		int getEndX();
+		int getEndX() {
+			return this->endX;
+		}
 
 		/*
 		 * Gets the endning y position.
 		 *
 		 * @return the ending y position
 		 */
-		int getEndY();
+		int getEndY(){
+			return this->endY;
+		}
 
 		/*
 		 * Gets the piece that did the moving.
 		 *
 		 * @return the piece that did the enum
 		 */
-		PieceEnum getPiece();
+		PieceEnum getPiece() {return this->piece;}
 
 		/*
 		 * Gets the captured piece, if any.
 		 *
 		 * @return the captured piece, if any, or NAN
 		 */
-		PieceEnum getCapturedPiece();
+		PieceEnum getCapturedPiece() {return this->capturedPiece;}
+
+		bool isHorizontal() {
+			return (this->startY == this->endY && this->startX != this->endX);
+		}
+
+		bool isVertical() {
+			return (this->startX == this->endX && this->startY != this->endY);
+		}
+
+		bool isDiagonal() {
+			int xDiff = this->endX - this->startX;
+			int yDiff = this->endY - this->startY;
+
+			// take the product to remove sign
+			return ((xDiff * xDiff) == (yDiff * yDiff));
+		}
 
 	private:
 		/* Starting x position */

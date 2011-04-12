@@ -42,7 +42,6 @@ LIBS   = `pkg-config $(GTKMM) $(SIGC) $(LIBGLADE) --libs`
 # My additions
 GAME = obj/game.o
 CHESSCONTROLLER = obj/chesscontroller.o
-BOARD = obj/board.o
 PIECE = obj/piece.o
 HISTORY = obj/history.o
 MOVE = obj/move.o
@@ -72,7 +71,7 @@ EXE = bin/chess			# normal executable
 MEXE = bin/mchess			# executable for memory testing
 
 # Macros for compilation flags
-INCLUDES = -I$(MODEL_INC) -I$(VIEW_INC) -I$(CONT_INC) -I ./include ./utils
+INCLUDES = -I$(MODEL_INC) -I$(VIEW_INC) -I$(CONT_INC) -I ./include -I ./utils
 DEBUG = #-g # Uncomment this if you want to compile with debug info
 
 
@@ -163,71 +162,67 @@ $(MEMMAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessVi
 ################################################################################
 # Targets for YOUR object files...
 
-$(CHESSCONTROLLER) : src/chesscontroller.cpp $(GAME)
+$(CHESSCONTROLLER) : src/chesscontroller.cpp include/chesscontroller.h $(GAME)
 	@ mkdir -p obj
 	g++ -g -c -o $(CHESSCONTROLLER) $(INCLUDES) $(CFLAGS) $(LIBS) src/chesscontroller.cpp
 
-$(GAME) : src/game.cpp $(BOARD) $(HISTORY) $(PLAYER) $(IO)
+$(GAME) : src/game.cpp include/game.h $(HISTORY) $(PIECE) $(MOVE) $(PLAYER)
 	@ mkdir -p obj
 	g++ -g -c -o $(GAME) $(INCLUDES) $(CFLAGS) $(LIBS) src/game.cpp
 
-$(BOARD) : src/board.cpp $(PIECE)
-	@ mkdir -p obj
-	g++ -g -c -o $(BOARD) $(INCLUDES) $(CFLAGS) $(LIBS) src/board.cpp
-
-$(PIECE) : src/piece.cpp
+$(PIECE) : src/piece.cpp include/piece.h $(MOVE)
 	@ mkdir -p obj
 	g++ -g -c -o $(PIECE) $(INCLUDES) $(CFLAGS) $(LIBS) src/piece.cpp
 
-$(HISTORY) : src/history.cpp $(MOVE)
+$(HISTORY) : src/history.cpp include/history.h $(MOVE)
 	@ mkdir -p obj
 	g++ -g -c -o $(HISTORY) $(INCLUDES) $(CFLAGS) $(LIBS) src/history.cpp
 
-$(MOVE) : src/move.cpp
+$(MOVE) : src/move.cpp include/move.h
 	@ mkdir -p obj
 	g++ -g -c -o $(MOVE) $(INCLUDES) $(CFLAGS) $(LIBS) src/move.cpp
 
-$(PLAYER) : src/player.cpp
+$(PLAYER) : src/player.cpp include/player.h
 	@ mkdir -p obj
 	g++ -g -c -o $(PLAYER) $(INCLUDES) $(CFLAGS) $(LIBS) src/player.cpp
 
-$(IO) : src/io.cpp
+$(IO) : src/io.cpp include/io.h $(GAME) $(HISTORY) $(PIECE) $(PAWN) $(ROOK) $(KNIGHT) $(BISHOP) $(QUEEN) $(KING)
 	@ mkdir -p obj
 	g++ -g -c -o $(IO) $(INCLUDES) $(CFLAGS) $(LIBS) src/io.cpp
 
-$(AI) : src/ai.cpp
+$(AI) : src/ai.cpp include/ai.h
 	@ mkdir -p obj
 	g++ -g -c -o $(AI) $(INCLUDES) $(CFLAGS) $(LIBS) src/ai.cpp
 
-$(SIMPLEAI) : src/simpleai.cpp $(AI)
+$(SIMPLEAI) : src/simpleai.cpp include/simpleai.h $(AI)
 	@ mkdir -p obj
 	g++ -g -c -o $(SIMPLEAI) $(INCLUDES) $(CFLAGS) $(LIBS) src/simpleai.cpp
 
-$(KING) : src/king.cpp $(PIECE)
+$(KING) : src/king.cpp include/king.h $(PIECE)
 	@ mkdir -p obj
 	g++ -g -c -o $(KING) $(INCLUDES) $(CFLAGS) $(LIBS) src/king.cpp
 
-$(QUEEN) : src/queen.cpp $(PIECE)
+$(QUEEN) : src/queen.cpp include/queen.h $(PIECE)
 	@ mkdir -p obj
 	g++ -g -c -o $(QUEEN) $(INCLUDES) $(CFLAGS) $(LIBS) src/queen.cpp
 
-$(ROOK) : src/rook.cpp $(PIECE)
+$(ROOK) : src/rook.cpp include/rook.h $(PIECE)
 	@ mkdir -p obj
 	g++ -g -c -o $(ROOK) $(INCLUDES) $(CFLAGS) $(LIBS) src/rook.cpp
 
-$(KNIGHT) : src/knight.cpp $(PIECE)
+$(KNIGHT) : src/knight.cpp include/knight.h $(PIECE)
 	@ mkdir -p obj
 	g++ -g -c -o $(KNIGHT) $(INCLUDES) $(CFLAGS) $(LIBS) src/knight.cpp
 
-$(BISHOP) : src/bishop.cpp $(PIECE)
+$(BISHOP) : src/bishop.cpp include/bishop.h $(PIECE)
 	@ mkdir -p obj
 	g++ -g -c -o $(BISHOP) $(INCLUDES) $(CFLAGS) $(LIBS) src/bishop.cpp
 
-$(PAWN) : src/pawn.cpp  $(PIECE)
+$(PAWN) : src/pawn.cpp include/pawn.h $(PIECE)
 	@ mkdir -p obj
 	g++ -g -c -o $(PAWN) $(INCLUDES) $(CFLAGS) $(LIBS) src/pawn.cpp
 
-$(HUMAN) : src/human.cpp  $(PIECE)
+$(HUMAN) : src/human.cpp include/human.h $(PIECE)
 	@ mkdir -p obj
 	g++ -g -c -o $(HUMAN) $(INCLUDES) $(CFLAGS) $(LIBS) src/human.cpp
 

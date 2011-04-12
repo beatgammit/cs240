@@ -5,6 +5,8 @@
 
 #include "../controller/inc/IChessController.h"
 
+#include <list>
+
 #include "game.h"
 #include "io.h"
 
@@ -85,6 +87,8 @@ class ChessController : public IChessController {
 
 		~ChessController() {}
 
+		static ImageName mineToTheirs(PieceEnum tEnum);
+
 	private:
 		/* The chess game */
 		Game game;
@@ -92,6 +96,12 @@ class ChessController : public IChessController {
 		IChessView* pView;
 
 		string currentGame;
+
+		void placePiece(Piece* pPiece);
+
+		void selectPiece(Piece* pPiece);
+
+		list<Move> validMoves;
 };
 
 #endif

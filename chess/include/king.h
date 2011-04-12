@@ -1,5 +1,5 @@
-#ifndef __ROOK_H__
-#define __ROOK_H__
+#ifndef __KING_H__
+#define __KING_H__
 
 #include <list>
 
@@ -7,7 +7,7 @@
 
 using namespace std;
 
-class King : Piece {
+class King : public Piece {
 	public:
 		/*
 		 * Calls the super constructor.
@@ -16,7 +16,8 @@ class King : Piece {
 		 * @param y- y position on board
 		 * @param bWhite- true if white, false if black
 		 */
-		King(int x, int y, bool bWhite) : Piece(x, y, bWhite) {}
+		King(int x, int y, bool bWhite) : Piece(x, y, bWhite) {
+		}
 
 		/*
 		 * Overriddes Piece's virtual method.
@@ -30,9 +31,10 @@ class King : Piece {
 		 * without checking to see if the path is obstructed
 		 *
 		 * @param pBoard- if defined, the game board
+		 * @param pKing- king piece, defaults to NULL
 		 * @return a list of valid moves
 		 */
-		virtual list<Move> getValidMoves(Piece** pBoard = NULL);
+		virtual list<Move> getValidMoves(TBoard* pBoard = NULL);
 
 		/*
 		 * Runs the test driver and outputs any errors to the output stream.
@@ -41,6 +43,11 @@ class King : Piece {
 		 * @return True if all tests passed successfully, false otherwise
 		 */
 		virtual bool test(ostream & os);
+
+		virtual PieceEnum getType() {return this->isWhite() ? P_W_KING : P_B_KING;}
+
+	private:
+		list<Move> getPossibleMoves(TBoard* pBoard);
 };
 
 #endif

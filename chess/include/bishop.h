@@ -1,10 +1,13 @@
-#ifndef __ROOK_H__
-#define __ROOK_H__
+#ifndef __BISHOP_H__
+#define __BISHOP_H__
+
+#include <list>
 
 #include "piece.h"
-#include "board.h"
 
-class Bishop : Piece {
+using namespace std;
+
+class Bishop : public Piece {
 	public:
 		/*
 		 * Calls the super constructor.
@@ -26,9 +29,10 @@ class Bishop : Piece {
 		 * without checking to see if the path is obstructed
 		 *
 		 * @param pBoard- if defined, the game board
+		 * @param pKing- king piece, defaults to NULL
 		 * @return a list of valid moves
 		 */
-		virtual list<Move> getValidMoves(Piece** pBoard = NULL);
+		virtual list<Move> getValidMoves(TBoard* pBoard = NULL);
 
 		/*
 		 * Runs the test driver and outputs any errors to the output stream.
@@ -37,6 +41,11 @@ class Bishop : Piece {
 		 * @return True if all tests passed successfully, false otherwise
 		 */
 		virtual bool test(ostream & os);
+
+		virtual PieceEnum getType() {return this->isWhite() ? P_W_BISHOP : P_B_BISHOP;}
+
+	private:
+		list<Move> getPossibleMoves(TBoard* pBoard);
 };
 
 #endif
