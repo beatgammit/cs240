@@ -3,25 +3,12 @@
 /// Public functions ///
 
 void IO::loadGame(std::string filename, Game* pGame) {
-	std::ifstream in(filename.c_str());
-	std::string contents((std::istreambuf_iterator<char>(in)),
-    std::istreambuf_iterator<char>());
-
-	xml_document<> doc;
-
-	int len = contents.length();
-	char* buf = new char[len];
-
-	try {
-		strncpy(buf, (char*)contents.c_str(), len);
-
-		// I don't know why I need this flag, but it makes it more reliable
-		doc.parse<parse_no_data_nodes>(buf);
+	TiXmlDocument doc(filename.c_str());
+	if (doc.LoadFile()) {
 		parseXML(doc, pGame);
-		delete[] buf;
-	}catch (...) {
-		std::cout << "Fail: " << len << std::endl << buf << std::endl << contents << endl;
-		delete[] buf;
+		std::cout << "Success: " << filename << std::endl;
+	} else {
+		std::cout << "Fail: " << filename << std::endl;
 	}
 }
 
@@ -31,33 +18,31 @@ void IO::saveGame(string filename, Game* pGame) {
 
 /// Private functions ///
 
-void IO::parseXML(xml_document<> & doc, Game* pGame) {
-	xml_node<>* pRoot = doc.first_node("chessgame");
-
-	parseBoardXML(pRoot->first_node("board"), pGame->getBoard());
-	parseHistoryXML(pRoot->first_node("history"), pGame->getMoveHistory());
+void IO::parseXML(TiXmlDocument doc, Game* pGame) {
+	TiXmlElement* pRoot = doc.RootElement();
+	if (pRoot) {
+		parseBoardXML(pRoot->FirstChildElement("board"), pGame->getBoard());
+		parseHistoryXML(pRoot->FirstChildElement("history"), pGame->getMoveHistory());
+	}
 }
 
-void IO::parseBoardXML(xml_node<>* pBoardNode, Board* pBoard){
-	xml_node<>* pNode = pBoardNode->first_node();
+void IO::parseBoardXML(TiXmlElement* pBoardNode, Board* pBoard){
+	TiXmlElement* pNode = pBoardNode->FirstChildElement();
 	while(pNode) {
 		int x = 0;
 		int y = 0;
 		bool bWhite;
 		Piece* pPiece = NULL;
 
-		xml_attribute<>* pRow = pNode->first_attribute("row");
-		y = atoi(pRow->value());
+		y = atoi(pNode->Attribute("row"));
 
-		xml_attribute<>* pColumn = pNode->first_attribute("column");
-		x = atoi(pColumn->value());
 
-		xml_attribute<>* pColor = pNode->first_attribute("color");
-		string color = pColor->value();
+		x = atoi(pNode->Attribute("column"));
+
+		string color = pNode->Attribute("color");
 		bWhite = (color == "white");
 
-		xml_attribute<>* pType = pNode->first_attribute("type");
-		string type = pType->value();
+		string type = pNode->Attribute("type");
 		if (type == "pawn") {
 			pPiece = new Pawn(x, y, bWhite);
 		} else if (type == "rook") {
@@ -74,16 +59,17 @@ void IO::parseBoardXML(xml_node<>* pBoardNode, Board* pBoard){
 
 		(*pBoard)[x][y] = pPiece;
 
-		pNode = pNode->next_sibling();
+		pNode = pNode->NextSiblingElement();
 	}
 }
 
-void IO::parseHistoryXML(xml_node<>* pHistoryNode, History* pHistory) {
-	xml_node<>* pMoveNode = pHistoryNode->first_node("move");
+void IO::parseHistoryXML(TiXmlElement* pHistoryNode, History* pHistory) {
+
+	TiXmlElement* pMoveNode = pHistoryNode->FirstChildElement("move");
 	while(pMoveNode) {
-		xml_node<>* pStart = pMoveNode->first_node("piece");
-		xml_node<>* pEnd = pStart->next_sibling("piece");
-		xml_node<>* pPieceTaken = pEnd->next_sibling("piece");
+		TiXmlElement* pStart = pMoveNode->FirstChildElement("piece");
+		TiXmlElement* pEnd = pStart->NextSiblingElement("piece");
+		TiXmlElement* pPieceTaken = pEnd->NextSiblingElement("piece");
 
 		int startX = 0;
 		int startY = 0;
@@ -93,35 +79,28 @@ void IO::parseHistoryXML(xml_node<>* pHistoryNode, History* pHistory) {
 		PieceEnum tPiece = P_NAN;
 		PieceEnum tCapturedPiece = P_NAN;
 
-		xml_attribute<>* pRow = pStart->first_attribute("row");
-		startY = atoi(pRow->value());
+		startY = atoi(pStart->Attribute("row"));
 
-		xml_attribute<>* pColumn = pStart->first_attribute("column");
-		startX = atoi(pColumn->value());
+		startX = atoi(pStart->Attribute("column"));
 
-		xml_attribute<>* pColor = pStart->first_attribute("color");
-		string color = pColor->value();
+		string color = pStart->Attribute("color");
 		bWhite = (color == "white");
 
-		xml_attribute<>* pType = pStart->first_attribute("type");
-		string type = pType->value();
+		string type = pStart->Attribute("type");
 		tPiece = typeFromString(type, bWhite);
 
-		pRow = pEnd->first_attribute("row");
-		endY = atoi(pRow->value());
+		endY = atoi(pEnd->Attribute("row"));
 
-		pColumn = pEnd->first_attribute("column");
-		endX = atoi(pColumn->value());
+		endX = atoi(pEnd->Attribute("column"));
 
 		if (pPieceTaken) {
-			pType = pStart->first_attribute("type");
-			type = pType->value();
+			type = pStart->Attribute("type");
 			tCapturedPiece = typeFromString(type, !bWhite);
 		}
 
 		pHistory->push(startX, startY, endX, endY, tPiece, tCapturedPiece);
 
-		pMoveNode = pMoveNode->next_sibling("move");
+		pMoveNode = pMoveNode->NextSiblingElement("move");
 	}
 }
 

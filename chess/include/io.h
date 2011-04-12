@@ -7,7 +7,7 @@
 #include "string"
 #include "string.h"
 
-#include "rapidxml.hpp"
+#include "tinyxml.h"
 
 #include "game.h"
 
@@ -21,8 +21,6 @@
 #include "bishop.h"
 #include "queen.h"
 #include "king.h"
-
-using namespace rapidxml;
 
 class IO {
 	public:
@@ -43,11 +41,11 @@ class IO {
 		static void saveGame(std::string filename, Game* pGame);
 
 	private:
-		static void parseXML(xml_document<> & doc, Game* pGame);
+		static void parseXML(TiXmlDocument doc, Game* pGame);
 
-		static void parseBoardXML(xml_node<>* pBoardNode, Board* pBoard);
+		static void parseBoardXML(TiXmlElement* pBoardNode, Board* pBoard);
 
-		static void parseHistoryXML(xml_node<>* pHistoryNode, History* pHistory);
+		static void parseHistoryXML(TiXmlElement* pHistoryNode, History* pHistory);
 
 		static PieceEnum typeFromString(string s, bool bWhite);
 };

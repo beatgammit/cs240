@@ -56,6 +56,10 @@ ROOK = obj/rook.o
 BISHOP = obj/bishop.o
 PAWN = obj/pawn.o
 HUMAN = obj/human.o
+TINYXML = obj/tinyxml.o
+TINYXML_ERROR = obj/tinyxml_error.o
+TINYXML_PARSER = obj/tinyxml_parser.o
+TINYXML_STR = obj/tinyxml_str.o
 
 # TODO Re-phrase: Macros for directory tree locations
 MODEL_SRC = model/src/
@@ -71,7 +75,7 @@ EXE = bin/chess			# normal executable
 MEXE = bin/mchess			# executable for memory testing
 
 # Macros for compilation flags
-INCLUDES = -I$(MODEL_INC) -I$(VIEW_INC) -I$(CONT_INC) -I ./include -I ./utils
+INCLUDES = -I$(MODEL_INC) -I$(VIEW_INC) -I$(CONT_INC) -I ./include -I ./utils/tinyxml
 DEBUG = #-g # Uncomment this if you want to compile with debug info
 
 
@@ -81,7 +85,7 @@ MEMMAIN_O = $(CONT_OBJ)memcheck_main.o
 
 # This macro should be used to store all of the object files created 
 # from *your* source files
-MY_OBJS = $(CHESSCONTROLLER) $(GAME) $(BOARD) $(PIECE) $(HISTORY) $(MOVE) $(PLAYER) $(IO) $(AI) $(SIMPLEAI) $(KNIGHT) $(KING) $(QUEEN) $(ROOK) $(BISHOP) $(PAWN) $(HUMAN)
+MY_OBJS = $(CHESSCONTROLLER) $(GAME) $(BOARD) $(PIECE) $(HISTORY) $(MOVE) $(PLAYER) $(IO) $(AI) $(SIMPLEAI) $(KNIGHT) $(KING) $(QUEEN) $(ROOK) $(BISHOP) $(PAWN) $(HUMAN) $(TINYXML) $(TINYXML_ERROR) $(TINYXML_PARSER) $(TINYXML_STR)
 
 # These are all the object files that go into the library
 LIB_OBJS = $(VIEW_OBJ)ChessView.o \
@@ -90,8 +94,6 @@ LIB_OBJS = $(VIEW_OBJ)ChessView.o \
       $(VIEW_OBJ)ChessGui.o \
       $(VIEW_OBJ)ChessGuiImages.o \
       $(VIEW_OBJ)SelectDialog.o
-
-
 
 
 
@@ -186,7 +188,7 @@ $(PLAYER) : src/player.cpp include/player.h
 	@ mkdir -p obj
 	g++ -g -c -o $(PLAYER) $(INCLUDES) $(CFLAGS) $(LIBS) src/player.cpp
 
-$(IO) : src/io.cpp include/io.h $(GAME) $(HISTORY) $(PIECE) $(PAWN) $(ROOK) $(KNIGHT) $(BISHOP) $(QUEEN) $(KING)
+$(IO) : src/io.cpp include/io.h $(GAME) $(HISTORY) $(PIECE) $(PAWN) $(ROOK) $(KNIGHT) $(BISHOP) $(QUEEN) $(KING) $(TINYXML)
 	@ mkdir -p obj
 	g++ -g -c -o $(IO) $(INCLUDES) $(CFLAGS) $(LIBS) src/io.cpp
 
@@ -226,6 +228,21 @@ $(HUMAN) : src/human.cpp include/human.h $(PIECE)
 	@ mkdir -p obj
 	g++ -g -c -o $(HUMAN) $(INCLUDES) $(CFLAGS) $(LIBS) src/human.cpp
 
+$(TINYXML) : utils/tinyxml/tinyxml.cpp utils/tinyxml/tinyxml.h
+	@ mkdir -p obj
+	g++ -c -o $(TINYXML) $(INCLUDES) $(CFLAGS) $(LIBS) utils/tinyxml/tinyxml.cpp
+
+$(TINYXML_ERROR) : utils/tinyxml/tinyxmlerror.cpp
+	@ mkdir -p obj
+	g++ -c -o $(TINYXML_ERROR) $(INCLUDES) $(CFLAGS) $(LIBS) utils/tinyxml/tinyxmlerror.cpp
+
+$(TINYXML_PARSER) : utils/tinyxml/tinyxmlparser.cpp
+	@ mkdir -p obj
+	g++ -c -o $(TINYXML_PARSER) $(INCLUDES) $(CFLAGS) $(LIBS) utils/tinyxml/tinyxmlparser.cpp
+
+$(TINYXML_STR) : utils/tinyxml/tinystr.cpp utils/tinyxml/tinystr.h
+	@ mkdir -p obj
+	g++ -c -o $(TINYXML_STR) $(INCLUDES) $(CFLAGS) $(LIBS) utils/tinyxml/tinystr.cpp
 
 ################################################################################
 # Targets for GUI-related object files
