@@ -66,6 +66,9 @@ ChessController::ChessController(int argc, char** argv){
 	}
 
 	bSaved = false;
+
+	bIgnoreTimeout = true;
+	//Chess::SetTimeoutMilliseconds(2000);
 }
 
 void ChessController::on_CellSelected(int row, int col, int button) {
@@ -96,6 +99,8 @@ void ChessController::on_CellSelected(int row, int col, int button) {
 }
 
 void ChessController::on_DragStart(int row,int col) {
+	bIgnoreTimeout = true;
+
 	if (this->game.canMove(col, row)) {
 		this->validMoves = this->game.getLegalMoves(col, row);
 
@@ -118,9 +123,12 @@ void ChessController::on_DragStart(int row,int col) {
 
 bool ChessController::on_DragEnd(int row,int col) {
 	this->clearSelection(row, col);
+	bIgnoreTimeout = false;
 }
 
 void ChessController::on_NewGame() {
+	bIgnoreTimeout = true;
+
 	this->pView->SetStatusBar("");
 	this->currentGame = "";
 
@@ -189,12 +197,15 @@ void ChessController::on_NewGame() {
 		}
 	}
 	this->setLabel(false);
+
+	bIgnoreTimeout = false;
 }
 
 void ChessController::on_SaveGame() {
 	this->clearSelection();
 
 	if(this->currentGame == ""){
+		bIgnoreTimeout = true;
 		this->currentGame = this->pView->SelectSaveFile();
 	}
 
@@ -203,23 +214,28 @@ void ChessController::on_SaveGame() {
 		IO::saveGame(this->currentGame, &this->game);
 		this->bSaved = true;
 	}
+	bIgnoreTimeout = false;
 }
 
 void ChessController::on_SaveGameAs() {
 	this->clearSelection();
 
+	bIgnoreTimeout = true;
 	string tFile = this->pView->SelectSaveFile();
+
 	if (tFile.length() > 0) {
 		IO::saveGame(tFile, &this->game);
 		this->currentGame = tFile;
 		this->pView->SetStatusBar(this->currentGame);
 		this->bSaved = true;
 	}
+	bIgnoreTimeout = false;
 }
 
 void ChessController::on_LoadGame() {
 	this->clearSelection();
 
+	bIgnoreTimeout = true;
 	string tFile = this->pView->SelectLoadFile();
 	if (tFile.length() > 0) {
 		this->currentGame = tFile;
@@ -244,13 +260,18 @@ void ChessController::on_LoadGame() {
 		game.setTurn();
 		this->setLabel(this->game.kingIsInCheck());
 		this->bSaved = false;
+
+		bIgnoreTimeout = false;
 	}
 }
 
 void ChessController::on_UndoMove() {
+	bIgnoreTimeout = true;
+
 	this->clearSelection();
 
 	if (!game.canUndo()) {
+		bIgnoreTimeout = false;
 		return;
 	}
 
@@ -271,9 +292,13 @@ void ChessController::on_UndoMove() {
 	this->game.changeSides();
 	this->setLabel(this->game.kingIsInCheck());
 	this->bSaved = false;
+
+	bIgnoreTimeout = false;
 }
 
 void ChessController::on_QuitGame() {
+	bIgnoreTimeout = true;
+
 	if (!bSaved) {
 		string title = "Game not saved!";
 
@@ -296,7 +321,9 @@ void ChessController::on_QuitGame() {
 }
 
 void ChessController::on_TimerEvent() {
-	// not implemented
+	if (!bIgnoreTimeout && game.aiIsNext()) {
+		this->makeMove(game.getAIMove());
+	}
 }
 
 void ChessController::SetView(IChessView* view) {

@@ -120,6 +120,8 @@ class ChessController : public IChessController {
 		int selectedY;
 
 		bool bSaved;
+
+		bool bIgnoreTimeout;
 };
 
 #endif

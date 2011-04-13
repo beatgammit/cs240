@@ -47,7 +47,6 @@ HISTORY = obj/history.o
 MOVE = obj/move.o
 PLAYER = obj/player.o
 IO = obj/io.o
-AI = obj/ai.o
 SIMPLEAI = obj/simpleai.o
 KNIGHT = obj/knight.o
 KING = obj/king.o
@@ -85,7 +84,7 @@ MEMMAIN_O = $(CONT_OBJ)memcheck_main.o
 
 # This macro should be used to store all of the object files created 
 # from *your* source files
-MY_OBJS = $(CHESSCONTROLLER) $(GAME) $(BOARD) $(PIECE) $(HISTORY) $(MOVE) $(PLAYER) $(IO) $(AI) $(SIMPLEAI) $(KNIGHT) $(KING) $(QUEEN) $(ROOK) $(BISHOP) $(PAWN) $(HUMAN) $(TINYXML) $(TINYXML_ERROR) $(TINYXML_PARSER) $(TINYXML_STR)
+MY_OBJS = $(CHESSCONTROLLER) $(GAME) $(BOARD) $(PIECE) $(HISTORY) $(MOVE) $(PLAYER) $(IO) $(SIMPLEAI) $(KNIGHT) $(KING) $(QUEEN) $(ROOK) $(BISHOP) $(PAWN) $(HUMAN) $(TINYXML) $(TINYXML_ERROR) $(TINYXML_PARSER) $(TINYXML_STR)
 
 # These are all the object files that go into the library
 LIB_OBJS = $(VIEW_OBJ)ChessView.o \
@@ -192,11 +191,7 @@ $(IO) : src/io.cpp include/io.h $(GAME) $(HISTORY) $(PIECE) $(PAWN) $(ROOK) $(KN
 	@ mkdir -p obj
 	g++ -g -c -o $(IO) $(INCLUDES) $(CFLAGS) $(LIBS) src/io.cpp
 
-$(AI) : src/ai.cpp include/ai.h
-	@ mkdir -p obj
-	g++ -g -c -o $(AI) $(INCLUDES) $(CFLAGS) $(LIBS) src/ai.cpp
-
-$(SIMPLEAI) : src/simpleai.cpp include/simpleai.h $(AI)
+$(SIMPLEAI) : include/ai.h src/simpleai.cpp include/simpleai.h
 	@ mkdir -p obj
 	g++ -g -c -o $(SIMPLEAI) $(INCLUDES) $(CFLAGS) $(LIBS) src/simpleai.cpp
 
