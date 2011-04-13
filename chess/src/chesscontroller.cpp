@@ -62,7 +62,7 @@ ChessController::ChessController(int argc, char** argv){
 	this->selectedY = -1;
 
 	if (argc == 2) {
-		this->game = Game(atoi(argv[1]));
+		//this->game = Game(atoi(argv[1]));
 	}
 
 	bSaved = false;
@@ -75,9 +75,10 @@ void ChessController::on_CellSelected(int row, int col, int button) {
 	if (this->selectedX >= 0 && this->selectedY >= 0) {
 		this->clearSelection(row, col);
 
-		while (game.aiIsNext()) {
+/*		while (game.aiIsNext()) {
 			this->makeMove(game.getAIMove());
-		}
+		}*/
+		/*
 	} else if (this->game.canMove(col, row)) {
 		this->validMoves = this->game.getLegalMoves(col, row);
 
@@ -94,11 +95,11 @@ void ChessController::on_CellSelected(int row, int col, int button) {
 		selectedX = col;
 		selectedY = row;
 
-		this->pView->HighlightSquare(row, col, RED_SQUARE);
+		this->pView->HighlightSquare(row, col, RED_SQUARE);*/
 	}
 }
 
-void ChessController::on_DragStart(int row,int col) {
+void ChessController::on_DragStart(int row,int col) {/*
 	bIgnoreTimeout = true;
 
 	if (this->game.canMove(col, row)) {
@@ -118,7 +119,7 @@ void ChessController::on_DragStart(int row,int col) {
 		selectedY = row;
 
 		this->pView->HighlightSquare(row, col, RED_SQUARE);
-	}
+	}*/
 }
 
 bool ChessController::on_DragEnd(int row,int col) {
@@ -127,6 +128,7 @@ bool ChessController::on_DragEnd(int row,int col) {
 }
 
 void ChessController::on_NewGame() {
+	/*
 	bIgnoreTimeout = true;
 
 	this->pView->SetStatusBar("");
@@ -198,7 +200,7 @@ void ChessController::on_NewGame() {
 	}
 	this->setLabel(false);
 
-	bIgnoreTimeout = false;
+	bIgnoreTimeout = false;*/
 }
 
 void ChessController::on_SaveGame() {
@@ -211,7 +213,7 @@ void ChessController::on_SaveGame() {
 
 	if (this->currentGame.length() > 0) {
 		this->pView->SetStatusBar(this->currentGame);
-		IO::saveGame(this->currentGame, &this->game);
+		//IO::saveGame(this->currentGame, &this->game);
 		this->bSaved = true;
 	}
 	bIgnoreTimeout = false;
@@ -224,7 +226,7 @@ void ChessController::on_SaveGameAs() {
 	string tFile = this->pView->SelectSaveFile();
 
 	if (tFile.length() > 0) {
-		IO::saveGame(tFile, &this->game);
+		//IO::saveGame(tFile, &this->game);
 		this->currentGame = tFile;
 		this->pView->SetStatusBar(this->currentGame);
 		this->bSaved = true;
@@ -233,6 +235,7 @@ void ChessController::on_SaveGameAs() {
 }
 
 void ChessController::on_LoadGame() {
+	/*
 	this->clearSelection();
 
 	bIgnoreTimeout = true;
@@ -263,9 +266,11 @@ void ChessController::on_LoadGame() {
 
 		bIgnoreTimeout = false;
 	}
+	*/
 }
 
 void ChessController::on_UndoMove() {
+	/*
 	bIgnoreTimeout = true;
 
 	this->clearSelection();
@@ -289,11 +294,11 @@ void ChessController::on_UndoMove() {
 		this->pView->PlacePiece(tMove.getEndY(), tMove.getEndX(), tPiece);
 	}
 
-	this->game.changeSides();
-	this->setLabel(this->game.kingIsInCheck());
+	//this->game.changeSides();
+	//this->setLabel(this->game.kingIsInCheck());
 	this->bSaved = false;
 
-	bIgnoreTimeout = false;
+	bIgnoreTimeout = false;*/
 }
 
 void ChessController::on_QuitGame() {
@@ -321,9 +326,9 @@ void ChessController::on_QuitGame() {
 }
 
 void ChessController::on_TimerEvent() {
-	if (!bIgnoreTimeout && game.aiIsNext()) {
-		this->makeMove(game.getAIMove());
-	}
+	//if (!bIgnoreTimeout && bIgnoreTimeout && game.aiIsNext()) {
+	//	this->makeMove(game.getAIMove());
+	//}
 }
 
 void ChessController::SetView(IChessView* view) {
@@ -331,7 +336,7 @@ void ChessController::SetView(IChessView* view) {
 }
 
 void ChessController::checkGameOver() {
-	if (!this->game.legalMoveExists()) {
+	/*if (!this->game.legalMoveExists()) {
 		bool bCheckmate = this->game.kingIsInCheck();
 		string title = bCheckmate ? "Checkmate" : "Stalemate";
 
@@ -350,6 +355,7 @@ void ChessController::checkGameOver() {
 			this->on_NewGame();
 		}
 	}
+	*/
 }
 
 void ChessController::clearBoard() {
@@ -394,7 +400,7 @@ void ChessController::setLabel(bool bCheck, bool bEndOfGame) {
 			text += " You are in check.";
 		}
 	}
-
+/*
 	if (game.isWhiteTurn()) {
 		this->pView->SetTopLabel("");
 		this->pView->SetBottomLabel(text);
@@ -402,9 +408,11 @@ void ChessController::setLabel(bool bCheck, bool bEndOfGame) {
 		this->pView->SetTopLabel(text);
 		this->pView->SetBottomLabel("");
 	}
+	*/
 }
 
 void ChessController::makeMove(Move tMove) {
+	/*
 	ImageName tImage = ChessController::mineToTheirs(this->game.getPieceAt(selectedX, selectedY));
 	game.move(tMove);
 
@@ -434,5 +442,6 @@ void ChessController::makeMove(Move tMove) {
 	}
 
 	this->pView->WriteMessageArea(moveMessage.str());
-	this->bSaved = false;
+	this->bSaved = false;*/
 }
+

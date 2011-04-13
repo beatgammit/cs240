@@ -76,7 +76,7 @@ bool canCheckKnight(Piece* pPiece, bool bWhite) {
 
 Game::Game(int i) {
 	this->iPlayMode = i;
-
+/*
 	switch (i) {
 		case 1: { // Human (White) vs Computer (Black)
 			pWhite = new Human(true);
@@ -109,10 +109,11 @@ Game::Game(int i) {
 		for(int y = 0; y < 8; y++){
 			board[x][y] = NULL;
 		}
-	}
+	}*/
 }
 
 Game::~Game() {
+	/*
 	delete this->pWhite;
 	this->pWhite = NULL;
 	delete this->pBlack;
@@ -144,6 +145,7 @@ Game::~Game() {
 			whitePieces.pop();
 		}
 	}
+	*/
 }
 
 Board* Game::getBoard() {

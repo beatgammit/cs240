@@ -108,7 +108,7 @@ class ChessController : public IChessController {
 		void makeMove(Move tMove);
 
 		/* The chess game */
-		Game game;
+		//Game game;
 
 		IChessView* pView;
 
