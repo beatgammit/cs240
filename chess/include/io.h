@@ -47,6 +47,12 @@ class IO {
 
 		static void parseHistoryXML(TiXmlElement* pHistoryNode, History* pHistory);
 
+		static void appendBoardXML(TiXmlElement & parentNode, Board* pBoard);
+
+		static void appendHistoryXML(TiXmlElement & parentNode, History history);
+
+		static TiXmlElement* createPieceXML(int col, int row, PieceEnum type, bool bWhite);
+
 		static PieceEnum typeFromString(string s, bool bWhite);
 };
 

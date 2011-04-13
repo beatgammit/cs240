@@ -13,6 +13,14 @@ void IO::loadGame(std::string filename, Game* pGame) {
 }
 
 void IO::saveGame(string filename, Game* pGame) {
+	TiXmlDocument doc;
+	TiXmlElement* root = new TiXmlElement("chessgame");
+	doc.LinkEndChild(root);
+
+	IO::appendBoardXML(*root, pGame->getBoard());
+	IO::appendHistoryXML(*root, *pGame->getMoveHistory());
+
+	doc.SaveFile(filename.c_str());
 }
 
 
@@ -64,7 +72,6 @@ void IO::parseBoardXML(TiXmlElement* pBoardNode, Board* pBoard){
 }
 
 void IO::parseHistoryXML(TiXmlElement* pHistoryNode, History* pHistory) {
-
 	TiXmlElement* pMoveNode = pHistoryNode->FirstChildElement("move");
 	while(pMoveNode) {
 		TiXmlElement* pStart = pMoveNode->FirstChildElement("piece");
@@ -98,10 +105,62 @@ void IO::parseHistoryXML(TiXmlElement* pHistoryNode, History* pHistory) {
 			tCapturedPiece = typeFromString(type, !bWhite);
 		}
 
-		pHistory->push(startX, startY, endX, endY, tPiece, tCapturedPiece);
+		Move tMove = Move(startX, startY, endX, endY, tPiece, tCapturedPiece);
+		pHistory->push(tMove);
 
 		pMoveNode = pMoveNode->NextSiblingElement("move");
 	}
+}
+
+void IO::appendBoardXML(TiXmlElement & parentNode, Board* pBoard) {
+	TiXmlElement* pBoardXML = new TiXmlElement("board");
+
+	for (int x = 0; x < 8; x++) {
+		for (int y = 0; y < 8; y++) {
+			Piece* p = (*pBoard)[x][y];
+			if (p) {
+				TiXmlElement* pElem;
+				pElem = createPieceXML(p->getY(), p->getX(), p->getType(), p->isWhite());
+
+				pBoardXML->LinkEndChild(pElem);
+			}
+		}
+	}
+	parentNode.LinkEndChild(pBoardXML);
+}
+
+void IO::appendHistoryXML(TiXmlElement & parentNode, History history) {
+	TiXmlElement* pHistoryXML = new TiXmlElement("history");
+	while (!history.isEmpty()) {
+		Move tMove = history.popBack();
+		TiXmlElement* pMoveXML = new TiXmlElement("move");
+
+		TiXmlElement* pPieceXml;
+		pPieceXml = createPieceXML(tMove.getStartY(), tMove.getStartX(), tMove.getPiece(), tMove.isWhite());
+		pMoveXML->LinkEndChild(pPieceXml);
+
+		pPieceXml = createPieceXML(tMove.getEndY(), tMove.getEndX(), tMove.getPiece(), tMove.isWhite());
+		pMoveXML->LinkEndChild(pPieceXml);
+
+		if (tMove.getCapturedPiece() != P_NAN) {
+			pPieceXml = createPieceXML(tMove.getEndY(), tMove.getEndX(), tMove.getCapturedPiece(), !tMove.isWhite());
+			pMoveXML->LinkEndChild(pPieceXml);
+		}
+
+		pHistoryXML->LinkEndChild(pMoveXML);
+	}
+	parentNode.LinkEndChild(pHistoryXML);
+}
+
+TiXmlElement* IO::createPieceXML(int row, int col, PieceEnum type, bool bWhite) {
+	TiXmlElement* pPieceXML = new TiXmlElement("piece");
+
+	pPieceXML->SetAttribute("type", Game::typeToString(type).c_str());
+	pPieceXML->SetAttribute("color", bWhite ? "white" : "black");
+	pPieceXML->SetAttribute("column", col);
+	pPieceXML->SetAttribute("row", row);
+
+	return pPieceXML;
 }
 
 PieceEnum IO::typeFromString(string type, bool bWhite) {

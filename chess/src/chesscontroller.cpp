@@ -58,68 +58,190 @@ ImageName ChessController::mineToTheirs(PieceEnum tEnum) {
 }
 
 ChessController::ChessController(int argc, char** argv){
+	this->selectedX = -1;
+	this->selectedY = -1;
+
+	bSaved = false;
 }
 
 void ChessController::on_CellSelected(int row, int col, int button) {
-	Board* pBoard = this->game.getBoard();
-	if (this->validMoves.size()) {
-		while(validMoves.size()) {
-			Move tMove = validMoves.front();
-			validMoves.pop_front();
+	if (this->selectedX >= 0 && this->selectedY >= 0) {
+		this->clearSelection(row, col);
+	} else if (this->game.canMove(col, row)) {
+		this->validMoves = this->game.getLegalMoves(col, row);
 
-			this->pView->UnHighlightSquare(tMove.getEndY(), tMove.getEndX());
-
-			if (tMove.getEndY() == row && tMove.getEndX() == col) {
-				Piece* pPiece = (*pBoard)[tMove.getStartX()][tMove.getStartY()];
-				game.move(tMove);
-
-				this->pView->ClearPiece(tMove.getStartY(), tMove.getStartX());
-				this->placePiece(pPiece);
-
-				this->game.changeSides();
+		list<Move>::iterator iter = this->validMoves.begin();
+		while(iter != validMoves.end()) {
+			if (iter->getCapturedPiece() == P_NAN) {
+				this->pView->HighlightSquare(iter->getEndY(), iter->getEndX(), BLUE_SQUARE);
+			} else {
+				this->pView->HighlightSquare(iter->getEndY(), iter->getEndX(), GREEN_SQUARE);
 			}
+			iter++;
 		}
-	} else if ((*pBoard)[col][row]) {
-		this->selectPiece((*pBoard)[col][row]);
+
+		selectedX = col;
+		selectedY = row;
+
+		this->pView->HighlightSquare(row, col, RED_SQUARE);
 	}
 }
 
 void ChessController::on_DragStart(int row,int col) {
+	if (this->game.canMove(col, row)) {
+		this->validMoves = this->game.getLegalMoves(col, row);
+
+		list<Move>::iterator iter = this->validMoves.begin();
+		while(iter != validMoves.end()) {
+			if (iter->getCapturedPiece() == P_NAN) {
+				this->pView->HighlightSquare(iter->getEndY(), iter->getEndX(), BLUE_SQUARE);
+			} else {
+				this->pView->HighlightSquare(iter->getEndY(), iter->getEndX(), GREEN_SQUARE);
+			}
+			iter++;
+		}
+
+		selectedX = col;
+		selectedY = row;
+
+		this->pView->HighlightSquare(row, col, RED_SQUARE);
+	}
 }
 
 bool ChessController::on_DragEnd(int row,int col) {
+	this->clearSelection(row, col);
 }
 
 void ChessController::on_NewGame() {
+	this->pView->SetStatusBar("");
+	this->currentGame = "";
+
+	// clear everything
+	this->clearSelection();
+	this->clearBoard();
+	this->game = Game();
+
+	Board* pBoard = this->game.getBoard();
+
+	// just loop through once... we can make it work
+	for (int x = 0; x < 8; x++) {
+		(*pBoard)[x][1] = new Pawn(x, 1, false);
+		this->pView->PlacePiece(1, x, B_PAWN);
+
+		(*pBoard)[x][6] = new Pawn(x, 6, true);
+		this->pView->PlacePiece(6, x, W_PAWN);
+
+		switch (x) {
+			case 0:
+			case 7: {
+				(*pBoard)[x][0] = new Rook(x, 0, false);
+				this->pView->PlacePiece(0, x, B_ROOK);
+
+				(*pBoard)[x][7] = new Rook(x, 7, true);
+				this->pView->PlacePiece(7, x, W_ROOK);
+				break;
+			}
+
+			case 1:
+			case 6: {
+				(*pBoard)[x][0] = new Knight(x, 0, false);
+				this->pView->PlacePiece(0, x, B_KNIGHT);
+
+				(*pBoard)[x][7] = new Knight(x, 7, true);
+				this->pView->PlacePiece(7, x, W_KNIGHT);
+				break;
+			}
+
+			case 2:
+			case 5: {
+				(*pBoard)[x][0] = new Bishop(x, 0, false);
+				this->pView->PlacePiece(0, x, B_BISHOP);
+
+				(*pBoard)[x][7] = new Bishop(x, 7, true);
+				this->pView->PlacePiece(7, x, W_BISHOP);
+				break;
+			}
+
+			case 3: {
+				(*pBoard)[x][0] = new Queen(x, 0, false);
+				this->pView->PlacePiece(0, x, B_QUEEN);
+
+				(*pBoard)[x][7] = new Queen(x, 7, true);
+				this->pView->PlacePiece(7, x, W_QUEEN);
+				break;
+			}
+			case 4: {
+				(*pBoard)[x][0] = new King(x, 0, false);
+				this->pView->PlacePiece(0, x, B_KING);
+
+				(*pBoard)[x][7] = new King(x, 7, true);
+				this->pView->PlacePiece(7, x, W_KING);
+				break;
+			}
+		}
+	}
+	this->setLabel(false);
 }
 
 void ChessController::on_SaveGame() {
+	this->clearSelection();
+
 	if(this->currentGame == ""){
 		this->currentGame = this->pView->SelectSaveFile();
 	}
 
-	IO::saveGame(this->currentGame, &this->game);
+	if (this->currentGame.length() > 0) {
+		this->pView->SetStatusBar(this->currentGame);
+		IO::saveGame(this->currentGame, &this->game);
+		this->bSaved = true;
+	}
 }
 
 void ChessController::on_SaveGameAs() {
-	IO::saveGame(this->pView->SelectSaveFile(), &this->game);
+	this->clearSelection();
+
+	string tFile = this->pView->SelectSaveFile();
+	if (tFile.length() > 0) {
+		IO::saveGame(tFile, &this->game);
+		this->currentGame = tFile;
+		this->pView->SetStatusBar(this->currentGame);
+		this->bSaved = true;
+	}
 }
 
 void ChessController::on_LoadGame() {
-	IO::loadGame(this->pView->SelectLoadFile(), &this->game);
+	this->clearSelection();
 
-	Board* pBoard = this->game.getBoard();
+	string tFile = this->pView->SelectLoadFile();
+	if (tFile.length() > 0) {
+		this->currentGame = tFile;
+		this->pView->SetStatusBar(this->currentGame);
 
-	for (int x = 0; x < 8; x++){
-		for (int y = 0; y < 8; y++){
-			if ((*pBoard)[x][y]) {
-				placePiece((*pBoard)[x][y]);
+		this->game = Game();
+		this->clearBoard();
+
+		IO::loadGame(tFile, &this->game);
+
+		Board* pBoard = this->game.getBoard();
+
+		for (int x = 0; x < 8; x++){
+			for (int y = 0; y < 8; y++){
+				if ((*pBoard)[x][y]) {
+					ImageName tImage = ChessController::mineToTheirs(this->game.getPieceAt(x, y));
+					this->pView->PlacePiece(y, x, tImage);
+				}
 			}
 		}
+
+		game.setTurn();
+		this->setLabel(this->game.kingIsInCheck());
+		this->bSaved = false;
 	}
 }
 
 void ChessController::on_UndoMove() {
+	this->clearSelection();
+
 	if (!game.canUndo()) {
 		return;
 	}
@@ -139,38 +261,139 @@ void ChessController::on_UndoMove() {
 	}
 
 	this->game.changeSides();
+	this->setLabel(this->game.kingIsInCheck());
+	this->bSaved = false;
 }
 
 void ChessController::on_QuitGame() {
+	if (!bSaved) {
+		string title = "Game not saved!";
+
+		string message("Do you want to save your game?");
+
+		vector<string> labels;
+		labels.resize(3);
+		labels[0] = "Yes";
+		labels[1] = "Yes, but to a new file";
+		labels[2] = "No";
+
+		signed int selected = SelectDialog::SelectDialogRun(title, message, labels);
+
+		if (selected == 1) {
+			this->on_SaveGame();
+		} else if (selected == 2) {
+			this->on_SaveGameAs();
+		}
+	}
 }
 
 void ChessController::on_TimerEvent() {
+	// not implemented
 }
 
 void ChessController::SetView(IChessView* view) {
 	this->pView = view;
 }
 
-void ChessController::placePiece(Piece* pPiece) {
-	ImageName tImage = ChessController::mineToTheirs(pPiece->getType());
+void ChessController::checkGameOver() {
+	if (!this->game.legalMoveExists()) {
+		bool bCheckmate = this->game.kingIsInCheck();
+		string title = bCheckmate ? "Checkmate" : "Stalemate";
 
-	this->pView->PlacePiece(pPiece->getY(), pPiece->getX(), tImage);
+		this->setLabel(bCheckmate, true);
+
+		string message("Do you want to start a new game or look at the board?");
+
+		vector<string> labels;
+		labels.resize(2);
+		labels[0]="New game";
+		labels[1]="Cancel";
+
+		signed int selected = SelectDialog::SelectDialogRun(title, message, labels);
+
+		if (selected == 1) {
+			this->on_NewGame();
+		}
+	}
 }
 
-void ChessController::selectPiece(Piece* pPiece) {
-	if (pPiece->isWhite() == this->game.isWhiteTurn()) {
-		list<Move> moves = pPiece->getValidMoves(this->game.getBoard());
-
-		list<Move>::iterator iter = moves.begin();
-		while(iter != moves.end()) {
-			this->game.move(*iter);
-			if (!this->game.kingIsInCheck(pPiece->isWhite())) {
-				validMoves.push_back(*iter);
-				this->pView->HighlightSquare(iter->getEndY(), iter->getEndX(), BLUE_SQUARE);
-			}
-			this->game.undoMove();
-
-			iter++;
+void ChessController::clearBoard() {
+	for (int x = 0; x < 8; x++){
+		for (int y = 0; y < 8; y++){
+			this->pView->ClearPiece(y, x);
 		}
+	}
+}
+
+void ChessController::clearSelection(int row, int col) {
+	if (selectedX >= 0 && selectedY >= 0) {
+		this->pView->UnHighlightSquare(selectedY, selectedX);
+		while(validMoves.size()) {
+			Move tMove = validMoves.front();
+			validMoves.pop_front();
+
+			this->pView->UnHighlightSquare(tMove.getEndY(), tMove.getEndX());
+
+			if (tMove.getEndY() == row && tMove.getEndX() == col) {
+				ImageName tImage = ChessController::mineToTheirs(this->game.getPieceAt(selectedX, selectedY));
+				game.move(tMove);
+
+				this->pView->ClearPiece(tMove.getStartY(), tMove.getStartX());
+				this->pView->PlacePiece(tMove.getEndY(), tMove.getEndX(), tImage);
+
+				this->game.changeSides();
+				this->setLabel(this->game.kingIsInCheck());
+				this->checkGameOver();
+
+				stringstream moveMessage;
+				moveMessage << Game::typeToString(game.getPieceAt(col, row));
+				moveMessage << " (";
+				moveMessage << tMove.getStartY() << "," << tMove.getStartX();
+				moveMessage << " : ";
+				moveMessage << tMove.getEndY() << ","<< tMove.getEndX();
+				moveMessage << ")\n";
+
+				if (tMove.getCapturedPiece() != P_NAN) {
+					moveMessage << "Piece Captured: ";
+					if (tMove.isWhite()) {
+						moveMessage << "white ";
+					} else {
+						moveMessage << "black ";
+					}
+					moveMessage << Game::typeToString(tMove.getCapturedPiece()) << "\n";
+				}
+
+				this->pView->WriteMessageArea(moveMessage.str());
+				this->bSaved = false;
+			}
+		}
+
+		this->selectedX = -1;
+		this->selectedY = -1;
+	}
+}
+
+void ChessController::setLabel(bool bCheck, bool bEndOfGame) {
+	string text;
+	if (bEndOfGame) {
+		text = "Game over: ";
+		if(bCheck) {
+			text += "Checkmate";
+		} else {
+			text += "Stalemate";
+		}
+	} else {
+		text = "Your turn.";
+		if (bCheck) {
+			text += " You are in check.";
+		}
+	}
+
+	if (game.isWhiteTurn()) {
+		this->pView->SetTopLabel("");
+		this->pView->SetBottomLabel(text);
+	} else {
+		this->pView->SetTopLabel(text);
+		this->pView->SetBottomLabel("");
 	}
 }

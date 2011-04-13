@@ -2,10 +2,13 @@
 #define __CHESSCONTROLLER_H__
 
 #include <iostream>
-
-#include "../controller/inc/IChessController.h"
+#include <sstream>
 
 #include <list>
+#include <vector>
+
+#include "IChessController.h"
+#include "SelectDialog.h"
 
 #include "game.h"
 #include "io.h"
@@ -90,6 +93,18 @@ class ChessController : public IChessController {
 		static ImageName mineToTheirs(PieceEnum tEnum);
 
 	private:
+		void clearBoard();
+
+		void clearSelection(int row = 0, int col = 0);
+
+		void placePiece(Piece* pPiece);
+
+		void selectPiece(Piece* pPiece);
+
+		void setLabel(bool bCheck, bool bEndOfGame = false);
+
+		void checkGameOver();
+
 		/* The chess game */
 		Game game;
 
@@ -97,11 +112,12 @@ class ChessController : public IChessController {
 
 		string currentGame;
 
-		void placePiece(Piece* pPiece);
-
-		void selectPiece(Piece* pPiece);
-
 		list<Move> validMoves;
+
+		int selectedX;
+		int selectedY;
+
+		bool bSaved;
 };
 
 #endif

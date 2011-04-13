@@ -64,6 +64,8 @@ class Game {
 
 		void move(Move tMove);
 
+		bool kingIsInCheck() {kingIsInCheck(this->isWhiteTurn());}
+
 		bool kingIsInCheck(bool bWhite);
 
 		/*
@@ -93,11 +95,24 @@ class Game {
 
 		Piece* findPiece(PieceEnum tPiece);
 
+		list<Move> getLegalMoves(int x, int y);
+
+		PieceEnum getPieceAt(int x, int y);
+
+		bool canMove(int x, int y);
+
+		bool legalMoveExists();
+
+		void setTurn();
+
+		static string typeToString(PieceEnum type);
+
 	private:
 		bool kingInCheckKnight(Piece* pKing);
 		bool kingInCheckVertical(Piece* pKing);
 		bool kingInCheckHorizontal(Piece* pKing);
 		bool kingInCheckDiagonal(Piece* pKing);
+		bool kingInCheckPawn(Piece* pKing);
 
 		/* The game board */
 		Board board;

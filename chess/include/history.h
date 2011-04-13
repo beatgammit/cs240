@@ -23,13 +23,6 @@ class History {
 		void push(Move tMove);
 
 		/*
-		 * Calls push in Stack.
-		 *
-		 * @param tMove- the move to push on the history
-		 */
-		void push(int startX, int startY, int endX, int endY, PieceEnum tPiece, PieceEnum tCaptured = P_NAN);
-
-		/*
 		 * Calls pop in Stack.
 		 *
 		 * @return The previous Move

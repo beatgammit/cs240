@@ -98,22 +98,20 @@ Game::~Game() {
 	}
 
 	if (blackPieces.size()) {
-		Piece* pPiece = blackPieces.top();
-		while (pPiece != NULL) {
+		Piece* pPiece;
+		while (blackPieces.size()) {
+			pPiece = blackPieces.top();
 			delete pPiece;
 			blackPieces.pop();
-
-			pPiece = blackPieces.top();
 		}
 	}
 
 	if (whitePieces.size()) {
-		Piece* pPiece = whitePieces.top();
-		while (pPiece != NULL) {
+		Piece* pPiece;
+		while (whitePieces.size()) {
+			pPiece = whitePieces.top();
 			delete pPiece;
 			whitePieces.pop();
-
-			pPiece = whitePieces.top();
 		}
 	}
 }
@@ -144,6 +142,8 @@ void Game::move(Move tMove) {
 	if (pCapturedPiece) {
 		if (pCapturedPiece->isWhite()) {
 			this->whitePieces.push(pCapturedPiece);
+		} else {
+			this->blackPieces.push(pCapturedPiece);
 		}
 	}
 
@@ -188,7 +188,8 @@ bool Game::kingIsInCheck(bool bWhite) {
 	if (kingInCheckHorizontal(pKing) ||
 		kingInCheckVertical(pKing) ||
 		kingInCheckDiagonal(pKing) ||
-		kingInCheckKnight(pKing) ){
+		kingInCheckKnight(pKing) ||
+		kingInCheckPawn(pKing)) {
 		return true;
 	}
 
@@ -205,6 +206,32 @@ Piece* Game::findPiece(PieceEnum tEnum) {
 		}
 	}
 	return NULL;
+}
+
+bool Game::kingInCheckPawn(Piece* pKing) {
+	Piece* pPawn;
+	if (pKing->isWhite()) {
+		pPawn = this->board[pKing->getX() - 1][pKing->getY() - 1];
+		if (pPawn && pPawn->getType() == P_B_PAWN) {
+			return true;
+		}
+
+		pPawn = this->board[pKing->getX() + 1][pKing->getY() - 1];
+		if (pPawn && pPawn->getType() == P_B_PAWN) {
+			return true;
+		}
+	} else {
+		pPawn = this->board[pKing->getX() - 1][pKing->getY() + 1];
+		if (pPawn && pPawn->getType() == P_W_PAWN) {
+			return true;
+		}
+
+		pPawn = this->board[pKing->getX() + 1][pKing->getY() + 1];
+		if (pPawn && pPawn->getType() == P_W_PAWN) {
+			return true;
+		}
+	}
+	return false;
 }
 
 bool Game::kingInCheckKnight(Piece* pKing) {
@@ -449,4 +476,91 @@ bool Game::kingInCheckHorizontal(Piece* pKing){
 		}
 	}
 	return false;
+}
+
+bool Game::canMove(int x, int y) {
+	Piece* pPiece = this->board[x][y];
+	if (pPiece && pPiece->isWhite() == this->isWhiteTurn()) {
+		return true;
+	}
+	return false;
+}
+
+list<Move> Game::getLegalMoves(int x, int y) {
+	list<Move> legalMoves;
+
+	Piece* pPiece = this->board[x][y];
+	if (pPiece && pPiece->isWhite() == this->isWhiteTurn()) {
+		list<Move> moves = pPiece->getValidMoves(this->getBoard());
+
+		// filter out moves that will endanger the king
+		list<Move>::iterator iter = moves.begin();
+		while(iter != moves.end()) {
+			this->move(*iter);
+			if (!this->kingIsInCheck(pPiece->isWhite())) {
+				legalMoves.push_back(*iter);
+			}
+			this->undoMove();
+
+			iter++;
+		}
+	}
+	return legalMoves;
+}
+
+PieceEnum Game::getPieceAt(int x, int y) {
+	Piece* pPiece = this->board[x][y];
+	if (pPiece) {
+		return pPiece->getType();
+	}
+	return P_NAN;
+}
+
+bool Game::legalMoveExists() {
+	for(int x = 0; x < 8; x++) {
+		for(int y = 0; y < 8; y++) {
+			if (this->getLegalMoves(x, y).size()) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+void Game::setTurn() {
+	Move tMove = this->moveHistory.pop();
+	this->bWhiteTurn = !tMove.isWhite();
+	this->moveHistory.push(tMove);
+}
+
+string Game::typeToString(PieceEnum type) {
+	switch (type) {
+		case P_B_BISHOP:
+		case P_W_BISHOP:{
+			return "bishop";
+		}
+		case P_B_KING:
+		case P_W_KING:{
+			return "king";
+		}
+		case P_B_KNIGHT:
+		case P_W_KNIGHT:{
+			return "knight";
+		}
+		case P_B_PAWN:
+		case P_W_PAWN:{
+			return "pawn";
+		}
+		case P_B_QUEEN:
+		case P_W_QUEEN:{
+			return "queen";
+		}
+		case P_B_ROOK:
+		case P_W_ROOK:{
+			return "rook";
+		}
+		default:{
+			return "";
+		}
+	}
 }

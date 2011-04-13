@@ -74,6 +74,8 @@ class Move {
 		 */
 		PieceEnum getPiece() {return this->piece;}
 
+		bool isWhite();
+
 		/*
 		 * Gets the captured piece, if any.
 		 *
