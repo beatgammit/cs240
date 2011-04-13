@@ -9,7 +9,7 @@ class AI : public Player {
 		/*
 		 * Default constructor.
 		 */
-		AI();
+		AI(bool bWhite) : Player(bWhite) {}
 
 		/*
 		 * Returns true because this is an AI.
@@ -21,10 +21,11 @@ class AI : public Player {
 		/*
 		 * Given a the other player's move, the AI should make a new move.
 		 *
+		 * @param pBoard- game board
 		 * @param pPlayerMove- a pointer to the opponent's last move
 		 * @return The generated move
 		 */
-		virtual Move generateMove(Move* pPlayerMove);
+		virtual Move generateMove(TBoard* pBoard, Move* pPlayerMove = NULL) {}
 };
 
 #endif

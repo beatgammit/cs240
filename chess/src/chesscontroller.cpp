@@ -61,12 +61,20 @@ ChessController::ChessController(int argc, char** argv){
 	this->selectedX = -1;
 	this->selectedY = -1;
 
+	if (argc == 2) {
+		this->game = Game(atoi(argv[1]));
+	}
+
 	bSaved = false;
 }
 
 void ChessController::on_CellSelected(int row, int col, int button) {
 	if (this->selectedX >= 0 && this->selectedY >= 0) {
 		this->clearSelection(row, col);
+
+		while (game.aiIsNext()) {
+			this->makeMove(game.getAIMove());
+		}
 	} else if (this->game.canMove(col, row)) {
 		this->validMoves = this->game.getLegalMoves(col, row);
 
@@ -335,36 +343,7 @@ void ChessController::clearSelection(int row, int col) {
 			this->pView->UnHighlightSquare(tMove.getEndY(), tMove.getEndX());
 
 			if (tMove.getEndY() == row && tMove.getEndX() == col) {
-				ImageName tImage = ChessController::mineToTheirs(this->game.getPieceAt(selectedX, selectedY));
-				game.move(tMove);
-
-				this->pView->ClearPiece(tMove.getStartY(), tMove.getStartX());
-				this->pView->PlacePiece(tMove.getEndY(), tMove.getEndX(), tImage);
-
-				this->game.changeSides();
-				this->setLabel(this->game.kingIsInCheck());
-				this->checkGameOver();
-
-				stringstream moveMessage;
-				moveMessage << Game::typeToString(game.getPieceAt(col, row));
-				moveMessage << " (";
-				moveMessage << tMove.getStartY() << "," << tMove.getStartX();
-				moveMessage << " : ";
-				moveMessage << tMove.getEndY() << ","<< tMove.getEndX();
-				moveMessage << ")\n";
-
-				if (tMove.getCapturedPiece() != P_NAN) {
-					moveMessage << "Piece Captured: ";
-					if (tMove.isWhite()) {
-						moveMessage << "white ";
-					} else {
-						moveMessage << "black ";
-					}
-					moveMessage << Game::typeToString(tMove.getCapturedPiece()) << "\n";
-				}
-
-				this->pView->WriteMessageArea(moveMessage.str());
-				this->bSaved = false;
+				this->makeMove(tMove);
 			}
 		}
 
@@ -396,4 +375,37 @@ void ChessController::setLabel(bool bCheck, bool bEndOfGame) {
 		this->pView->SetTopLabel(text);
 		this->pView->SetBottomLabel("");
 	}
+}
+
+void ChessController::makeMove(Move tMove) {
+	ImageName tImage = ChessController::mineToTheirs(this->game.getPieceAt(selectedX, selectedY));
+	game.move(tMove);
+
+	this->pView->ClearPiece(tMove.getStartY(), tMove.getStartX());
+	this->pView->PlacePiece(tMove.getEndY(), tMove.getEndX(), tImage);
+
+	this->game.changeSides();
+	this->setLabel(this->game.kingIsInCheck());
+	this->checkGameOver();
+
+	stringstream moveMessage;
+	moveMessage << Game::typeToString(game.getPieceAt(tMove.getEndX(), tMove.getEndY()));
+	moveMessage << " (";
+	moveMessage << tMove.getStartY() << "," << tMove.getStartX();
+	moveMessage << " : ";
+	moveMessage << tMove.getEndY() << ","<< tMove.getEndX();
+	moveMessage << ")\n";
+
+	if (tMove.getCapturedPiece() != P_NAN) {
+		moveMessage << "Piece Captured: ";
+		if (tMove.isWhite()) {
+			moveMessage << "white ";
+		} else {
+			moveMessage << "black ";
+		}
+		moveMessage << Game::typeToString(tMove.getCapturedPiece()) << "\n";
+	}
+
+	this->pView->WriteMessageArea(moveMessage.str());
+	this->bSaved = false;
 }

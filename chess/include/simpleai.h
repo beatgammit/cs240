@@ -9,15 +9,16 @@ class SimpleAI : public AI {
 		/*
 		 * Default constructor.
 		 */
-		SimpleAI() : AI() {}
+		SimpleAI(bool bWhite) : AI(bWhite) {}
 
 		/*
 		 * Generate's a random move.  The parameter is not used.
 		 *
+		 * @param pBoard- the game board
 		 * @param pPlayerMove- the opponent's last move
 		 * @return The generated move
 		 */
-		virtual Move generateMove(Move* pPlayerMove);
+		virtual Move generateMove(TBoard* pBoard, Move* pPlayerMove = NULL);
 };
 
 #endif

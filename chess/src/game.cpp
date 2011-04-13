@@ -75,6 +75,34 @@ bool canCheckKnight(Piece* pPiece, bool bWhite) {
 }
 
 Game::Game(int i) {
+	this->iPlayMode = i;
+
+	switch (i) {
+		case 1: { // Human (White) vs Computer (Black)
+			pWhite = new Human(true);
+			pBlack = new SimpleAI(false);
+			break;
+		}
+		case 2: { // Computer (White) vs Human (Black)
+			pWhite = new SimpleAI(true);
+			pBlack = new Human(false);
+			break;
+		}
+		case 3: { // Computer (White) vs Computer (Black)
+			pWhite = new SimpleAI(true);
+			pBlack = new SimpleAI(false);
+			break;
+		}
+		case 0: // Human (White) vs Human (Black)
+		default: {
+			pWhite = new Human(true);
+			pBlack = new Human(false);
+
+			iPlayMode = 0;
+			break;
+		}
+	}
+
 	this->bWhiteTurn = true;
 
 	for(int x = 0; x < 8; x++){
@@ -84,10 +112,12 @@ Game::Game(int i) {
 	}
 }
 
-Game::Game(string savedGame) {
-}
-
 Game::~Game() {
+	delete this->pWhite;
+	this->pWhite = NULL;
+	delete this->pBlack;
+	this->pBlack = NULL;
+
 	for(int x = 0; x < 8; x++){
 		for(int y = 0; y < 8; y++){
 			if(board[x][y]){
@@ -562,5 +592,23 @@ string Game::typeToString(PieceEnum type) {
 		default:{
 			return "";
 		}
+	}
+}
+
+bool Game::aiIsNext() {
+	if (this->isWhiteTurn()) {
+		return pWhite->isAI();
+	} else {
+		return pBlack->isAI();
+	}
+}
+
+Move Game::getAIMove() {
+	if (this->isWhiteTurn()) {
+		AI* pAI = (AI*)pWhite;
+		return pAI->generateMove(this->getBoard());
+	} else {
+		AI* pAI = (AI*)pBlack;
+		return pAI->generateMove(this->getBoard());
 	}
 }

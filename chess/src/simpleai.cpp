@@ -1,4 +1,5 @@
 #include "simpleai.h"
 
-Move SimpleAI::generateMove(Move* pOppMove) {
+Move SimpleAI::generateMove(TBoard* pBoard, Move* pOppMove) {
+	;
 }

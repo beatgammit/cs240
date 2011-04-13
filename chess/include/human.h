@@ -8,7 +8,7 @@ class Human : public Player {
 		/*
 		 * Default constructor.  Not very interesting...
 		 */
-		Human() : Player() {}
+		Human(bool bWhite) : Player(bWhite) {}
 
 		/*
 		 * Returns false, because this is a human.

@@ -105,6 +105,8 @@ class ChessController : public IChessController {
 
 		void checkGameOver();
 
+		void makeMove(Move tMove);
+
 		/* The chess game */
 		Game game;
 

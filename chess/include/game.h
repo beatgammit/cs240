@@ -6,7 +6,11 @@
 #include <list>
 
 #include "history.h"
+
 #include "player.h"
+#include "human.h"
+#include "simpleai.h"
+
 #include "piece.h"
 #include "move.h"
 
@@ -26,7 +30,7 @@ class Game {
 		 * Creates the game according to the play mode:
 		 * - 0: Human (White) vs Human (Black)
 		 * - 1: Human (White) vs Computer (Black)
-		 * - 2: Computer (Black) vs Human (White)
+		 * - 2: Computer (White) vs Human (Black)
 		 * - 3: Computer (Black) vs Computer (Black)
 		 *
 		 *
@@ -38,11 +42,6 @@ class Game {
 		 * Takes an filename to load a saved game.
 		 *
 		 * @param string- Filename of a saved game
-		 */
-		Game(string savedGame);
-
-		/*
-		 * Destructor.  Frees everything in the board.
 		 */
 		~Game();
 
@@ -107,6 +106,12 @@ class Game {
 
 		static string typeToString(PieceEnum type);
 
+		bool aiIsNext();
+
+		Move getAIMove();
+
+		int getPlayMode() {return iPlayMode;}
+
 	private:
 		bool kingInCheckKnight(Piece* pKing);
 		bool kingInCheckVertical(Piece* pKing);
@@ -121,10 +126,10 @@ class Game {
 		History moveHistory;
 
 		/* The white player */
-		Player white;
+		Player* pWhite;
 
 		/* The black player */
-		Player black;
+		Player* pBlack;
 
 		/* White pieces that have been captured */
 		stack<Piece*> whitePieces;
@@ -133,6 +138,8 @@ class Game {
 		stack<Piece*> blackPieces;
 
 		bool bWhiteTurn;
+
+		int iPlayMode;
 };
 
 #endif
